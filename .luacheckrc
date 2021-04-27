@@ -4,5 +4,6 @@ exclude_files = {
 globals = {
   table = { fields = { find = {} } },
   "love",
+  "gooi",
 }
 max_line_length = 80
