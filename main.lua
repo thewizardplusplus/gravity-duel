@@ -51,9 +51,32 @@ function love.load()
     size = joystick_size,
   })
   direction_joystick:noSpring()
+
+  local font_size = screen.height / 25
+  love.graphics.setFont(love.graphics.newFont(font_size))
 end
 
 function love.draw()
+  local text_margin = screen.height / 16
+  love.graphics.print(
+    string.format(
+      "Position joystick: (%.2f, %.2f)",
+      position_joystick:xValue(),
+      position_joystick:yValue()
+    ),
+    screen.x + text_margin,
+    screen.y + text_margin
+  )
+  love.graphics.print(
+    string.format(
+      "Direction joystick: (%.2f, %.2f)",
+      direction_joystick:xValue(),
+      direction_joystick:yValue()
+    ),
+    screen.x + text_margin,
+    screen.y + 2 * text_margin
+  )
+
   gooi.draw()
 end
 
@@ -81,6 +104,9 @@ function love.resize()
     size = joystick_size,
   })
   direction_joystick:noSpring()
+
+  local font_size = screen.height / 25
+  love.graphics.setFont(love.graphics.newFont(font_size))
 end
 
 function love.keypressed(key)
