@@ -12,6 +12,7 @@ require("compat52")
 local screen = nil -- models.Rectangle
 local world = nil -- windfield.World
 local stones = {}
+local player = nil
 local position_joystick = nil
 local direction_joystick = nil
 
@@ -58,6 +59,11 @@ function love.load()
         grid_step
       ))
       table.insert(stones, stone)
+
+      if row == math.floor(side_count / 2)
+        and column == math.floor(side_count / 2) then
+        player = stone
+      end
     end
   end
 
@@ -83,6 +89,17 @@ end
 
 function love.update(dt)
   world:update(dt)
+
+  local player_speed = 5000
+  player:setLinearVelocity(
+    player_speed * dt * position_joystick:xValue(),
+    player_speed * dt * position_joystick:yValue()
+  )
+  player:setAngle(math.atan2(
+    direction_joystick:yValue(),
+    direction_joystick:xValue()
+  ))
+
   gooi.update(dt)
 end
 
@@ -107,6 +124,11 @@ function love.resize()
         grid_step
       ))
       table.insert(stones, stone)
+
+      if row == math.floor(side_count / 2)
+        and column == math.floor(side_count / 2) then
+        player = stone
+      end
     end
   end
 
