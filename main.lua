@@ -13,6 +13,8 @@ local screen = nil -- models.Rectangle
 local world = nil -- windfield.World
 local stones = {}
 local player = nil
+local player_initial_x = 0
+local player_initial_y = 0
 local position_joystick = nil
 local direction_joystick = nil
 
@@ -62,6 +64,7 @@ function love.load()
       if row == math.floor(side_count / 2)
         and column == math.floor(side_count / 2) then
         player = stone
+        player_initial_x, player_initial_y = player:getPosition()
       end
     end
   end
@@ -83,7 +86,13 @@ end
 
 function love.draw()
   local grid_step = screen.height / 8
+  local player_x, player_y = player:getPosition()
   love.graphics.setColor(0.5, 0.5, 0.5)
+  love.graphics.push()
+  love.graphics.translate(
+    -(player_x - player_initial_x),
+    -(player_y - player_initial_y)
+  )
   physics.process_colliders(stones, function(stone)
     love.graphics.push()
     love.graphics.translate(stone:getPosition())
@@ -97,6 +106,7 @@ function love.draw()
     )
     love.graphics.pop()
   end)
+  love.graphics.pop()
 
   gooi.draw()
 end
@@ -142,6 +152,7 @@ function love.resize()
       if row == math.floor(side_count / 2)
         and column == math.floor(side_count / 2) then
         player = stone
+        player_initial_x, player_initial_y = player:getPosition()
       end
     end
   end
