@@ -44,7 +44,6 @@ function love.load()
   screen = _make_screen()
 
   world = windfield.newWorld(0, 0, true)
-  world:setQueryDebugDrawing(true)
 
   local side_count = 3
   local grid_step = screen.height / 8
@@ -83,7 +82,22 @@ function love.load()
 end
 
 function love.draw()
-  world:draw()
+  local grid_step = screen.height / 8
+  love.graphics.setColor(0.5, 0.5, 0.5)
+  physics.process_colliders(stones, function(stone)
+    love.graphics.push()
+    love.graphics.translate(stone:getPosition())
+    love.graphics.rotate(stone:getAngle())
+    love.graphics.rectangle(
+      "fill",
+      -grid_step / 2,
+      -grid_step / 2,
+      grid_step,
+      grid_step
+    )
+    love.graphics.pop()
+  end)
+
   gooi.draw()
 end
 
