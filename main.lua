@@ -53,21 +53,26 @@ function love.load()
   local offset_y = screen.y + screen.height / 2 - (2 * side_count + 1) * grid_step / 2
   for row = 0, side_count - 1 do
     for column = 0, side_count - 1 do
-      local stone = physics.make_collider(world, "dynamic", Rectangle:new(
-        offset_x + (2 * column + 1) * grid_step,
-        offset_y + (2 * row + 1) * grid_step,
-        grid_step,
-        grid_step
-      ))
-      table.insert(stones, stone)
-
-      if row == math.floor(side_count / 2)
-        and column == math.floor(side_count / 2) then
-        player = stone
-        player_initial_x, player_initial_y = player:getPosition()
+      if row ~= math.floor(side_count / 2)
+        or column ~= math.floor(side_count / 2) then
+        local stone = physics.make_collider(world, "dynamic", Rectangle:new(
+          offset_x + (2 * column + 1) * grid_step,
+          offset_y + (2 * row + 1) * grid_step,
+          grid_step,
+          grid_step
+        ))
+        table.insert(stones, stone)
       end
     end
   end
+
+  player = physics.make_collider(world, "dynamic", Rectangle:new(
+    offset_x + 3 * grid_step,
+    offset_y + 3 * grid_step,
+    grid_step,
+    grid_step
+  ))
+  player_initial_x, player_initial_y = player:getPosition()
 
   local joystick_size = screen.height / 4
   local joystick_margin = screen.height / 16
@@ -93,6 +98,7 @@ function love.draw()
     -(player_x - player_initial_x),
     -(player_y - player_initial_y)
   )
+
   physics.process_colliders(stones, function(stone)
     love.graphics.push()
     love.graphics.translate(stone:getPosition())
@@ -106,6 +112,19 @@ function love.draw()
     )
     love.graphics.pop()
   end)
+
+  love.graphics.push()
+  love.graphics.translate(player:getPosition())
+  love.graphics.rotate(player:getAngle())
+  love.graphics.rectangle(
+    "fill",
+    -grid_step / 2,
+    -grid_step / 2,
+    grid_step,
+    grid_step
+  )
+  love.graphics.pop()
+
   love.graphics.pop()
 
   gooi.draw()
@@ -141,21 +160,27 @@ function love.resize()
   local offset_y = screen.y + screen.height / 2 - (2 * side_count + 1) * grid_step / 2
   for row = 0, side_count - 1 do
     for column = 0, side_count - 1 do
-      local stone = physics.make_collider(world, "dynamic", Rectangle:new(
-        offset_x + (2 * column + 1) * grid_step,
-        offset_y + (2 * row + 1) * grid_step,
-        grid_step,
-        grid_step
-      ))
-      table.insert(stones, stone)
-
-      if row == math.floor(side_count / 2)
-        and column == math.floor(side_count / 2) then
-        player = stone
-        player_initial_x, player_initial_y = player:getPosition()
+      if row ~= math.floor(side_count / 2)
+        or column ~= math.floor(side_count / 2) then
+        local stone = physics.make_collider(world, "dynamic", Rectangle:new(
+          offset_x + (2 * column + 1) * grid_step,
+          offset_y + (2 * row + 1) * grid_step,
+          grid_step,
+          grid_step
+        ))
+        table.insert(stones, stone)
       end
     end
   end
+
+  player:destroy()
+  player = physics.make_collider(world, "dynamic", Rectangle:new(
+    offset_x + 3 * grid_step,
+    offset_y + 3 * grid_step,
+    grid_step,
+    grid_step
+  ))
+  player_initial_x, player_initial_y = player:getPosition()
 
   local joystick_size = screen.height / 4
   local joystick_margin = screen.height / 16
