@@ -68,9 +68,9 @@ function love.load()
 
   player = physics.make_collider(world, "dynamic", Rectangle:new(
     offset_x + 3 * grid_step,
-    offset_y + 3 * grid_step,
+    offset_y + 3 * grid_step - grid_step / 6,
     grid_step,
-    grid_step
+    grid_step + grid_step / 3
   ))
   player_initial_x, player_initial_y = player:getPosition()
 
@@ -119,9 +119,9 @@ function love.draw()
   love.graphics.rectangle(
     "fill",
     -grid_step / 2,
-    -grid_step / 2,
+    -grid_step / 2 - grid_step / 6,
     grid_step,
-    grid_step
+    grid_step + grid_step / 3
   )
   love.graphics.pop()
 
@@ -176,9 +176,9 @@ function love.resize()
   player:destroy()
   player = physics.make_collider(world, "dynamic", Rectangle:new(
     offset_x + 3 * grid_step,
-    offset_y + 3 * grid_step,
+    offset_y + 3 * grid_step - grid_step / 6,
     grid_step,
-    grid_step
+    grid_step + grid_step / 3
   ))
   player_initial_x, player_initial_y = player:getPosition()
 
