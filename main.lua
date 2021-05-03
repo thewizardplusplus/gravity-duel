@@ -17,6 +17,7 @@ local player_initial_x = 0
 local player_initial_y = 0
 local position_joystick = nil
 local direction_joystick = nil
+local impulse_button = nil
 
 local function _enter_fullscreen()
   local os = love.system.getOS()
@@ -87,6 +88,14 @@ function love.load()
     size = joystick_size,
   })
   direction_joystick:noSpring()
+
+  impulse_button = gooi.newButton({
+    text = "~~>",
+    x = screen.x + screen.width - joystick_size - joystick_margin,
+    y = screen.y + screen.height - 1.625 * joystick_size - joystick_margin,
+    w = joystick_size,
+    h = joystick_size / 2,
+  })
 end
 
 function love.draw()
@@ -213,6 +222,15 @@ function love.resize()
     size = joystick_size,
   })
   direction_joystick:noSpring()
+
+  gooi.removeComponent(impulse_button)
+  impulse_button = gooi.newButton({
+    text = "~~>",
+    x = screen.x + screen.width - joystick_size - joystick_margin,
+    y = screen.y + screen.height - 1.625 * joystick_size - joystick_margin,
+    w = joystick_size,
+    h = joystick_size / 2,
+  })
 end
 
 function love.keypressed(key)
