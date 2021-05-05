@@ -101,7 +101,9 @@ function love.load()
     h = joystick_size / 2,
   })
   impulse_button:onPress(function()
+    local impulse_speed = 2000
     local player_x, player_y = player:getPosition()
+    local dt = love.timer.getDelta()
     local impulse = physics.make_circle_collider(
       world,
       "dynamic",
@@ -110,6 +112,10 @@ function love.load()
       grid_step / 12
     )
     impulse:setCollisionClass("Impulse")
+    impulse:applyLinearImpulse(
+      impulse_speed * dt * direction_joystick:xValue(),
+      impulse_speed * dt * direction_joystick:yValue()
+    )
 
     table.insert(impulses, impulse)
   end)
@@ -258,7 +264,9 @@ function love.resize()
     h = joystick_size / 2,
   })
   impulse_button:onPress(function()
+    local impulse_speed = 2000
     local player_x, player_y = player:getPosition()
+    local dt = love.timer.getDelta()
     local impulse = physics.make_circle_collider(
       world,
       "dynamic",
@@ -267,6 +275,10 @@ function love.resize()
       grid_step / 12
     )
     impulse:setCollisionClass("Impulse")
+    impulse:applyLinearImpulse(
+      impulse_speed * dt * direction_joystick:xValue(),
+      impulse_speed * dt * direction_joystick:yValue()
+    )
 
     table.insert(impulses, impulse)
   end)
