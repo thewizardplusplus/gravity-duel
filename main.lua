@@ -48,6 +48,8 @@ function love.load()
   screen = _make_screen()
 
   world = windfield.newWorld(0, 0, true)
+  world:addCollisionClass("Player")
+  world:addCollisionClass("Impulse", {ignores = {"Player", "Impulse"}})
 
   local side_count = 3
   local grid_step = screen.height / 8
@@ -74,6 +76,7 @@ function love.load()
     grid_step,
     grid_step + grid_step / 3
   ))
+  player:setCollisionClass("Player")
   player_initial_x, player_initial_y = player:getPosition()
 
   local joystick_size = screen.height / 4
@@ -106,6 +109,8 @@ function love.load()
       player_y,
       grid_step / 12
     )
+    impulse:setCollisionClass("Impulse")
+
     table.insert(impulses, impulse)
   end)
 end
@@ -223,6 +228,7 @@ function love.resize()
     grid_step,
     grid_step + grid_step / 3
   ))
+  player:setCollisionClass("Player")
   player_initial_x, player_initial_y = player:getPosition()
 
   local joystick_size = screen.height / 4
@@ -260,6 +266,8 @@ function love.resize()
       player_y,
       grid_step / 12
     )
+    impulse:setCollisionClass("Impulse")
+
     table.insert(impulses, impulse)
   end)
 end
