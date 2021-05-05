@@ -56,7 +56,7 @@ function love.load()
     for column = 0, side_count - 1 do
       if row ~= math.floor(side_count / 2)
         or column ~= math.floor(side_count / 2) then
-        local stone = physics.make_collider(world, "dynamic", Rectangle:new(
+        local stone = physics.make_rectangle_collider(world, "dynamic", Rectangle:new(
           offset_x + (2 * column + 1) * grid_step,
           offset_y + (2 * row + 1) * grid_step,
           grid_step,
@@ -67,7 +67,7 @@ function love.load()
     end
   end
 
-  player = physics.make_collider(world, "dynamic", Rectangle:new(
+  player = physics.make_rectangle_collider(world, "dynamic", Rectangle:new(
     offset_x + 3 * grid_step,
     offset_y + 3 * grid_step - grid_step / 6,
     grid_step,
@@ -185,7 +185,7 @@ function love.resize()
     for column = 0, side_count - 1 do
       if row ~= math.floor(side_count / 2)
         or column ~= math.floor(side_count / 2) then
-        local stone = physics.make_collider(world, "dynamic", Rectangle:new(
+        local stone = physics.make_rectangle_collider(world, "dynamic", Rectangle:new(
           offset_x + (2 * column + 1) * grid_step,
           offset_y + (2 * row + 1) * grid_step,
           grid_step,
@@ -197,7 +197,7 @@ function love.resize()
   end
 
   player:destroy()
-  player = physics.make_collider(world, "dynamic", Rectangle:new(
+  player = physics.make_rectangle_collider(world, "dynamic", Rectangle:new(
     offset_x + 3 * grid_step,
     offset_y + 3 * grid_step - grid_step / 6,
     grid_step,

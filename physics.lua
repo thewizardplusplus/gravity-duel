@@ -11,7 +11,7 @@ local physics = {}
 -- @tparam "static"|"dynamic" kind
 -- @tparam Rectangle rectangle
 -- @treturn windfield.Collider
-function physics.make_collider(world, kind, rectangle)
+function physics.make_rectangle_collider(world, kind, rectangle)
   assert(type(world) == "table")
   assert(kind == "static" or kind == "dynamic")
   assert(typeutils.is_instance(rectangle, Rectangle))
