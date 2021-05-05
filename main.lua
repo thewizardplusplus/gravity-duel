@@ -15,6 +15,7 @@ local stones = {}
 local player = nil
 local player_initial_x = 0
 local player_initial_y = 0
+local impulses = {}
 local position_joystick = nil
 local direction_joystick = nil
 local impulse_button = nil
@@ -96,6 +97,17 @@ function love.load()
     w = joystick_size,
     h = joystick_size / 2,
   })
+  impulse_button:onPress(function()
+    local player_x, player_y = player:getPosition()
+    local impulse = physics.make_circle_collider(
+      world,
+      "dynamic",
+      player_x,
+      player_y,
+      grid_step / 12
+    )
+    table.insert(impulses, impulse)
+  end)
 end
 
 function love.draw()
@@ -147,6 +159,14 @@ function love.draw()
     grid_step / 3
   )
   love.graphics.pop()
+
+  love.graphics.setColor(0, 0.5, 1)
+  physics.process_colliders(impulses, function(impulse)
+    love.graphics.push()
+    love.graphics.translate(impulse:getPosition())
+    love.graphics.circle("fill", 0, 0, grid_step / 12)
+    love.graphics.pop()
+  end)
 
   love.graphics.pop()
 
@@ -231,6 +251,17 @@ function love.resize()
     w = joystick_size,
     h = joystick_size / 2,
   })
+  impulse_button:onPress(function()
+    local player_x, player_y = player:getPosition()
+    local impulse = physics.make_circle_collider(
+      world,
+      "dynamic",
+      player_x,
+      player_y,
+      grid_step / 12
+    )
+    table.insert(impulses, impulse)
+  end)
 end
 
 function love.keypressed(key)
