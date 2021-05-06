@@ -132,6 +132,9 @@ function love.draw()
   local player_initial_y = position_joystick.y + position_joystick.h / 2
   love.graphics.setColor(0.5, 0.5, 0.5)
   love.graphics.push()
+  love.graphics.translate(player_initial_x, player_initial_y)
+  love.graphics.rotate(-(player:getAngle() - -math.pi / 2))
+  love.graphics.translate(-player_initial_x, -player_initial_y)
   love.graphics.translate(
     -(player_x - player_initial_x),
     -(player_y - player_initial_y)
