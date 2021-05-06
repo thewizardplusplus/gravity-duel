@@ -151,32 +151,6 @@ function love.draw()
     love.graphics.pop()
   end)
 
-  love.graphics.push()
-  love.graphics.translate(player:getPosition())
-  love.graphics.rotate(player:getAngle())
-  love.graphics.rectangle(
-    "fill",
-    -grid_step / 2,
-    -grid_step / 2 + grid_step / 6,
-    grid_step,
-    grid_step
-  )
-  love.graphics.rectangle(
-    "fill",
-    -grid_step / 2,
-    -grid_step / 2 - grid_step / 6,
-    grid_step / 3,
-    grid_step / 3
-  )
-  love.graphics.rectangle(
-    "fill",
-    -grid_step / 2 + 2 * grid_step / 3,
-    -grid_step / 2 - grid_step / 6,
-    grid_step / 3,
-    grid_step / 3
-  )
-  love.graphics.pop()
-
   love.graphics.setColor(0, 0.5, 1)
   physics.process_colliders(impulses, function(impulse)
     love.graphics.push()
@@ -184,6 +158,33 @@ function love.draw()
     love.graphics.circle("fill", 0, 0, grid_step / 12)
     love.graphics.pop()
   end)
+
+  love.graphics.setColor(0.5, 0.5, 0.5)
+  love.graphics.push()
+  love.graphics.translate(player:getPosition())
+  love.graphics.rotate(player:getAngle())
+  love.graphics.rectangle(
+    "fill",
+    -grid_step / 2 - grid_step / 6,
+    -grid_step / 2,
+    grid_step,
+    grid_step
+  )
+  love.graphics.rectangle(
+    "fill",
+    grid_step / 2 - grid_step / 6,
+    -grid_step / 2,
+    grid_step / 3,
+    grid_step / 3
+  )
+  love.graphics.rectangle(
+    "fill",
+    grid_step / 2 - grid_step / 6,
+    -grid_step / 2 + 2 * grid_step / 3,
+    grid_step / 3,
+    grid_step / 3
+  )
+  love.graphics.pop()
 
   love.graphics.pop()
 
