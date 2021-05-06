@@ -72,10 +72,10 @@ function love.load()
   end
 
   player = physics.make_rectangle_collider(world, "dynamic", Rectangle:new(
-    offset_x + 3 * grid_step,
-    offset_y + 3 * grid_step - grid_step / 6,
-    grid_step,
-    grid_step + grid_step / 3
+    offset_x + 3 * grid_step - grid_step / 6,
+    offset_y + 3 * grid_step,
+    grid_step + grid_step / 3,
+    grid_step
   ))
   player:setCollisionClass("Player")
   player:setAngle(-math.pi / 2)
@@ -240,10 +240,10 @@ function love.resize()
 
   player:destroy()
   player = physics.make_rectangle_collider(world, "dynamic", Rectangle:new(
-    offset_x + 3 * grid_step,
-    offset_y + 3 * grid_step - grid_step / 6,
-    grid_step,
-    grid_step + grid_step / 3
+    offset_x + 3 * grid_step - grid_step / 6,
+    offset_y + 3 * grid_step,
+    grid_step + grid_step / 3,
+    grid_step
   ))
   player:setCollisionClass("Player")
   player:setAngle(-math.pi / 2)
