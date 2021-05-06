@@ -195,6 +195,12 @@ end
 function love.update(dt)
   world:update(dt)
 
+  physics.process_colliders(impulses, function(impulse)
+    if impulse:enter("Default") then
+      impulse:destroy()
+    end
+  end)
+
   local player_speed = 5000
   player:setLinearVelocity(
     player_speed * dt * position_joystick:xValue(),
