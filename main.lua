@@ -78,6 +78,7 @@ function love.load()
     grid_step + grid_step / 3
   ))
   player:setCollisionClass("Player")
+  player:setAngle(-math.pi / 2)
   player_initial_x, player_initial_y = player:getPosition()
 
   local joystick_size = screen.height / 4
@@ -199,10 +200,13 @@ function love.update(dt)
     player_speed * dt * position_joystick:xValue(),
     player_speed * dt * position_joystick:yValue()
   )
-  player:setAngle(math.atan2(
-    direction_joystick:yValue(),
-    direction_joystick:xValue()
-  ))
+  if direction_joystick:xValue() ~= 0
+    or direction_joystick:yValue() ~= 0 then
+    player:setAngle(math.atan2(
+      direction_joystick:yValue(),
+      direction_joystick:xValue()
+    ))
+  end
 
   gooi.update(dt)
 end
@@ -242,6 +246,7 @@ function love.resize()
     grid_step + grid_step / 3
   ))
   player:setCollisionClass("Player")
+  player:setAngle(-math.pi / 2)
   player_initial_x, player_initial_y = player:getPosition()
 
   local joystick_size = screen.height / 4
