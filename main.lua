@@ -14,8 +14,6 @@ local screen = nil -- models.Rectangle
 local world = nil -- windfield.World
 local stones = {}
 local player = nil
-local player_initial_x = 0
-local player_initial_y = 0
 local impulses = {}
 local position_joystick = nil
 local direction_joystick = nil
@@ -79,7 +77,6 @@ function love.load()
   ))
   player:setCollisionClass("Player")
   player:setAngle(-math.pi / 2)
-  player_initial_x, player_initial_y = player:getPosition()
 
   local joystick_size = screen.height / 4
   local joystick_margin = screen.height / 16
@@ -131,6 +128,8 @@ end
 function love.draw()
   local grid_step = screen.height / 8
   local player_x, player_y = player:getPosition()
+  local player_initial_x = (position_joystick.x + direction_joystick.x) / 2 + position_joystick.w / 2
+  local player_initial_y = position_joystick.y + position_joystick.h / 2
   love.graphics.setColor(0.5, 0.5, 0.5)
   love.graphics.push()
   love.graphics.translate(
@@ -253,7 +252,6 @@ function love.resize()
   ))
   player:setCollisionClass("Player")
   player:setAngle(-math.pi / 2)
-  player_initial_x, player_initial_y = player:getPosition()
 
   local joystick_size = screen.height / 4
   local joystick_margin = screen.height / 16
