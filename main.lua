@@ -204,9 +204,13 @@ function love.update(dt)
   end)
 
   local player_speed = 5000
+  local player_velocity = mlib.vec2.rotate(
+    mlib.vec2.new(position_joystick:xValue(), position_joystick:yValue()),
+    player:getAngle() - -math.pi / 2
+  )
   player:setLinearVelocity(
-    player_speed * dt * position_joystick:xValue(),
-    player_speed * dt * position_joystick:yValue()
+    player_speed * dt * player_velocity.x,
+    player_speed * dt * player_velocity.y
   )
   if direction_joystick:xValue() ~= 0
     or direction_joystick:yValue() ~= 0 then
