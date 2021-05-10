@@ -118,7 +118,7 @@ function love.load()
     )
     impulse:setCollisionClass("Impulse")
 
-    local impulse_speed = 2000
+    local impulse_speed = 2 * screen.height
     local dt = love.timer.getDelta()
     local player_direction = mlib.vec2.rotate(
       mlib.vec2.new(1, 0),
@@ -349,7 +349,7 @@ function love.resize()
     )
     impulse:setCollisionClass("Impulse")
 
-    local impulse_speed = 2000
+    local impulse_speed = 2 * screen.height
     local dt = love.timer.getDelta()
     local player_direction = mlib.vec2.rotate(
       mlib.vec2.new(1, 0),
