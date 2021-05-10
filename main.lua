@@ -4,6 +4,8 @@ love.filesystem.setRequirePath(table.concat(require_paths, ";"))
 
 local windfield = require("windfield")
 local mlib = require("mlib")
+local baton = require("baton")
+local typeutils = require("typeutils")
 local Rectangle = require("models.rectangle")
 local physics = require("physics")
 require("gooi")
@@ -18,6 +20,7 @@ local impulses = {}
 local position_joystick = nil
 local direction_joystick = nil
 local impulse_button = nil
+local keys = nil
 
 local function _enter_fullscreen()
   local os = love.system.getOS()
@@ -123,6 +126,40 @@ function love.load()
 
     table.insert(impulses, impulse)
   end)
+
+  local keys_config = assert(typeutils.load_json("keys_config.json", {
+    type = "object",
+    properties = {
+      moved_left = {["$ref"] = "#/definitions/source_group"},
+      moved_right = {["$ref"] = "#/definitions/source_group"},
+      moved_top = {["$ref"] = "#/definitions/source_group"},
+      moved_bottom = {["$ref"] = "#/definitions/source_group"},
+    },
+    required = {
+      "moved_left",
+      "moved_right",
+      "moved_top",
+      "moved_bottom",
+    },
+    definitions = {
+      source_group = {
+        type = "array",
+        items = {type = "string", pattern = "^%a+:%w+$"},
+        minItems = 1,
+      },
+    },
+  }))
+  keys = baton.new({
+    controls = keys_config,
+    pairs = {
+      moved = {
+        "moved_left",
+        "moved_right",
+        "moved_top",
+        "moved_bottom",
+      },
+    },
+  })
 end
 
 function love.draw()

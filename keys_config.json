@@ -1,0 +1,6 @@
+{
+  "moved_left": ["key:left", "key:a"],
+  "moved_right": ["key:right", "key:d"],
+  "moved_top": ["key:up", "key:w"],
+  "moved_bottom": ["key:down", "key:s"]
+}
