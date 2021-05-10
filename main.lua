@@ -241,8 +241,12 @@ function love.update(dt)
   end)
 
   local player_speed = 5000
+  local position_keys_x, position_keys_y = keys:get("moved")
   local player_velocity = mlib.vec2.rotate(
-    mlib.vec2.new(position_joystick:xValue(), position_joystick:yValue()),
+    mlib.vec2.add(
+      mlib.vec2.new(position_joystick:xValue(), position_joystick:yValue()),
+      mlib.vec2.new(position_keys_x, position_keys_y)
+    ),
     player:getAngle() - -math.pi / 2
   )
   player:setLinearVelocity(
@@ -258,6 +262,7 @@ function love.update(dt)
   end
 
   gooi.update(dt)
+  keys:update()
 end
 
 function love.resize()
