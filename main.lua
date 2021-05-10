@@ -120,6 +120,7 @@ function love.load()
       grid_step / 12
     )
     impulse:setCollisionClass("Impulse")
+    impulse:setMass(1 / 36)
 
     local impulse_speed = 2 * screen.height
     local dt = love.timer.getDelta()
@@ -354,6 +355,7 @@ function love.resize()
       grid_step / 12
     )
     impulse:setCollisionClass("Impulse")
+    impulse:setMass(1 / 36)
 
     local impulse_speed = 2 * screen.height
     local dt = love.timer.getDelta()
