@@ -67,6 +67,8 @@ function love.load()
           grid_step,
           grid_step
         ))
+        stone:setMass(1)
+
         table.insert(stones, stone)
       end
     end
@@ -292,6 +294,8 @@ function love.resize()
           grid_step,
           grid_step
         ))
+        stone:setMass(1)
+
         table.insert(stones, stone)
       end
     end
