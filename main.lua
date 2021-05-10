@@ -245,7 +245,7 @@ function love.update(dt)
     end
   end)
 
-  local player_speed = 5000
+  local player_speed = 10 * screen.height
   local position_keys_x, position_keys_y = keys:get("moved")
   local player_velocity = mlib.vec2.rotate(
     mlib.vec2.add(
