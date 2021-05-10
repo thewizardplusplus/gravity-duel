@@ -82,6 +82,7 @@ function love.load()
   ))
   player:setCollisionClass("Player")
   player:setAngle(-math.pi / 2)
+  player:setMass(1 + 2 / 9)
 
   local font_size = screen.height / 20
   gooi.setStyle({
@@ -310,6 +311,7 @@ function love.resize()
   ))
   player:setCollisionClass("Player")
   player:setAngle(-math.pi / 2)
+  player:setMass(1 + 2 / 9)
 
   local font_size = screen.height / 20
   gooi.setStyle({
