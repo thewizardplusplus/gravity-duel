@@ -81,6 +81,11 @@ function love.load()
   player:setCollisionClass("Player")
   player:setAngle(-math.pi / 2)
 
+  local font_size = screen.height / 20
+  gooi.setStyle({
+    font = love.graphics.newFont(font_size),
+  })
+
   local joystick_size = screen.height / 4
   local joystick_margin = screen.height / 16
   position_joystick = gooi.newJoy({
@@ -301,6 +306,11 @@ function love.resize()
   ))
   player:setCollisionClass("Player")
   player:setAngle(-math.pi / 2)
+
+  local font_size = screen.height / 20
+  gooi.setStyle({
+    font = love.graphics.newFont(font_size),
+  })
 
   local joystick_size = screen.height / 4
   local joystick_margin = screen.height / 16
