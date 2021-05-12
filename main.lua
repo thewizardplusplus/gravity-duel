@@ -188,9 +188,7 @@ function love.draw()
     )
 
     physics.process_colliders(stones, function(stone)
-      drawing.draw_with_transformations(function()
-        love.graphics.translate(stone:getPosition())
-        love.graphics.rotate(stone:getAngle())
+      drawing.draw_collider(stone, function()
         love.graphics.rectangle(
           "fill",
           -grid_step / 2,
@@ -203,16 +201,13 @@ function love.draw()
 
     love.graphics.setColor(0, 0.5, 1)
     physics.process_colliders(impulses, function(impulse)
-      drawing.draw_with_transformations(function()
-        love.graphics.translate(impulse:getPosition())
+      drawing.draw_collider(impulse, function()
         love.graphics.circle("fill", 0, 0, grid_step / 12)
       end)
     end)
 
     love.graphics.setColor(0.5, 0.5, 0.5)
-    drawing.draw_with_transformations(function()
-      love.graphics.translate(player:getPosition())
-      love.graphics.rotate(player:getAngle())
+    drawing.draw_collider(player, function()
       love.graphics.rectangle(
         "fill",
         -grid_step / 2 - grid_step / 6,

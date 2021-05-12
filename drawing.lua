@@ -15,4 +15,18 @@ function drawing.draw_with_transformations(drawer)
   love.graphics.pop()
 end
 
+---
+-- @tparam windfield.Collider collider
+-- @tparam func drawer func(): nil
+function drawing.draw_collider(collider, drawer)
+  assert(type(collider) == "table")
+  assert(typeutils.is_callable(drawer))
+
+  drawing.draw_with_transformations(function()
+    love.graphics.translate(collider:getPosition())
+    love.graphics.rotate(collider:getAngle())
+    drawer()
+  end)
+end
+
 return drawing
