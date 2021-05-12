@@ -6,8 +6,9 @@ local windfield = require("windfield")
 local mlib = require("mlib")
 local baton = require("baton")
 local typeutils = require("typeutils")
-local Rectangle = require("models.rectangle")
+local drawing = require("drawing")
 local physics = require("physics")
+local Rectangle = require("models.rectangle")
 require("gooi")
 require("luatable")
 require("compat52")
@@ -177,65 +178,64 @@ function love.draw()
   local player_initial_x = (position_joystick.x + direction_joystick.x) / 2 + position_joystick.w / 2
   local player_initial_y = position_joystick.y + position_joystick.h / 2
   love.graphics.setColor(0.5, 0.5, 0.5)
-  love.graphics.push()
-  love.graphics.translate(player_initial_x, player_initial_y)
-  love.graphics.rotate(-(player:getAngle() - -math.pi / 2))
-  love.graphics.translate(-player_initial_x, -player_initial_y)
-  love.graphics.translate(
-    -(player_x - player_initial_x),
-    -(player_y - player_initial_y)
-  )
-
-  physics.process_colliders(stones, function(stone)
-    love.graphics.push()
-    love.graphics.translate(stone:getPosition())
-    love.graphics.rotate(stone:getAngle())
-    love.graphics.rectangle(
-      "fill",
-      -grid_step / 2,
-      -grid_step / 2,
-      grid_step,
-      grid_step
+  drawing.draw_with_transformations(function()
+    love.graphics.translate(player_initial_x, player_initial_y)
+    love.graphics.rotate(-(player:getAngle() - -math.pi / 2))
+    love.graphics.translate(-player_initial_x, -player_initial_y)
+    love.graphics.translate(
+      -(player_x - player_initial_x),
+      -(player_y - player_initial_y)
     )
-    love.graphics.pop()
+
+    physics.process_colliders(stones, function(stone)
+      drawing.draw_with_transformations(function()
+        love.graphics.translate(stone:getPosition())
+        love.graphics.rotate(stone:getAngle())
+        love.graphics.rectangle(
+          "fill",
+          -grid_step / 2,
+          -grid_step / 2,
+          grid_step,
+          grid_step
+        )
+      end)
+    end)
+
+    love.graphics.setColor(0, 0.5, 1)
+    physics.process_colliders(impulses, function(impulse)
+      drawing.draw_with_transformations(function()
+        love.graphics.translate(impulse:getPosition())
+        love.graphics.circle("fill", 0, 0, grid_step / 12)
+      end)
+    end)
+
+    love.graphics.setColor(0.5, 0.5, 0.5)
+    drawing.draw_with_transformations(function()
+      love.graphics.translate(player:getPosition())
+      love.graphics.rotate(player:getAngle())
+      love.graphics.rectangle(
+        "fill",
+        -grid_step / 2 - grid_step / 6,
+        -grid_step / 2,
+        grid_step,
+        grid_step
+      )
+      love.graphics.rectangle(
+        "fill",
+        grid_step / 2 - grid_step / 6,
+        -grid_step / 2,
+        grid_step / 3,
+        grid_step / 3
+      )
+      love.graphics.rectangle(
+        "fill",
+        grid_step / 2 - grid_step / 6,
+        -grid_step / 2 + 2 * grid_step / 3,
+        grid_step / 3,
+        grid_step / 3
+      )
+    end)
   end)
-
-  love.graphics.setColor(0, 0.5, 1)
-  physics.process_colliders(impulses, function(impulse)
-    love.graphics.push()
-    love.graphics.translate(impulse:getPosition())
-    love.graphics.circle("fill", 0, 0, grid_step / 12)
-    love.graphics.pop()
-  end)
-
-  love.graphics.setColor(0.5, 0.5, 0.5)
-  love.graphics.push()
-  love.graphics.translate(player:getPosition())
-  love.graphics.rotate(player:getAngle())
-  love.graphics.rectangle(
-    "fill",
-    -grid_step / 2 - grid_step / 6,
-    -grid_step / 2,
-    grid_step,
-    grid_step
-  )
-  love.graphics.rectangle(
-    "fill",
-    grid_step / 2 - grid_step / 6,
-    -grid_step / 2,
-    grid_step / 3,
-    grid_step / 3
-  )
-  love.graphics.rectangle(
-    "fill",
-    grid_step / 2 - grid_step / 6,
-    -grid_step / 2 + 2 * grid_step / 3,
-    grid_step / 3,
-    grid_step / 3
-  )
-  love.graphics.pop()
-
-  love.graphics.pop()
 
   gooi.draw()
 end
