@@ -4,6 +4,7 @@ file = {
   "drawing.lua",
   "physics.lua",
   "models/rectangle.lua",
+  "objects/player.lua",
 }
 topics = {
   "README.md",

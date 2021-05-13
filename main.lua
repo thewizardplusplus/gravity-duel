@@ -9,6 +9,7 @@ local typeutils = require("typeutils")
 local drawing = require("drawing")
 local physics = require("physics")
 local Rectangle = require("models.rectangle")
+local Player = require("objects.player")
 require("gooi")
 require("luatable")
 require("compat52")
@@ -16,7 +17,7 @@ require("compat52")
 local screen = nil -- models.Rectangle
 local world = nil -- windfield.World
 local stones = {}
-local player = nil
+local player = nil -- objects.Player
 local impulses = {}
 local position_joystick = nil
 local direction_joystick = nil
@@ -75,15 +76,7 @@ function love.load()
     end
   end
 
-  player = physics.make_rectangle_collider(world, "dynamic", Rectangle:new(
-    offset_x + 3 * grid_step - grid_step / 6,
-    offset_y + 3 * grid_step,
-    grid_step + grid_step / 3,
-    grid_step
-  ))
-  player:setCollisionClass("Player")
-  player:setAngle(-math.pi / 2)
-  player:setMass(1 + 2 / 9)
+  player = Player:new(world, screen)
 
   local font_size = screen.height / 20
   gooi.setStyle({
@@ -112,7 +105,7 @@ function love.load()
     h = joystick_size / 2,
   })
   impulse_button:onPress(function()
-    local player_x, player_y = player:getPosition()
+    local player_x, player_y = player._collider:getPosition()
     local impulse = physics.make_circle_collider(
       world,
       "dynamic",
@@ -127,7 +120,7 @@ function love.load()
     local dt = love.timer.getDelta()
     local player_direction = mlib.vec2.rotate(
       mlib.vec2.new(1, 0),
-      player:getAngle()
+      player._collider:getAngle()
     )
     impulse:applyLinearImpulse(
       impulse_speed * dt * player_direction.x,
@@ -174,13 +167,13 @@ end
 
 function love.draw()
   local grid_step = screen.height / 8
-  local player_x, player_y = player:getPosition()
+  local player_x, player_y = player._collider:getPosition()
   local player_initial_x = (position_joystick.x + direction_joystick.x) / 2 + position_joystick.w / 2
   local player_initial_y = position_joystick.y + position_joystick.h / 2
   love.graphics.setColor(0.5, 0.5, 0.5)
   drawing.draw_with_transformations(function()
     love.graphics.translate(player_initial_x, player_initial_y)
-    love.graphics.rotate(-(player:getAngle() - -math.pi / 2))
+    love.graphics.rotate(-(player._collider:getAngle() - -math.pi / 2))
     love.graphics.translate(-player_initial_x, -player_initial_y)
     love.graphics.translate(
       -(player_x - player_initial_x),
@@ -207,7 +200,7 @@ function love.draw()
     end)
 
     love.graphics.setColor(0.5, 0.5, 0.5)
-    drawing.draw_collider(player, function()
+    drawing.draw_collider(player._collider, function()
       love.graphics.rectangle(
         "fill",
         -grid_step / 2 - grid_step / 6,
@@ -251,15 +244,15 @@ function love.update(dt)
       mlib.vec2.new(position_joystick:xValue(), position_joystick:yValue()),
       mlib.vec2.new(position_keys_x, position_keys_y)
     ),
-    player:getAngle() - -math.pi / 2
+    player._collider:getAngle() - -math.pi / 2
   )
-  player:setLinearVelocity(
+  player._collider:setLinearVelocity(
     player_speed * dt * player_velocity.x,
     player_speed * dt * player_velocity.y
   )
   if direction_joystick:xValue() ~= 0
     or direction_joystick:yValue() ~= 0 then
-    player:setAngle(math.atan2(
+    player._collider:setAngle(math.atan2(
       direction_joystick:yValue(),
       direction_joystick:xValue()
     ))
@@ -298,16 +291,8 @@ function love.resize()
     end
   end
 
-  player:destroy()
-  player = physics.make_rectangle_collider(world, "dynamic", Rectangle:new(
-    offset_x + 3 * grid_step - grid_step / 6,
-    offset_y + 3 * grid_step,
-    grid_step + grid_step / 3,
-    grid_step
-  ))
-  player:setCollisionClass("Player")
-  player:setAngle(-math.pi / 2)
-  player:setMass(1 + 2 / 9)
+  player._collider:destroy()
+  player = Player:new(world, screen)
 
   local font_size = screen.height / 20
   gooi.setStyle({
@@ -341,7 +326,7 @@ function love.resize()
     h = joystick_size / 2,
   })
   impulse_button:onPress(function()
-    local player_x, player_y = player:getPosition()
+    local player_x, player_y = player._collider:getPosition()
     local impulse = physics.make_circle_collider(
       world,
       "dynamic",
@@ -356,7 +341,7 @@ function love.resize()
     local dt = love.timer.getDelta()
     local player_direction = mlib.vec2.rotate(
       mlib.vec2.new(1, 0),
-      player:getAngle()
+      player._collider:getAngle()
     )
     impulse:applyLinearImpulse(
       impulse_speed * dt * player_direction.x,
