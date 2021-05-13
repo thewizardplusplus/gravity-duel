@@ -199,30 +199,7 @@ function love.draw()
       end)
     end)
 
-    love.graphics.setColor(0.5, 0.5, 0.5)
-    drawing.draw_collider(player._collider, function()
-      love.graphics.rectangle(
-        "fill",
-        -grid_step / 2 - grid_step / 6,
-        -grid_step / 2,
-        grid_step,
-        grid_step
-      )
-      love.graphics.rectangle(
-        "fill",
-        grid_step / 2 - grid_step / 6,
-        -grid_step / 2,
-        grid_step / 3,
-        grid_step / 3
-      )
-      love.graphics.rectangle(
-        "fill",
-        grid_step / 2 - grid_step / 6,
-        -grid_step / 2 + 2 * grid_step / 3,
-        grid_step / 3,
-        grid_step / 3
-      )
-    end)
+    player:draw()
   end)
 
   gooi.draw()
