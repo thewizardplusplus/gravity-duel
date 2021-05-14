@@ -268,7 +268,7 @@ function love.resize()
     end
   end
 
-  player._collider:destroy()
+  player:destroy()
   player = Player:new(world, screen)
 
   local font_size = screen.height / 20

@@ -80,4 +80,10 @@ function Player:draw()
   end)
 end
 
+---
+-- @function destroy
+function Player:destroy()
+  self._collider:destroy()
+end
+
 return Player
