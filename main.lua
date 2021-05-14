@@ -105,7 +105,7 @@ function love.load()
     h = joystick_size / 2,
   })
   impulse_button:onPress(function()
-    local player_x, player_y = player._collider:getPosition()
+    local player_x, player_y = player:position()
     local impulse = physics.make_circle_collider(
       world,
       "dynamic",
@@ -167,7 +167,7 @@ end
 
 function love.draw()
   local grid_step = screen.height / 8
-  local player_x, player_y = player._collider:getPosition()
+  local player_x, player_y = player:position()
   local player_initial_x = (position_joystick.x + direction_joystick.x) / 2 + position_joystick.w / 2
   local player_initial_y = position_joystick.y + position_joystick.h / 2
   love.graphics.setColor(0.5, 0.5, 0.5)
@@ -303,7 +303,7 @@ function love.resize()
     h = joystick_size / 2,
   })
   impulse_button:onPress(function()
-    local player_x, player_y = player._collider:getPosition()
+    local player_x, player_y = player:position()
     local impulse = physics.make_circle_collider(
       world,
       "dynamic",

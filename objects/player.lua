@@ -39,6 +39,13 @@ function Player:initialize(world, screen)
 end
 
 ---
+-- @treturn number x
+-- @treturn number y
+function Player:position()
+  return self._collider:getPosition()
+end
+
+---
 -- @function draw
 function Player:draw()
   love.graphics.setColor(0.5, 0.5, 0.5)
