@@ -46,6 +46,12 @@ function Player:position()
 end
 
 ---
+-- @treturn number
+function Player:angle()
+  return self._collider:getAngle()
+end
+
+---
 -- @function draw
 function Player:draw()
   love.graphics.setColor(0.5, 0.5, 0.5)

@@ -120,7 +120,7 @@ function love.load()
     local dt = love.timer.getDelta()
     local player_direction = mlib.vec2.rotate(
       mlib.vec2.new(1, 0),
-      player._collider:getAngle()
+      player:angle()
     )
     impulse:applyLinearImpulse(
       impulse_speed * dt * player_direction.x,
@@ -173,7 +173,7 @@ function love.draw()
   love.graphics.setColor(0.5, 0.5, 0.5)
   drawing.draw_with_transformations(function()
     love.graphics.translate(player_initial_x, player_initial_y)
-    love.graphics.rotate(-(player._collider:getAngle() - -math.pi / 2))
+    love.graphics.rotate(-(player:angle() - -math.pi / 2))
     love.graphics.translate(-player_initial_x, -player_initial_y)
     love.graphics.translate(
       -(player_x - player_initial_x),
@@ -221,7 +221,7 @@ function love.update(dt)
       mlib.vec2.new(position_joystick:xValue(), position_joystick:yValue()),
       mlib.vec2.new(position_keys_x, position_keys_y)
     ),
-    player._collider:getAngle() - -math.pi / 2
+    player:angle() - -math.pi / 2
   )
   player._collider:setLinearVelocity(
     player_speed * dt * player_velocity.x,
@@ -318,7 +318,7 @@ function love.resize()
     local dt = love.timer.getDelta()
     local player_direction = mlib.vec2.rotate(
       mlib.vec2.new(1, 0),
-      player._collider:getAngle()
+      player:angle()
     )
     impulse:applyLinearImpulse(
       impulse_speed * dt * player_direction.x,
