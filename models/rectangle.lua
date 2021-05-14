@@ -32,4 +32,10 @@ function Rectangle:initialize(x, y, width, height)
   self.height = height
 end
 
+---
+-- @treturn number [0, ∞)
+function Rectangle:grid_step()
+  return self.height / 8
+end
+
 return Rectangle

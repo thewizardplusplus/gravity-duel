@@ -56,18 +56,17 @@ function love.load()
   world:addCollisionClass("Impulse", {ignores = {"Player", "Impulse"}})
 
   local side_count = 3
-  local grid_step = screen.height / 8
-  local offset_x = screen.x + screen.width / 2 - (2 * side_count + 1) * grid_step / 2
-  local offset_y = screen.y + screen.height / 2 - (2 * side_count + 1) * grid_step / 2
+  local offset_x = screen.x + screen.width / 2 - (2 * side_count + 1) * screen:grid_step() / 2
+  local offset_y = screen.y + screen.height / 2 - (2 * side_count + 1) * screen:grid_step() / 2
   for row = 0, side_count - 1 do
     for column = 0, side_count - 1 do
       if row ~= math.floor(side_count / 2)
         or column ~= math.floor(side_count / 2) then
         local stone = physics.make_rectangle_collider(world, "dynamic", Rectangle:new(
-          offset_x + (2 * column + 1) * grid_step,
-          offset_y + (2 * row + 1) * grid_step,
-          grid_step,
-          grid_step
+          offset_x + (2 * column + 1) * screen:grid_step(),
+          offset_y + (2 * row + 1) * screen:grid_step(),
+          screen:grid_step(),
+          screen:grid_step()
         ))
         stone:setMass(1)
 
@@ -111,7 +110,7 @@ function love.load()
       "dynamic",
       player_x,
       player_y,
-      grid_step / 12
+      screen:grid_step() / 12
     )
     impulse:setCollisionClass("Impulse")
     impulse:setMass(1 / 36)
@@ -166,7 +165,6 @@ function love.load()
 end
 
 function love.draw()
-  local grid_step = screen.height / 8
   local player_x, player_y = player:position()
   local player_initial_x = (position_joystick.x + direction_joystick.x) / 2 + position_joystick.w / 2
   local player_initial_y = position_joystick.y + position_joystick.h / 2
@@ -184,10 +182,10 @@ function love.draw()
       drawing.draw_collider(stone, function()
         love.graphics.rectangle(
           "fill",
-          -grid_step / 2,
-          -grid_step / 2,
-          grid_step,
-          grid_step
+          -screen:grid_step() / 2,
+          -screen:grid_step() / 2,
+          screen:grid_step(),
+          screen:grid_step()
         )
       end)
     end)
@@ -195,11 +193,11 @@ function love.draw()
     love.graphics.setColor(0, 0.5, 1)
     physics.process_colliders(impulses, function(impulse)
       drawing.draw_collider(impulse, function()
-        love.graphics.circle("fill", 0, 0, grid_step / 12)
+        love.graphics.circle("fill", 0, 0, screen:grid_step() / 12)
       end)
     end)
 
-    player:draw()
+    player:draw(screen)
   end)
 
   gooi.draw()
@@ -248,18 +246,17 @@ function love.resize()
   stones = {}
 
   local side_count = 3
-  local grid_step = screen.height / 8
-  local offset_x = screen.x + screen.width / 2 - (2 * side_count + 1) * grid_step / 2
-  local offset_y = screen.y + screen.height / 2 - (2 * side_count + 1) * grid_step / 2
+  local offset_x = screen.x + screen.width / 2 - (2 * side_count + 1) * screen:grid_step() / 2
+  local offset_y = screen.y + screen.height / 2 - (2 * side_count + 1) * screen:grid_step() / 2
   for row = 0, side_count - 1 do
     for column = 0, side_count - 1 do
       if row ~= math.floor(side_count / 2)
         or column ~= math.floor(side_count / 2) then
         local stone = physics.make_rectangle_collider(world, "dynamic", Rectangle:new(
-          offset_x + (2 * column + 1) * grid_step,
-          offset_y + (2 * row + 1) * grid_step,
-          grid_step,
-          grid_step
+          offset_x + (2 * column + 1) * screen:grid_step(),
+          offset_y + (2 * row + 1) * screen:grid_step(),
+          screen:grid_step(),
+          screen:grid_step()
         ))
         stone:setMass(1)
 
@@ -309,7 +306,7 @@ function love.resize()
       "dynamic",
       player_x,
       player_y,
-      grid_step / 12
+      screen:grid_step() / 12
     )
     impulse:setCollisionClass("Impulse")
     impulse:setMass(1 / 36)
