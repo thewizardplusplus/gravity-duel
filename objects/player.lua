@@ -22,14 +22,14 @@ function Player:initialize(world, screen)
   assert(type(world) == "table")
   assert(typeutils.is_instance(screen, Rectangle))
 
-  local x = screen.x + screen.width / 2 - screen:grid_step() / 2 - screen:grid_step() / 6
-  local y = screen.y + screen.height / 2 - screen:grid_step() / 2
-  self._collider = physics.make_rectangle_collider(world, "dynamic", Rectangle:new(
-    x,
-    y,
-    screen:grid_step() + screen:grid_step() / 3,
-    screen:grid_step()
-  ))
+  self._collider =
+    physics.make_rectangle_collider(world, "dynamic", Rectangle:new(
+      screen.x + screen.width / 2
+        - screen:grid_step() / 2 - screen:grid_step() / 6,
+      screen.y + screen.height / 2 - screen:grid_step() / 2,
+      screen:grid_step() + screen:grid_step() / 3,
+      screen:grid_step()
+    ))
   self._collider:setCollisionClass("Player")
   self._collider:setAngle(-math.pi / 2)
   self._collider:setMass(1 + 2 / 9)
