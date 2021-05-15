@@ -7,6 +7,7 @@ local typeutils = require("typeutils")
 local Rectangle = require("models.rectangle")
 local Player = require("objects.player")
 local physics = require("physics")
+local drawing = require("drawing")
 
 ---
 -- @table instance
@@ -43,6 +44,17 @@ function Impulse:initialize(world, screen, player)
     impulse_speed * dt * player_direction.x,
     impulse_speed * dt * player_direction.y
   )
+end
+
+---
+-- @tparam Rectangle screen
+function Impulse:draw(screen)
+  assert(typeutils.is_instance(screen, Rectangle))
+
+  love.graphics.setColor(0, 0.5, 1)
+  drawing.draw_collider(self._collider, function()
+    love.graphics.circle("fill", 0, 0, screen:grid_step() / 12)
+  end)
 end
 
 return Impulse

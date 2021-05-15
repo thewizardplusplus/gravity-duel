@@ -170,12 +170,9 @@ function love.draw()
       end)
     end)
 
-    love.graphics.setColor(0, 0.5, 1)
     for _, impulse in ipairs(impulses) do
       if not impulse._collider:isDestroyed() then
-        drawing.draw_collider(impulse._collider, function()
-          love.graphics.circle("fill", 0, 0, screen:grid_step() / 12)
-        end)
+        impulse:draw(screen)
       end
     end
 
