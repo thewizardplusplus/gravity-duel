@@ -63,4 +63,10 @@ function Impulse:draw(screen)
   end)
 end
 
+---
+-- @function destroy
+function Impulse:destroy()
+  self._collider:destroy()
+end
+
 return Impulse

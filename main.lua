@@ -187,7 +187,7 @@ function love.update(dt)
 
   for _, impulse in ipairs(impulses) do
     if impulse:hit() then
-      impulse._collider:destroy()
+      impulse:destroy()
     end
   end
 
