@@ -244,6 +244,13 @@ function love.resize()
     end
   end
 
+  for _, impulse in ipairs(impulses) do
+    if not impulse._collider:isDestroyed() then
+      impulse:destroy()
+    end
+  end
+  impulses = {}
+
   player:destroy()
   player = Player:new(world, screen)
 
