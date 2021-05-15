@@ -47,6 +47,12 @@ function Impulse:initialize(world, screen, player)
 end
 
 ---
+-- @treturn bool
+function Impulse:hit()
+  return self._collider:enter("Default")
+end
+
+---
 -- @tparam Rectangle screen
 function Impulse:draw(screen)
   assert(typeutils.is_instance(screen, Rectangle))

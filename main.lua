@@ -186,7 +186,7 @@ function love.update(dt)
   world:update(dt)
 
   for _, impulse in ipairs(impulses) do
-    if impulse._collider:enter("Default") then
+    if impulse:hit() then
       impulse._collider:destroy()
     end
   end
