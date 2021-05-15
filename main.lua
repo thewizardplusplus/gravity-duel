@@ -171,9 +171,7 @@ function love.draw()
     end)
 
     for _, impulse in ipairs(impulses) do
-      if not impulse._collider:isDestroyed() then
-        impulse:draw(screen)
-      end
+      impulse:draw(screen)
     end
 
     player:draw(screen)
@@ -185,11 +183,15 @@ end
 function love.update(dt)
   world:update(dt)
 
+  local active_impulses = {}
   for _, impulse in ipairs(impulses) do
-    if impulse:hit() then
+    if not impulse:hit() then
+      table.insert(active_impulses, impulse)
+    else
       impulse:destroy()
     end
   end
+  impulses = active_impulses
 
   local player_speed = 10 * screen.height
   local position_keys_x, position_keys_y = keys:get("moved")
@@ -245,9 +247,7 @@ function love.resize()
   end
 
   for _, impulse in ipairs(impulses) do
-    if not impulse._collider:isDestroyed() then
-      impulse:destroy()
-    end
+    impulse:destroy()
   end
   impulses = {}
 
