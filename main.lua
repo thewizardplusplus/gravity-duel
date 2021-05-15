@@ -10,6 +10,7 @@ local drawing = require("drawing")
 local physics = require("physics")
 local Rectangle = require("models.rectangle")
 local Player = require("objects.player")
+local Impulse = require("objects.impulse")
 require("gooi")
 require("luatable")
 require("compat52")
@@ -18,7 +19,7 @@ local screen = nil -- models.Rectangle
 local world = nil -- windfield.World
 local stones = {}
 local player = nil -- objects.Player
-local impulses = {}
+local impulses = {} -- {objects.Impulse,...}
 local position_joystick = nil
 local direction_joystick = nil
 local impulse_button = nil
@@ -104,28 +105,7 @@ function love.load()
     h = joystick_size / 2,
   })
   impulse_button:onPress(function()
-    local player_x, player_y = player:position()
-    local impulse = physics.make_circle_collider(
-      world,
-      "dynamic",
-      player_x,
-      player_y,
-      screen:grid_step() / 12
-    )
-    impulse:setCollisionClass("Impulse")
-    impulse:setMass(1 / 36)
-
-    local impulse_speed = 2 * screen.height
-    local dt = love.timer.getDelta()
-    local player_direction = mlib.vec2.rotate(
-      mlib.vec2.new(1, 0),
-      player:angle()
-    )
-    impulse:applyLinearImpulse(
-      impulse_speed * dt * player_direction.x,
-      impulse_speed * dt * player_direction.y
-    )
-
+    local impulse = Impulse:new(world, screen, player)
     table.insert(impulses, impulse)
   end)
 
@@ -191,11 +171,13 @@ function love.draw()
     end)
 
     love.graphics.setColor(0, 0.5, 1)
-    physics.process_colliders(impulses, function(impulse)
-      drawing.draw_collider(impulse, function()
-        love.graphics.circle("fill", 0, 0, screen:grid_step() / 12)
-      end)
-    end)
+    for _, impulse in ipairs(impulses) do
+      if not impulse._collider:isDestroyed() then
+        drawing.draw_collider(impulse._collider, function()
+          love.graphics.circle("fill", 0, 0, screen:grid_step() / 12)
+        end)
+      end
+    end
 
     player:draw(screen)
   end)
@@ -206,11 +188,11 @@ end
 function love.update(dt)
   world:update(dt)
 
-  physics.process_colliders(impulses, function(impulse)
-    if impulse:enter("Default") then
-      impulse:destroy()
+  for _, impulse in ipairs(impulses) do
+    if impulse._collider:enter("Default") then
+      impulse._collider:destroy()
     end
-  end)
+  end
 
   local player_speed = 10 * screen.height
   local position_keys_x, position_keys_y = keys:get("moved")
@@ -300,28 +282,7 @@ function love.resize()
     h = joystick_size / 2,
   })
   impulse_button:onPress(function()
-    local player_x, player_y = player:position()
-    local impulse = physics.make_circle_collider(
-      world,
-      "dynamic",
-      player_x,
-      player_y,
-      screen:grid_step() / 12
-    )
-    impulse:setCollisionClass("Impulse")
-    impulse:setMass(1 / 36)
-
-    local impulse_speed = 2 * screen.height
-    local dt = love.timer.getDelta()
-    local player_direction = mlib.vec2.rotate(
-      mlib.vec2.new(1, 0),
-      player:angle()
-    )
-    impulse:applyLinearImpulse(
-      impulse_speed * dt * player_direction.x,
-      impulse_speed * dt * player_direction.y
-    )
-
+    local impulse = Impulse:new(world, screen, player)
     table.insert(impulses, impulse)
   end)
 end
