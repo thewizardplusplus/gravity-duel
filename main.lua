@@ -77,11 +77,6 @@ function love.load()
 
   player = Player:new(world, screen)
 
-  local font_size = screen.height / 20
-  gooi.setStyle({
-    font = love.graphics.newFont(font_size),
-  })
-
   ui = Ui:new(screen, function()
     local impulse = Impulse:new(world, screen, player)
     table.insert(impulses, impulse)
@@ -230,11 +225,6 @@ function love.resize()
 
   player:destroy()
   player = Player:new(world, screen)
-
-  local font_size = screen.height / 20
-  gooi.setStyle({
-    font = love.graphics.newFont(font_size),
-  })
 
   ui:destroy()
   ui = Ui:new(screen, function()
