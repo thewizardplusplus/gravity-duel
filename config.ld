@@ -6,6 +6,7 @@ file = {
   "models/rectangle.lua",
   "objects/player.lua",
   "objects/impulse.lua",
+  "objects/ui.lua",
 }
 topics = {
   "README.md",

@@ -11,6 +11,7 @@ local physics = require("physics")
 local Rectangle = require("models.rectangle")
 local Player = require("objects.player")
 local Impulse = require("objects.impulse")
+local Ui = require("objects.ui")
 require("gooi")
 require("luatable")
 require("compat52")
@@ -20,9 +21,7 @@ local world = nil -- windfield.World
 local stones = {}
 local player = nil -- objects.Player
 local impulses = {} -- {objects.Impulse,...}
-local position_joystick = nil
-local direction_joystick = nil
-local impulse_button = nil
+local ui = nil -- objects.Ui
 local keys = nil
 
 local function _enter_fullscreen()
@@ -83,28 +82,7 @@ function love.load()
     font = love.graphics.newFont(font_size),
   })
 
-  local joystick_size = screen.height / 4
-  local joystick_margin = screen.height / 16
-  position_joystick = gooi.newJoy({
-    x = screen.x + joystick_margin,
-    y = screen.y + screen.height - joystick_size - joystick_margin,
-    size = joystick_size,
-  })
-  direction_joystick = gooi.newJoy({
-    x = screen.x + screen.width - joystick_size - joystick_margin,
-    y = screen.y + screen.height - joystick_size - joystick_margin,
-    size = joystick_size,
-  })
-  direction_joystick:noSpring()
-
-  impulse_button = gooi.newButton({
-    text = "~~>",
-    x = screen.x + screen.width - joystick_size - joystick_margin,
-    y = screen.y + screen.height - 1.625 * joystick_size - joystick_margin,
-    w = joystick_size,
-    h = joystick_size / 2,
-  })
-  impulse_button:onPress(function()
+  ui = Ui:new(screen, function()
     local impulse = Impulse:new(world, screen, player)
     table.insert(impulses, impulse)
   end)
@@ -146,8 +124,8 @@ end
 
 function love.draw()
   local player_x, player_y = player:position()
-  local player_initial_x = (position_joystick.x + direction_joystick.x) / 2 + position_joystick.w / 2
-  local player_initial_y = position_joystick.y + position_joystick.h / 2
+  local player_initial_x = (ui._position_joystick.x + ui._direction_joystick.x) / 2 + ui._position_joystick.w / 2
+  local player_initial_y = ui._position_joystick.y + ui._position_joystick.h / 2
   love.graphics.setColor(0.5, 0.5, 0.5)
   drawing.draw_with_transformations(function()
     love.graphics.translate(player_initial_x, player_initial_y)
@@ -197,7 +175,7 @@ function love.update(dt)
   local position_keys_x, position_keys_y = keys:get("moved")
   local player_velocity = mlib.vec2.rotate(
     mlib.vec2.add(
-      mlib.vec2.new(position_joystick:xValue(), position_joystick:yValue()),
+      mlib.vec2.new(ui._position_joystick:xValue(), ui._position_joystick:yValue()),
       mlib.vec2.new(position_keys_x, position_keys_y)
     ),
     player:angle() - -math.pi / 2
@@ -206,11 +184,11 @@ function love.update(dt)
     player_speed * dt * player_velocity.x,
     player_speed * dt * player_velocity.y
   )
-  if direction_joystick:xValue() ~= 0
-    or direction_joystick:yValue() ~= 0 then
+  if ui._direction_joystick:xValue() ~= 0
+    or ui._direction_joystick:yValue() ~= 0 then
     player._collider:setAngle(math.atan2(
-      direction_joystick:yValue(),
-      direction_joystick:xValue()
+      ui._direction_joystick:yValue(),
+      ui._direction_joystick:xValue()
     ))
   end
 
@@ -259,33 +237,10 @@ function love.resize()
     font = love.graphics.newFont(font_size),
   })
 
-  local joystick_size = screen.height / 4
-  local joystick_margin = screen.height / 16
-
-  gooi.removeComponent(position_joystick)
-  position_joystick = gooi.newJoy({
-    x = screen.x + joystick_margin,
-    y = screen.y + screen.height - joystick_size - joystick_margin,
-    size = joystick_size,
-  })
-
-  gooi.removeComponent(direction_joystick)
-  direction_joystick = gooi.newJoy({
-    x = screen.x + screen.width - joystick_size - joystick_margin,
-    y = screen.y + screen.height - joystick_size - joystick_margin,
-    size = joystick_size,
-  })
-  direction_joystick:noSpring()
-
-  gooi.removeComponent(impulse_button)
-  impulse_button = gooi.newButton({
-    text = "~~>",
-    x = screen.x + screen.width - joystick_size - joystick_margin,
-    y = screen.y + screen.height - 1.625 * joystick_size - joystick_margin,
-    w = joystick_size,
-    h = joystick_size / 2,
-  })
-  impulse_button:onPress(function()
+  gooi.removeComponent(ui._position_joystick)
+  gooi.removeComponent(ui._direction_joystick)
+  gooi.removeComponent(ui._impulse_button)
+  ui = Ui:new(screen, function()
     local impulse = Impulse:new(world, screen, player)
     table.insert(impulses, impulse)
   end)
