@@ -22,7 +22,7 @@ local stones = {}
 local player = nil -- objects.Player
 local impulses = {} -- {objects.Impulse,...}
 local ui = nil -- objects.Ui
-local keys = nil
+local keys = nil -- baton.Player
 
 local function _enter_fullscreen()
   local os = love.system.getOS()
@@ -42,6 +42,38 @@ end
 local function _make_screen()
   local x, y, width, height = love.window.getSafeArea()
   return Rectangle:new(x, y, width, height)
+end
+
+local function _load_keys(path)
+  assert(type(path) == "string")
+
+  local data, loading_err = typeutils.load_json(path, {
+    type = "object",
+    properties = {
+      moved_left = {["$ref"] = "#/definitions/source_group"},
+      moved_right = {["$ref"] = "#/definitions/source_group"},
+      moved_top = {["$ref"] = "#/definitions/source_group"},
+      moved_bottom = {["$ref"] = "#/definitions/source_group"},
+    },
+    required = {"moved_left", "moved_right", "moved_top", "moved_bottom"},
+    definitions = {
+      source_group = {
+        type = "array",
+        items = {type = "string", pattern = "^%a+:%w+$"},
+        minItems = 1,
+      },
+    },
+  })
+  if not data then
+    return nil, "unable to load the keys: " .. loading_err
+  end
+
+  return baton.new({
+    controls = data,
+    pairs = {
+      moved = {"moved_left", "moved_right", "moved_top", "moved_bottom"},
+    },
+  })
 end
 
 function love.load()
@@ -81,40 +113,7 @@ function love.load()
     local impulse = Impulse:new(world, screen, player)
     table.insert(impulses, impulse)
   end)
-
-  local keys_config = assert(typeutils.load_json("keys_config.json", {
-    type = "object",
-    properties = {
-      moved_left = {["$ref"] = "#/definitions/source_group"},
-      moved_right = {["$ref"] = "#/definitions/source_group"},
-      moved_top = {["$ref"] = "#/definitions/source_group"},
-      moved_bottom = {["$ref"] = "#/definitions/source_group"},
-    },
-    required = {
-      "moved_left",
-      "moved_right",
-      "moved_top",
-      "moved_bottom",
-    },
-    definitions = {
-      source_group = {
-        type = "array",
-        items = {type = "string", pattern = "^%a+:%w+$"},
-        minItems = 1,
-      },
-    },
-  }))
-  keys = baton.new({
-    controls = keys_config,
-    pairs = {
-      moved = {
-        "moved_left",
-        "moved_right",
-        "moved_top",
-        "moved_bottom",
-      },
-    },
-  })
+  keys = assert(_load_keys("keys_config.json"))
 end
 
 function love.draw()
