@@ -2,7 +2,7 @@ exclude_files = {
   "vendor",
 }
 globals = {
-  table = { fields = { find = {} } },
+  table = { fields = { find = {}, eachi = {}, accept = {} } },
   "love",
   "gooi",
 }
