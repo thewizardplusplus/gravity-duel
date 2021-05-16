@@ -237,9 +237,7 @@ function love.resize()
     font = love.graphics.newFont(font_size),
   })
 
-  gooi.removeComponent(ui._position_joystick)
-  gooi.removeComponent(ui._direction_joystick)
-  gooi.removeComponent(ui._impulse_button)
+  ui:destroy()
   ui = Ui:new(screen, function()
     local impulse = Impulse:new(world, screen, player)
     table.insert(impulses, impulse)

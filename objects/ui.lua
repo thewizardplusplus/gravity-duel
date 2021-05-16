@@ -47,4 +47,12 @@ function Ui:initialize(screen, impulse_handler)
   self._impulse_button:onPress(impulse_handler)
 end
 
+---
+-- @function destroy
+function Ui:destroy()
+  gooi.removeComponent(self._position_joystick)
+  gooi.removeComponent(self._direction_joystick)
+  gooi.removeComponent(self._impulse_button)
+end
+
 return Ui
