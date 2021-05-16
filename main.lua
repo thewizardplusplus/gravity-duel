@@ -123,17 +123,16 @@ function love.load()
 end
 
 function love.draw()
-  local player_x, player_y = player:position()
-  local player_initial_x = (ui._position_joystick.x + ui._direction_joystick.x) / 2 + ui._position_joystick.w / 2
-  local player_initial_y = ui._position_joystick.y + ui._position_joystick.h / 2
+  local ui_center_position_x, ui_center_position_y = ui:center_position()
+  local player_position_x, player_position_y = player:position()
   love.graphics.setColor(0.5, 0.5, 0.5)
   drawing.draw_with_transformations(function()
-    love.graphics.translate(player_initial_x, player_initial_y)
+    love.graphics.translate(ui_center_position_x, ui_center_position_y)
     love.graphics.rotate(-(player:angle() - -math.pi / 2))
-    love.graphics.translate(-player_initial_x, -player_initial_y)
+    love.graphics.translate(-ui_center_position_x, -ui_center_position_y)
     love.graphics.translate(
-      -(player_x - player_initial_x),
-      -(player_y - player_initial_y)
+      -(player_position_x - ui_center_position_x),
+      -(player_position_y - ui_center_position_y)
     )
 
     physics.process_colliders(stones, function(stone)

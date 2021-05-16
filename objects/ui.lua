@@ -48,6 +48,16 @@ function Ui:initialize(screen, impulse_handler)
 end
 
 ---
+-- @treturn number x
+-- @treturn number y
+function Ui:center_position()
+  local x = (self._position_joystick.x + self._direction_joystick.x) / 2
+    + self._position_joystick.w / 2
+  local y = self._position_joystick.y + self._position_joystick.h / 2
+  return x, y
+end
+
+---
 -- @function destroy
 function Ui:destroy()
   gooi.removeComponent(self._position_joystick)
