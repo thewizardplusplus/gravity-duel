@@ -68,6 +68,13 @@ function Ui:player_position()
 end
 
 ---
+-- @treturn number x
+-- @treturn number y
+function Ui:player_direction()
+  return self._direction_joystick:xValue(), self._direction_joystick:yValue()
+end
+
+---
 -- @function destroy
 function Ui:destroy()
   gooi.removeComponent(self._position_joystick)
