@@ -164,11 +164,12 @@ function love.update(dt)
   end)
 
   local player_speed = 10 * screen.height
-  local position_keys_x, position_keys_y = keys:get("moved")
+  local ui_player_position_x, ui_player_position_y = ui:player_position()
+  local keys_player_position_x, keys_player_position_y = keys:get("moved")
   local player_velocity = mlib.vec2.rotate(
     mlib.vec2.add(
-      mlib.vec2.new(ui._position_joystick:xValue(), ui._position_joystick:yValue()),
-      mlib.vec2.new(position_keys_x, position_keys_y)
+      mlib.vec2.new(ui_player_position_x, ui_player_position_y),
+      mlib.vec2.new(keys_player_position_x, keys_player_position_y)
     ),
     player:angle() - -math.pi / 2
   )

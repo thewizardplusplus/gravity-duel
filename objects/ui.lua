@@ -61,6 +61,13 @@ function Ui:center_position()
 end
 
 ---
+-- @treturn number x
+-- @treturn number y
+function Ui:player_position()
+  return self._position_joystick:xValue(), self._position_joystick:yValue()
+end
+
+---
 -- @function destroy
 function Ui:destroy()
   gooi.removeComponent(self._position_joystick)
