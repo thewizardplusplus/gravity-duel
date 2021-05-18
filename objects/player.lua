@@ -80,6 +80,18 @@ function Player:draw(screen)
 end
 
 ---
+-- @tparam number x
+-- @tparam number y
+function Player:set_direction(x, y)
+  assert(type(x) == "number")
+  assert(type(y) == "number")
+
+  if x ~= 0 or y ~= 0 then
+    self._collider:setAngle(math.atan2(y, x))
+  end
+end
+
+---
 -- @function destroy
 function Player:destroy()
   self._collider:destroy()

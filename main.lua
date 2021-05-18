@@ -178,10 +178,7 @@ function love.update(dt)
     player_speed * dt * player_velocity.y
   )
 
-  local ui_player_direction_x, ui_player_direction_y = ui:player_direction()
-  if ui_player_direction_x ~= 0 or ui_player_direction_y ~= 0 then
-    player._collider:setAngle(math.atan2(ui_player_direction_y, ui_player_direction_x))
-  end
+  player:set_direction(ui:player_direction())
 
   gooi.update(dt)
   keys:update()
