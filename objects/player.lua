@@ -2,6 +2,7 @@
 -- @classmod Player
 
 local middleclass = require("middleclass")
+local mlib = require("mlib")
 local typeutils = require("typeutils")
 local Rectangle = require("models.rectangle")
 local physics = require("physics")
@@ -87,6 +88,27 @@ function Player:draw(screen)
       screen:grid_step() / 3
     )
   end)
+end
+
+---
+-- @tparam Rectangle screen
+-- @tparam number ui_direction_x
+-- @tparam number ui_direction_y
+function Player:move(screen, ui_direction_x, ui_direction_y)
+  assert(typeutils.is_instance(screen, Rectangle))
+  assert(type(ui_direction_x) == "number")
+  assert(type(ui_direction_y) == "number")
+
+  local player_speed = 10 * screen.height
+  local dt = love.timer.getDelta()
+  local player_ui_direction = mlib.vec2.rotate(
+    mlib.vec2.new(ui_direction_x, ui_direction_y),
+    self:angle(true)
+  )
+  self._collider:setLinearVelocity(
+    player_speed * dt * player_ui_direction.x,
+    player_speed * dt * player_ui_direction.y
+  )
 end
 
 ---

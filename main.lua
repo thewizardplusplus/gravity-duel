@@ -163,21 +163,11 @@ function love.update(dt)
     return not hit
   end)
 
-  local player_speed = 10 * screen.height
-  local ui_player_position_x, ui_player_position_y = ui:player_position()
-  local keys_player_position_x, keys_player_position_y = keys:get("moved")
-  local player_velocity = mlib.vec2.rotate(
-    mlib.vec2.add(
-      mlib.vec2.new(ui_player_position_x, ui_player_position_y),
-      mlib.vec2.new(keys_player_position_x, keys_player_position_y)
-    ),
-    player:angle(true)
+  local player_move_direction = mlib.vec2.add(
+    mlib.vec2.new(ui:player_position()),
+    mlib.vec2.new(keys:get("moved"))
   )
-  player._collider:setLinearVelocity(
-    player_speed * dt * player_velocity.x,
-    player_speed * dt * player_velocity.y
-  )
-
+  player:move(screen, player_move_direction.x, player_move_direction.y)
   player:set_direction(ui:player_direction())
 
   gooi.update(dt)
