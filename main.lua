@@ -122,7 +122,7 @@ function love.draw()
   love.graphics.setColor(0.5, 0.5, 0.5)
   drawing.draw_with_transformations(function()
     love.graphics.translate(ui_center_position_x, ui_center_position_y)
-    love.graphics.rotate(-(player:angle() - -math.pi / 2))
+    love.graphics.rotate(-player:angle(true))
     love.graphics.translate(-ui_center_position_x, -ui_center_position_y)
     love.graphics.translate(
       -(player_position_x - ui_center_position_x),
@@ -171,7 +171,7 @@ function love.update(dt)
       mlib.vec2.new(ui_player_position_x, ui_player_position_y),
       mlib.vec2.new(keys_player_position_x, keys_player_position_y)
     ),
-    player:angle() - -math.pi / 2
+    player:angle(true)
   )
   player._collider:setLinearVelocity(
     player_speed * dt * player_velocity.x,

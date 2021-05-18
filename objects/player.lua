@@ -43,9 +43,19 @@ function Player:position()
 end
 
 ---
+-- @tparam[opt=false] bool corrected_for_ui
 -- @treturn number
-function Player:angle()
-  return self._collider:getAngle()
+function Player:angle(corrected_for_ui)
+  corrected_for_ui = corrected_for_ui or false
+
+  assert(type(corrected_for_ui) == "boolean")
+
+  local angle = self._collider:getAngle()
+  if corrected_for_ui then
+    angle = angle + math.pi / 2
+  end
+
+  return angle
 end
 
 ---
