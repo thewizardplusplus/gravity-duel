@@ -7,8 +7,8 @@ local mlib = require("mlib")
 local baton = require("baton")
 local typeutils = require("typeutils")
 local drawing = require("drawing")
-local physics = require("physics")
 local Rectangle = require("models.rectangle")
+local Target = require("objects.target")
 local Player = require("objects.player")
 local Impulse = require("objects.impulse")
 local Ui = require("objects.ui")
@@ -18,7 +18,7 @@ require("compat52")
 
 local screen = nil -- models.Rectangle
 local world = nil -- windfield.World
-local stones = {}
+local targets = {} -- {objects.Target,...}
 local player = nil -- objects.Player
 local impulses = {} -- {objects.Impulse,...}
 local ui = nil -- objects.Ui
@@ -94,15 +94,13 @@ function love.load()
     for column = 0, side_count - 1 do
       if row ~= math.floor(side_count / 2)
         or column ~= math.floor(side_count / 2) then
-        local stone = physics.make_rectangle_collider(world, "dynamic", Rectangle:new(
-          offset_x + (2 * column + 1) * screen:grid_step(),
-          offset_y + (2 * row + 1) * screen:grid_step(),
-          screen:grid_step(),
-          screen:grid_step()
-        ))
-        stone:setMass(1)
-
-        table.insert(stones, stone)
+        local target = Target:new(
+          world,
+          screen,
+          offset_x + (2 * column + 1) * screen:grid_step() + screen:grid_step() / 2,
+          offset_y + (2 * row + 1) * screen:grid_step() + screen:grid_step() / 2
+        )
+        table.insert(targets, target)
       end
     end
   end
@@ -129,16 +127,8 @@ function love.draw()
       -(player_position_y - ui_center_position_y)
     )
 
-    physics.process_colliders(stones, function(stone)
-      drawing.draw_collider(stone, function()
-        love.graphics.rectangle(
-          "fill",
-          -screen:grid_step() / 2,
-          -screen:grid_step() / 2,
-          screen:grid_step(),
-          screen:grid_step()
-        )
-      end)
+    table.eachi(targets, function(target)
+      target:draw(screen)
     end)
 
     table.eachi(impulses, function(impulse)
@@ -177,10 +167,8 @@ end
 function love.resize()
   screen = _make_screen()
 
-  physics.process_colliders(stones, function(stone)
-    stone:destroy()
-  end)
-  stones = {}
+  table.eachi(targets, Target.destroy)
+  targets = {}
 
   local side_count = 3
   local offset_x = screen.x + screen.width / 2 - (2 * side_count + 1) * screen:grid_step() / 2
@@ -189,15 +177,13 @@ function love.resize()
     for column = 0, side_count - 1 do
       if row ~= math.floor(side_count / 2)
         or column ~= math.floor(side_count / 2) then
-        local stone = physics.make_rectangle_collider(world, "dynamic", Rectangle:new(
-          offset_x + (2 * column + 1) * screen:grid_step(),
-          offset_y + (2 * row + 1) * screen:grid_step(),
-          screen:grid_step(),
-          screen:grid_step()
-        ))
-        stone:setMass(1)
-
-        table.insert(stones, stone)
+        local target = Target:new(
+          world,
+          screen,
+          offset_x + (2 * column + 1) * screen:grid_step() + screen:grid_step() / 2,
+          offset_y + (2 * row + 1) * screen:grid_step() + screen:grid_step() / 2
+        )
+        table.insert(targets, target)
       end
     end
   end

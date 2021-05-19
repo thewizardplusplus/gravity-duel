@@ -47,18 +47,4 @@ function physics.make_circle_collider(world, kind, x, y, radius)
   return collider
 end
 
----
--- @tparam {windfield.Collider,...} colliders
--- @tparam func handler func(collider: windfield.Collider): nil
-function physics.process_colliders(colliders, handler)
-  assert(type(colliders) == "table")
-  assert(typeutils.is_callable(handler))
-
-  for _, collider in ipairs(colliders) do
-    if not collider:isDestroyed() then
-      handler(collider)
-    end
-  end
-end
-
 return physics
