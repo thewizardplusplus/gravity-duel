@@ -11,6 +11,8 @@ local drawing = require("drawing")
 
 ---
 -- @table instance
+-- @tfield number _initial_lifes
+-- @tfield number _current_lifes
 -- @tfield windfield.Collider _collider
 
 local Target = middleclass("Target")
@@ -28,6 +30,9 @@ function Target:initialize(world, screen, x, y)
   assert(type(x) == "number")
   assert(type(y) == "number")
 
+  self._initial_lifes = 5
+  self._current_lifes = self._initial_lifes
+
   self._collider = physics.make_circle_collider(
     world,
     "static",
@@ -38,14 +43,40 @@ function Target:initialize(world, screen, x, y)
 end
 
 ---
+-- @treturn bool
+function Target:alive()
+  return self._current_lifes > 0
+end
+
+---
 -- @tparam Rectangle screen
 function Target:draw(screen)
   assert(typeutils.is_instance(screen, Rectangle))
 
-  love.graphics.setColor(0, 0.5, 0)
+  local font_size = screen.height / 20
+  love.graphics.setFont(love.graphics.newFont(font_size))
+
   drawing.draw_collider(self._collider, function()
+    love.graphics.setColor(0, 0.5, 0)
     love.graphics.circle("fill", 0, 0, screen:grid_step() / 2)
+
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.printf(
+      tostring(self._current_lifes),
+      -screen:grid_step() / 2,
+      -font_size / 2,
+      screen:grid_step(),
+      "center"
+    )
   end)
+end
+
+---
+-- @function update
+function Target:update()
+  if self._collider:enter("Impulse") then
+    self._current_lifes = self._current_lifes - 1
+  end
 end
 
 ---

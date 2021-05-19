@@ -144,6 +144,16 @@ end
 function love.update(dt)
   world:update(dt)
 
+  table.eachi(targets, Target.update)
+  targets = table.accept(targets, function(target)
+    local alive = target:alive()
+    if not alive then
+      target:destroy()
+    end
+
+    return alive
+  end)
+
   impulses = table.accept(impulses, function(impulse)
     local hit = impulse:hit()
     if hit then
