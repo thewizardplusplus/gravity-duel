@@ -7,6 +7,7 @@ local mlib = require("mlib")
 local baton = require("baton")
 local tick = require("tick")
 local typeutils = require("typeutils")
+local mathutils = require("mathutils")
 local drawing = require("drawing")
 local Rectangle = require("models.rectangle")
 local Target = require("objects.target")
@@ -97,14 +98,21 @@ function love.load()
   keys = assert(_load_keys("keys_config.json"))
 
   tick.recur(function()
+    local additional_angle = mathutils.random_in_range(-math.pi / 3, math.pi / 3)
+    local distance = mathutils.random_in_range(2 * screen:grid_step(), 5 * screen:grid_step())
     local player_position_x, player_position_y = player:position()
-    local player_direction = mlib.vec2.rotate(mlib.vec2.new(1, 0), player:angle())
+    local player_direction = mlib.vec2.rotate(mlib.vec2.new(1, 0), player:angle() + additional_angle)
     local target = Target:new(
       world,
       screen,
-      player_position_x + 2 * screen:grid_step() * player_direction.x,
-      player_position_y + 2 * screen:grid_step() * player_direction.y
+      0,
+      0
     )
+    target._collider:setPosition(
+      player_position_x + distance * player_direction.x,
+      player_position_y + distance * player_direction.y
+    )
+
     table.insert(targets, target)
   end, 2.5)
 end

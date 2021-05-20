@@ -1,6 +1,7 @@
 project = "gravity-duel"
 file = {
   "typeutils.lua",
+  "mathutils.lua",
   "drawing.lua",
   "physics.lua",
   "models/rectangle.lua",
