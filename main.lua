@@ -5,6 +5,7 @@ love.filesystem.setRequirePath(table.concat(require_paths, ";"))
 local windfield = require("windfield")
 local mlib = require("mlib")
 local baton = require("baton")
+local tick = require("tick")
 local typeutils = require("typeutils")
 local drawing = require("drawing")
 local Rectangle = require("models.rectangle")
@@ -87,24 +88,6 @@ function love.load()
   world:addCollisionClass("Player")
   world:addCollisionClass("Impulse", {ignores = {"Player", "Impulse"}})
 
-  local side_count = 3
-  local offset_x = screen.x + screen.width / 2 - (2 * side_count + 1) * screen:grid_step() / 2
-  local offset_y = screen.y + screen.height / 2 - (2 * side_count + 1) * screen:grid_step() / 2
-  for row = 0, side_count - 1 do
-    for column = 0, side_count - 1 do
-      if row ~= math.floor(side_count / 2)
-        or column ~= math.floor(side_count / 2) then
-        local target = Target:new(
-          world,
-          screen,
-          offset_x + (2 * column + 1) * screen:grid_step() + screen:grid_step() / 2,
-          offset_y + (2 * row + 1) * screen:grid_step() + screen:grid_step() / 2
-        )
-        table.insert(targets, target)
-      end
-    end
-  end
-
   player = Player:new(world, screen)
 
   ui = Ui:new(screen, function()
@@ -112,6 +95,18 @@ function love.load()
     table.insert(impulses, impulse)
   end)
   keys = assert(_load_keys("keys_config.json"))
+
+  tick.recur(function()
+    local player_position_x, player_position_y = player:position()
+    local player_direction = mlib.vec2.rotate(mlib.vec2.new(1, 0), player:angle())
+    local target = Target:new(
+      world,
+      screen,
+      player_position_x + 2 * screen:grid_step() * player_direction.x,
+      player_position_y + 2 * screen:grid_step() * player_direction.y
+    )
+    table.insert(targets, target)
+  end, 2.5)
 end
 
 function love.draw()
@@ -143,6 +138,7 @@ end
 
 function love.update(dt)
   world:update(dt)
+  tick.update(dt)
 
   table.eachi(targets, Target.update)
   targets = table.accept(targets, function(target)
@@ -179,24 +175,6 @@ function love.resize()
 
   table.eachi(targets, Target.destroy)
   targets = {}
-
-  local side_count = 3
-  local offset_x = screen.x + screen.width / 2 - (2 * side_count + 1) * screen:grid_step() / 2
-  local offset_y = screen.y + screen.height / 2 - (2 * side_count + 1) * screen:grid_step() / 2
-  for row = 0, side_count - 1 do
-    for column = 0, side_count - 1 do
-      if row ~= math.floor(side_count / 2)
-        or column ~= math.floor(side_count / 2) then
-        local target = Target:new(
-          world,
-          screen,
-          offset_x + (2 * column + 1) * screen:grid_step() + screen:grid_step() / 2,
-          offset_y + (2 * row + 1) * screen:grid_step() + screen:grid_step() / 2
-        )
-        table.insert(targets, target)
-      end
-    end
-  end
 
   table.eachi(impulses, Impulse.destroy)
   impulses = {}
