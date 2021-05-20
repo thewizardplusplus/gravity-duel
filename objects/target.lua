@@ -11,6 +11,8 @@ local drawing = require("drawing")
 
 ---
 -- @table instance
+-- @tfield number _initial_lifetime
+-- @tfield number _rest_lifetime
 -- @tfield number _initial_lifes
 -- @tfield number _current_lifes
 -- @tfield windfield.Collider _collider
@@ -30,6 +32,9 @@ function Target:initialize(world, screen, x, y)
   assert(type(x) == "number")
   assert(type(y) == "number")
 
+  self._initial_lifetime = 5
+  self._rest_lifetime = self._initial_lifetime
+
   self._initial_lifes = 5
   self._current_lifes = self._initial_lifes
 
@@ -45,7 +50,7 @@ end
 ---
 -- @treturn bool
 function Target:alive()
-  return self._current_lifes > 0
+  return self._rest_lifetime > 0 and self._current_lifes > 0
 end
 
 ---
@@ -59,6 +64,19 @@ function Target:draw(screen)
   drawing.draw_collider(self._collider, function()
     love.graphics.setColor(0, 0.5, 0)
     love.graphics.circle("fill", 0, 0, screen:grid_step() / 2)
+
+    local elapsed_lifetime_factor = self._rest_lifetime / self._initial_lifetime
+    love.graphics.setColor(0, 0.3, 0)
+    love.graphics.setLineWidth(screen:grid_step() / 10)
+    love.graphics.arc(
+      "line",
+      "open",
+      0,
+      0,
+      screen:grid_step() / 2,
+      2 * math.pi - math.pi / 2 - 2 * math.pi * elapsed_lifetime_factor,
+      2 * math.pi - math.pi / 2
+    )
 
     love.graphics.setColor(1, 1, 1)
     love.graphics.printf(
@@ -74,6 +92,9 @@ end
 ---
 -- @function update
 function Target:update()
+  local dt = love.timer.getDelta()
+  self._rest_lifetime = self._rest_lifetime - dt
+
   if self._collider:enter("Impulse") then
     self._current_lifes = self._current_lifes - 1
   end
