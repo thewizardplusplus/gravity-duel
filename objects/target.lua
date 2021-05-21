@@ -17,6 +17,7 @@ local drawing = require("drawing")
 -- @tfield number _initial_lifes
 -- @tfield number _current_lifes
 -- @tfield windfield.Collider _collider
+-- @tfield func _zero_life_handler func(): nil
 
 local Target = middleclass("Target")
 
@@ -25,11 +26,13 @@ local Target = middleclass("Target")
 -- @tparam windfield.World world
 -- @tparam Rectangle screen
 -- @tparam Player player
+-- @tparam func zero_life_handler func(): nil
 -- @treturn Target
-function Target:initialize(world, screen, player)
+function Target:initialize(world, screen, player, zero_life_handler)
   assert(type(world) == "table")
   assert(typeutils.is_instance(screen, Rectangle))
   assert(typeutils.is_instance(player, Player))
+  assert(typeutils.is_callable(zero_life_handler))
 
   self._initial_lifetime = 5
   self._rest_lifetime = self._initial_lifetime
@@ -54,6 +57,8 @@ function Target:initialize(world, screen, player)
     distance * direction.x + player_position_x,
     distance * direction.y + player_position_y
   )
+
+  self._zero_life_handler = zero_life_handler
 end
 
 ---
@@ -106,6 +111,9 @@ function Target:update()
 
   if self._collider:enter("Impulse") then
     self._current_lifes = self._current_lifes - 1
+    if self._current_lifes == 0 then
+      self._zero_life_handler()
+    end
   end
 end
 

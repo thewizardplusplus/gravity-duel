@@ -24,6 +24,7 @@ local player = nil -- objects.Player
 local impulses = {} -- {objects.Impulse,...}
 local ui = nil -- objects.Ui
 local keys = nil -- baton.Player
+local hit_targets = 0
 
 local function _enter_fullscreen()
   local os = love.system.getOS()
@@ -97,7 +98,9 @@ function love.load()
   keys = assert(_load_keys("keys_config.json"))
 
   tick.recur(function()
-    local target = Target:new(world, screen, player)
+    local target = Target:new(world, screen, player, function()
+      hit_targets = hit_targets + 1
+    end)
     table.insert(targets, target)
   end, 2.5)
 end
@@ -127,6 +130,17 @@ function love.draw()
   end)
 
   gooi.draw()
+
+  local font_size = screen.height / 20
+  love.graphics.setFont(love.graphics.newFont(font_size))
+
+  local ui_margin = screen.height / 16
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.print(
+    "Targets: " .. tostring(hit_targets),
+    ui_margin,
+    ui_margin
+  )
 end
 
 function love.update(dt)
