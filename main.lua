@@ -10,6 +10,7 @@ local typeutils = require("typeutils")
 local drawing = require("drawing")
 local Rectangle = require("models.rectangle")
 local Target = require("objects.target")
+local Hole = require("objects.hole")
 local Player = require("objects.player")
 local Impulse = require("objects.impulse")
 local Ui = require("objects.ui")
@@ -20,6 +21,7 @@ require("compat52")
 local screen = nil -- models.Rectangle
 local world = nil -- windfield.World
 local targets = {} -- {objects.Target,...}
+local holes = {} -- {objects.Hole,...}
 local player = nil -- objects.Player
 local impulses = {} -- {objects.Impulse,...}
 local ui = nil -- objects.Ui
@@ -103,6 +105,11 @@ function love.load()
     end)
     table.insert(targets, target)
   end, 2.5)
+
+  tick.recur(function()
+    local hole = Hole:new(world, screen, player)
+    table.insert(holes, hole)
+  end, 2.5)
 end
 
 function love.draw()
@@ -117,6 +124,10 @@ function love.draw()
       -(player_position_x - ui_center_position_x),
       -(player_position_y - ui_center_position_y)
     )
+
+    table.eachi(holes, function(hole)
+      hole:draw(screen)
+    end)
 
     table.eachi(targets, function(target)
       target:draw(screen)
@@ -157,6 +168,16 @@ function love.update(dt)
     return alive
   end)
 
+  table.eachi(holes, Hole.update)
+  holes = table.accept(holes, function(hole)
+    local alive = hole:alive()
+    if not alive then
+      hole:destroy()
+    end
+
+    return alive
+  end)
+
   impulses = table.accept(impulses, function(impulse)
     local hit = impulse:hit()
     if hit then
@@ -182,6 +203,9 @@ function love.resize()
 
   table.eachi(targets, Target.destroy)
   targets = {}
+
+  table.eachi(holes, Hole.destroy)
+  holes = {}
 
   table.eachi(impulses, Impulse.destroy)
   impulses = {}
