@@ -107,7 +107,8 @@ function love.load()
   end, 2.5)
 
   tick.recur(function()
-    local hole = Hole:new(world, screen, player)
+    local kind = math.random() < 0.5 and "black" or "white"
+    local hole = Hole:new(kind, world, screen, player)
     table.insert(holes, hole)
   end, 2.5)
 end

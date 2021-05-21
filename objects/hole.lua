@@ -12,6 +12,7 @@ local drawing = require("drawing")
 
 ---
 -- @table instance
+-- @tfield "black"|"white" _kind
 -- @tfield number _initial_lifetime
 -- @tfield number _rest_lifetime
 -- @tfield windfield.Collider _collider
@@ -20,14 +21,18 @@ local Hole = middleclass("Hole")
 
 ---
 -- @function new
+-- @tparam "black"|"white" kind
 -- @tparam windfield.World world
 -- @tparam Rectangle screen
 -- @tparam Player player
 -- @treturn Hole
-function Hole:initialize(world, screen, player)
+function Hole:initialize(kind, world, screen, player)
+  assert(kind == "black" or kind == "white")
   assert(type(world) == "table")
   assert(typeutils.is_instance(screen, Rectangle))
   assert(typeutils.is_instance(player, Player))
+
+  self._kind = kind
 
   self._initial_lifetime = 5
   self._rest_lifetime = self._initial_lifetime
@@ -62,11 +67,19 @@ function Hole:draw(screen)
   assert(typeutils.is_instance(screen, Rectangle))
 
   drawing.draw_collider(self._collider, function()
-    love.graphics.setColor(0, 0.5, 0)
+    if self._kind == "black" then
+      love.graphics.setColor(0.3, 0.3, 0.3)
+    elseif self._kind == "white" then
+      love.graphics.setColor(0.75, 0.75, 0.75)
+    end
     love.graphics.circle("fill", 0, 0, 3 * screen:grid_step() / 4)
 
     local elapsed_lifetime_factor = self._rest_lifetime / self._initial_lifetime
-    love.graphics.setColor(0, 0.3, 0)
+    if self._kind == "black" then
+      love.graphics.setColor(0.15, 0.15, 0.15)
+    elseif self._kind == "white" then
+      love.graphics.setColor(0.55, 0.55, 0.55)
+    end
     love.graphics.setLineWidth(screen:grid_step() / 10)
     love.graphics.arc(
       "line",
