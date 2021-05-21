@@ -4,6 +4,7 @@
 local middleclass = require("middleclass")
 local mlib = require("mlib")
 local typeutils = require("typeutils")
+local mathutils = require("mathutils")
 local Rectangle = require("models.rectangle")
 local Player = require("objects.player")
 local physics = require("physics")
@@ -23,14 +24,12 @@ local Target = middleclass("Target")
 -- @function new
 -- @tparam windfield.World world
 -- @tparam Rectangle screen
--- @tparam number x
--- @tparam number y
+-- @tparam Player player
 -- @treturn Target
-function Target:initialize(world, screen, x, y)
+function Target:initialize(world, screen, player)
   assert(type(world) == "table")
   assert(typeutils.is_instance(screen, Rectangle))
-  assert(type(x) == "number")
-  assert(type(y) == "number")
+  assert(typeutils.is_instance(player, Player))
 
   self._initial_lifetime = 5
   self._rest_lifetime = self._initial_lifetime
@@ -38,12 +37,22 @@ function Target:initialize(world, screen, x, y)
   self._initial_lifes = 5
   self._current_lifes = self._initial_lifes
 
+  local distance =
+    mathutils.random_in_range(2 * screen:grid_step(), 5 * screen:grid_step())
+  local additional_angle = mathutils.random_in_range(-math.pi / 3, math.pi / 3)
+  local direction =
+    mlib.vec2.rotate(mlib.vec2.new(1, 0), player:angle() + additional_angle)
+  local player_position_x, player_position_y = player:position()
   self._collider = physics.make_circle_collider(
     world,
     "static",
-    x,
-    y,
+    0,
+    0,
     screen:grid_step() / 2
+  )
+  self._collider:setPosition(
+    distance * direction.x + player_position_x,
+    distance * direction.y + player_position_y
   )
 end
 
