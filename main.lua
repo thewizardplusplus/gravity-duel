@@ -168,10 +168,17 @@ function love.draw()
     ui_margin,
     ui_margin + ui_grid_step / 4
   )
+  if performed_impulses ~= 0 then
+    love.graphics.print(
+      "Accuracy: " .. string.format("%.2f%%", 100 * hit_impulses / performed_impulses),
+      ui_margin,
+      ui_margin + 2 * ui_grid_step / 4
+    )
+  end
   love.graphics.print(
     "Targets: " .. tostring(hit_targets),
     ui_margin,
-    ui_margin + 2 * ui_grid_step / 4
+    ui_margin + (performed_impulses ~= 0 and 3 * ui_grid_step / 4 or 2 * ui_grid_step / 4)
   )
 end
 
