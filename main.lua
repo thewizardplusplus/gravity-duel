@@ -190,7 +190,7 @@ function love.update(dt)
   table.eachi(impulses, function(impulse)
     table.eachi(holes, function(hole)
       local vector = mlib.vec2.sub(
-        mlib.vec2.new(hole._collider:getPosition()),
+        mlib.vec2.new(hole:position()),
         mlib.vec2.new(impulse._collider:getPosition())
       )
       if hole._kind == "white" then

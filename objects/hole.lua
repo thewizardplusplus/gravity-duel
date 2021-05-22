@@ -62,6 +62,13 @@ function Hole:alive()
 end
 
 ---
+-- @treturn number x
+-- @treturn number y
+function Hole:position()
+  return self._collider:getPosition()
+end
+
+---
 -- @tparam Rectangle screen
 function Hole:draw(screen)
   assert(typeutils.is_instance(screen, Rectangle))
