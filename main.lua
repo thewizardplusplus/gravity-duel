@@ -187,6 +187,23 @@ function love.update(dt)
 
     return not hit
   end)
+  table.eachi(impulses, function(impulse)
+    table.eachi(holes, function(hole)
+      local vector = mlib.vec2.sub(
+        mlib.vec2.new(hole._collider:getPosition()),
+        mlib.vec2.new(impulse._collider:getPosition())
+      )
+      if hole._kind == "white" then
+        vector = mlib.vec2.mul(vector, -1)
+      end
+
+      local factor = 1000000
+      local distance = mlib.vec2.len(vector)
+      local direction = mlib.vec2.normalize(vector)
+      local force = mlib.vec2.mul(direction, factor / math.pow(distance, 2))
+      impulse._collider:applyForce(force.x, force.y)
+    end)
+  end)
 
   local player_move_direction = mlib.vec2.add(
     mlib.vec2.new(ui:player_position()),
