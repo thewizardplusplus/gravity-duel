@@ -189,19 +189,7 @@ function love.update(dt)
   end)
   table.eachi(impulses, function(impulse)
     table.eachi(holes, function(hole)
-      local vector = mlib.vec2.sub(
-        mlib.vec2.new(hole:position()),
-        mlib.vec2.new(impulse._collider:getPosition())
-      )
-      if hole:kind() == "white" then
-        vector = mlib.vec2.mul(vector, -1)
-      end
-
-      local factor = 1000000
-      local distance = mlib.vec2.len(vector)
-      local direction = mlib.vec2.normalize(vector)
-      local force = mlib.vec2.mul(direction, factor / math.pow(distance, 2))
-      impulse._collider:applyForce(force.x, force.y)
+      impulse:apply_hole(hole)
     end)
   end)
 

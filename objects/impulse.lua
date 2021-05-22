@@ -5,6 +5,7 @@ local middleclass = require("middleclass")
 local mlib = require("mlib")
 local typeutils = require("typeutils")
 local Rectangle = require("models.rectangle")
+local Hole = require("objects.hole")
 local Player = require("objects.player")
 local physics = require("physics")
 local drawing = require("drawing")
@@ -61,6 +62,26 @@ function Impulse:draw(screen)
   drawing.draw_collider(self._collider, function()
     love.graphics.circle("fill", 0, 0, screen:grid_step() / 12)
   end)
+end
+
+---
+-- @tparam Hole hole
+function Impulse:apply_hole(hole)
+  assert(typeutils.is_instance(hole, Hole))
+
+  local vector = mlib.vec2.sub(
+    mlib.vec2.new(hole:position()),
+    mlib.vec2.new(self._collider:getPosition())
+  )
+  if hole:kind() == "white" then
+    vector = mlib.vec2.mul(vector, -1)
+  end
+
+  local factor = 1000000
+  local distance = mlib.vec2.len(vector)
+  local direction = mlib.vec2.normalize(vector)
+  local force = mlib.vec2.mul(direction, factor / math.pow(distance, 2))
+  self._collider:applyForce(force.x, force.y)
 end
 
 ---
