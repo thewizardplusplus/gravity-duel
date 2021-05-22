@@ -56,6 +56,12 @@ function Hole:initialize(kind, world, screen, player)
 end
 
 ---
+-- @treturn "black"|"white"
+function Hole:kind()
+  return self._kind
+end
+
+---
 -- @treturn bool
 function Hole:alive()
   return self._rest_lifetime > 0

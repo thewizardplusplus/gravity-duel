@@ -193,7 +193,7 @@ function love.update(dt)
         mlib.vec2.new(hole:position()),
         mlib.vec2.new(impulse._collider:getPosition())
       )
-      if hole._kind == "white" then
+      if hole:kind() == "white" then
         vector = mlib.vec2.mul(vector, -1)
       end
 
