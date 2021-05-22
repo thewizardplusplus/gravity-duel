@@ -27,6 +27,7 @@ local impulses = {} -- {objects.Impulse,...}
 local ui = nil -- objects.Ui
 local keys = nil -- baton.Player
 local performed_impulses = 0
+local hit_impulses = 0
 local hit_targets = 0
 
 local function _enter_fullscreen()
@@ -103,8 +104,13 @@ function love.load()
   keys = assert(_load_keys("keys_config.json"))
 
   tick.recur(function()
-    local target = Target:new(world, screen, player, function()
-      hit_targets = hit_targets + 1
+    local target = Target:new(world, screen, player, function(lifes)
+      assert(typeutils.is_positive_number(lifes))
+
+      hit_impulses = hit_impulses + 1
+      if lifes == 0 then
+        hit_targets = hit_targets + 1
+      end
     end)
     table.insert(targets, target)
   end, 2.5)
@@ -158,9 +164,14 @@ function love.draw()
     ui_margin
   )
   love.graphics.print(
-    "Targets: " .. tostring(hit_targets),
+    "Hits: " .. tostring(hit_impulses),
     ui_margin,
     ui_margin + ui_grid_step / 4
+  )
+  love.graphics.print(
+    "Targets: " .. tostring(hit_targets),
+    ui_margin,
+    ui_margin + 2 * ui_grid_step / 4
   )
 end
 
