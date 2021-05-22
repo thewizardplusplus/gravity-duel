@@ -26,6 +26,7 @@ local player = nil -- objects.Player
 local impulses = {} -- {objects.Impulse,...}
 local ui = nil -- objects.Ui
 local keys = nil -- baton.Player
+local performed_impulses = 0
 local hit_targets = 0
 
 local function _enter_fullscreen()
@@ -94,6 +95,8 @@ function love.load()
   player = Player:new(world, screen)
 
   ui = Ui:new(screen, function()
+    performed_impulses = performed_impulses + 1
+
     local impulse = Impulse:new(world, screen, player)
     table.insert(impulses, impulse)
   end)
@@ -146,12 +149,18 @@ function love.draw()
   local font_size = screen.height / 20
   love.graphics.setFont(love.graphics.newFont(font_size))
 
-  local ui_margin = screen.height / 16
+  local ui_grid_step = screen.height / 4
+  local ui_margin = ui_grid_step / 4
   love.graphics.setColor(1, 1, 1)
+  love.graphics.print(
+    "Impulses: " .. tostring(performed_impulses),
+    ui_margin,
+    ui_margin
+  )
   love.graphics.print(
     "Targets: " .. tostring(hit_targets),
     ui_margin,
-    ui_margin
+    ui_margin + ui_grid_step / 4
   )
 end
 
@@ -221,6 +230,8 @@ function love.resize()
 
   ui:destroy()
   ui = Ui:new(screen, function()
+    performed_impulses = performed_impulses + 1
+
     local impulse = Impulse:new(world, screen, player)
     table.insert(impulses, impulse)
   end)
