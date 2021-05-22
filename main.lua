@@ -189,7 +189,7 @@ function love.update(dt)
   end)
   table.eachi(impulses, function(impulse)
     table.eachi(holes, function(hole)
-      impulse:apply_hole(hole)
+      impulse:apply_hole(screen, hole)
     end)
   end)
 

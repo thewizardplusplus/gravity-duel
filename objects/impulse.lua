@@ -65,8 +65,10 @@ function Impulse:draw(screen)
 end
 
 ---
+-- @tparam Rectangle screen
 -- @tparam Hole hole
-function Impulse:apply_hole(hole)
+function Impulse:apply_hole(screen, hole)
+  assert(typeutils.is_instance(screen, Rectangle))
   assert(typeutils.is_instance(hole, Hole))
 
   local vector = mlib.vec2.sub(
@@ -77,7 +79,7 @@ function Impulse:apply_hole(hole)
     vector = mlib.vec2.mul(vector, -1)
   end
 
-  local factor = 1000000
+  local factor = 1000000 * math.pow(screen.height / 400, 3)
   local distance = mlib.vec2.len(vector)
   local direction = mlib.vec2.normalize(vector)
   local force = mlib.vec2.mul(direction, factor / math.pow(distance, 2))
