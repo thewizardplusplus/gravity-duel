@@ -15,6 +15,7 @@ local Hole = require("objects.hole")
 local Player = require("objects.player")
 local Impulse = require("objects.impulse")
 local Ui = require("objects.ui")
+local Stats = require("objects.stats")
 require("gooi")
 require("luatable")
 require("compat52")
@@ -27,10 +28,8 @@ local player = nil -- objects.Player
 local impulses = {} -- {objects.Impulse,...}
 local ui = nil -- objects.Ui
 local keys = nil -- baton.Player
+local stats = nil -- objects.Stats
 local stats_storage = nil -- StatsStorage
-local performed_impulses = 0
-local hit_impulses = 0
-local hit_targets = 0
 local best_accuracy = 0
 local best_hit_targets = 0
 
@@ -100,13 +99,14 @@ function love.load()
   player = Player:new(world, screen)
 
   ui = Ui:new(screen, function()
-    performed_impulses = performed_impulses + 1
+    stats._performed_impulses = stats._performed_impulses + 1
 
     local impulse = Impulse:new(world, screen, player)
     table.insert(impulses, impulse)
   end)
   keys = assert(_load_keys("keys_config.json"))
 
+  stats = Stats:new()
   stats_storage = assert(factory.create_stats_storage("stats-db"))
   best_accuracy = stats_storage:get_stats().best_accuracy
   best_hit_targets = stats_storage:get_stats().best_hit_targets
@@ -115,9 +115,9 @@ function love.load()
     local target = Target:new(world, screen, player, function(lifes)
       assert(typeutils.is_positive_number(lifes))
 
-      hit_impulses = hit_impulses + 1
+      stats._hit_targets = stats._hit_targets + 1
       if lifes == 0 then
-        hit_targets = hit_targets + 1
+        stats._destroyed_targets = stats._destroyed_targets + 1
       end
     end)
     table.insert(targets, target)
@@ -167,26 +167,26 @@ function love.draw()
   local ui_margin = ui_grid_step / 4
   love.graphics.setColor(1, 1, 1)
   love.graphics.print(
-    "Impulses: " .. tostring(performed_impulses),
+    "Impulses: " .. tostring(stats._performed_impulses),
     ui_margin,
     ui_margin
   )
   love.graphics.print(
-    "Hits: " .. tostring(hit_impulses),
+    "Hits: " .. tostring(stats._hit_targets),
     ui_margin,
     ui_margin + ui_grid_step / 4
   )
-  if performed_impulses ~= 0 then
+  if stats._performed_impulses ~= 0 then
     love.graphics.print(
-      "Accuracy: " .. string.format("%.2f%%", 100 * hit_impulses / performed_impulses),
+      "Accuracy: " .. string.format("%.2f%%", 100 * stats._hit_targets / stats._performed_impulses),
       ui_margin,
       ui_margin + 2 * ui_grid_step / 4
     )
   end
   love.graphics.print(
-    "Targets: " .. tostring(hit_targets),
+    "Targets: " .. tostring(stats._destroyed_targets),
     ui_margin,
-    ui_margin + (performed_impulses ~= 0 and 3 * ui_grid_step / 4 or 2 * ui_grid_step / 4)
+    ui_margin + (stats._performed_impulses ~= 0 and 3 * ui_grid_step / 4 or 2 * ui_grid_step / 4)
   )
 
   love.graphics.setColor(0, 0.5, 0)
@@ -251,13 +251,13 @@ function love.update(dt)
   keys:update()
 
   local preliminary_impulses = 50
-  local accuracy = hit_impulses / performed_impulses
-  if performed_impulses > preliminary_impulses and best_accuracy < accuracy then
+  local accuracy = stats._hit_targets / stats._performed_impulses
+  if stats._performed_impulses > preliminary_impulses and best_accuracy < accuracy then
     best_accuracy = accuracy
     stats_storage:store_stats({best_accuracy = best_accuracy})
   end
-  if best_hit_targets < hit_targets then
-    best_hit_targets = hit_targets
+  if best_hit_targets < stats._destroyed_targets then
+    best_hit_targets = stats._destroyed_targets
     stats_storage:store_stats({best_hit_targets = best_hit_targets})
   end
 end
@@ -279,7 +279,7 @@ function love.resize()
 
   ui:destroy()
   ui = Ui:new(screen, function()
-    performed_impulses = performed_impulses + 1
+    stats._performed_impulses = stats._performed_impulses + 1
 
     local impulse = Impulse:new(world, screen, player)
     table.insert(impulses, impulse)
