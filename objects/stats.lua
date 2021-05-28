@@ -20,4 +20,10 @@ function Stats:initialize()
   self._destroyed_targets = 0
 end
 
+---
+-- @function add_impulse
+function Stats:add_impulse()
+  self._performed_impulses = self._performed_impulses + 1
+end
+
 return Stats

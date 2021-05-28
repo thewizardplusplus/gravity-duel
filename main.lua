@@ -99,7 +99,7 @@ function love.load()
   player = Player:new(world, screen)
 
   ui = Ui:new(screen, function()
-    stats._performed_impulses = stats._performed_impulses + 1
+    stats:add_impulse()
 
     local impulse = Impulse:new(world, screen, player)
     table.insert(impulses, impulse)
@@ -279,7 +279,7 @@ function love.resize()
 
   ui:destroy()
   ui = Ui:new(screen, function()
-    stats._performed_impulses = stats._performed_impulses + 1
+    stats:add_impulse()
 
     local impulse = Impulse:new(world, screen, player)
     table.insert(impulses, impulse)
