@@ -160,23 +160,7 @@ function love.draw()
   gooi.draw()
 
   stats:draw(screen)
-
-  local font_size = screen.height / 20
-  love.graphics.setFont(love.graphics.newFont(font_size))
-
-  local ui_grid_step = screen.height / 4
-  local ui_margin = ui_grid_step / 4
-  love.graphics.setColor(0, 0.5, 0)
-  love.graphics.print(
-    "Best accuracy: " .. string.format("%.2f%%", 100 * best_stats._impulse_accuracy),
-    screen.width - 0.6 * screen.height,
-    ui_margin
-  )
-  love.graphics.print(
-    "Best targets: " .. tostring(best_stats._destroyed_targets),
-    screen.width - 0.6 * screen.height,
-    ui_margin + ui_grid_step / 4
-  )
+  best_stats:draw(screen)
 end
 
 function love.update(dt)

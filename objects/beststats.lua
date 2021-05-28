@@ -3,6 +3,7 @@
 
 local middleclass = require("middleclass")
 local typeutils = require("typeutils")
+local Rectangle = require("models.rectangle")
 
 ---
 -- @table instance
@@ -22,6 +23,29 @@ function BestStats:initialize(impulse_accuracy, destroyed_targets)
 
   self._impulse_accuracy = impulse_accuracy
   self._destroyed_targets = destroyed_targets
+end
+
+---
+-- @tparam Rectangle screen
+function BestStats:draw(screen)
+  assert(typeutils.is_instance(screen, Rectangle))
+
+  local grid_step = screen.height / 4
+  local font_size = grid_step / 5
+  love.graphics.setFont(love.graphics.newFont(font_size))
+
+  local margin = grid_step / 4
+  love.graphics.setColor(0, 0.5, 0)
+  love.graphics.print(
+    "Best accuracy: " .. string.format("%.2f%%", 100 * self._impulse_accuracy),
+    screen.width - 0.6 * screen.height,
+    margin
+  )
+  love.graphics.print(
+    "Best targets: " .. tostring(self._destroyed_targets),
+    screen.width - 0.6 * screen.height,
+    margin + grid_step / 4
+  )
 end
 
 return BestStats
