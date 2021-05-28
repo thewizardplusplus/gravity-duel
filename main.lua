@@ -157,35 +157,13 @@ function love.draw()
 
   gooi.draw()
 
+  stats:draw(screen)
+
   local font_size = screen.height / 20
   love.graphics.setFont(love.graphics.newFont(font_size))
 
   local ui_grid_step = screen.height / 4
   local ui_margin = ui_grid_step / 4
-  love.graphics.setColor(1, 1, 1)
-  love.graphics.print(
-    "Impulses: " .. tostring(stats._performed_impulses),
-    ui_margin,
-    ui_margin
-  )
-  love.graphics.print(
-    "Hits: " .. tostring(stats._hit_targets),
-    ui_margin,
-    ui_margin + ui_grid_step / 4
-  )
-  if stats._performed_impulses ~= 0 then
-    love.graphics.print(
-      "Accuracy: " .. string.format("%.2f%%", 100 * stats._hit_targets / stats._performed_impulses),
-      ui_margin,
-      ui_margin + 2 * ui_grid_step / 4
-    )
-  end
-  love.graphics.print(
-    "Targets: " .. tostring(stats._destroyed_targets),
-    ui_margin,
-    ui_margin + (stats._performed_impulses ~= 0 and 3 * ui_grid_step / 4 or 2 * ui_grid_step / 4)
-  )
-
   love.graphics.setColor(0, 0.5, 0)
   love.graphics.print(
     "Best accuracy: " .. string.format("%.2f%%", 100 * best_accuracy),

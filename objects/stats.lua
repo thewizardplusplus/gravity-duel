@@ -3,6 +3,7 @@
 
 local middleclass = require("middleclass")
 local typeutils = require("typeutils")
+local Rectangle = require("models.rectangle")
 
 ---
 -- @table instance
@@ -19,6 +20,41 @@ function Stats:initialize()
   self._performed_impulses = 0
   self._hit_targets = 0
   self._destroyed_targets = 0
+end
+
+---
+-- @tparam Rectangle screen
+function Stats:draw(screen)
+  assert(typeutils.is_instance(screen, Rectangle))
+
+  local grid_step = screen.height / 4
+  local font_size = grid_step / 5
+  love.graphics.setFont(love.graphics.newFont(font_size))
+
+  local margin = grid_step / 4
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.print(
+    "Impulses: " .. tostring(self._performed_impulses),
+    margin,
+    margin
+  )
+  love.graphics.print(
+    "Hits: " .. tostring(self._hit_targets),
+    margin,
+    margin + grid_step / 4
+  )
+  if self._performed_impulses ~= 0 then
+    love.graphics.print(
+      "Accuracy: " .. string.format("%.2f%%", 100 * self._hit_targets / self._performed_impulses),
+      margin,
+      margin + 2 * grid_step / 4
+    )
+  end
+  love.graphics.print(
+    "Targets: " .. tostring(self._destroyed_targets),
+    margin,
+    margin + (self._performed_impulses ~= 0 and 3 or 2) * grid_step / 4
+  )
 end
 
 ---
