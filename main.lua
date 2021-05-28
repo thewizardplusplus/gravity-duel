@@ -8,6 +8,7 @@ local baton = require("baton")
 local tick = require("tick")
 local typeutils = require("typeutils")
 local drawing = require("drawing")
+local factory = require("factory")
 local Rectangle = require("models.rectangle")
 local Target = require("objects.target")
 local Hole = require("objects.hole")
@@ -26,6 +27,7 @@ local player = nil -- objects.Player
 local impulses = {} -- {objects.Impulse,...}
 local ui = nil -- objects.Ui
 local keys = nil -- baton.Player
+local stats_storage = nil -- StatsStorage
 local performed_impulses = 0
 local hit_impulses = 0
 local hit_targets = 0
@@ -104,6 +106,10 @@ function love.load()
     table.insert(impulses, impulse)
   end)
   keys = assert(_load_keys("keys_config.json"))
+
+  stats_storage = assert(factory.create_stats_storage("stats-db"))
+  best_accuracy = stats_storage:get_stats().best_accuracy
+  best_hit_targets = stats_storage:get_stats().best_hit_targets
 
   tick.recur(function()
     local target = Target:new(world, screen, player, function(lifes)
@@ -248,9 +254,11 @@ function love.update(dt)
   local accuracy = hit_impulses / performed_impulses
   if performed_impulses > preliminary_impulses and best_accuracy < accuracy then
     best_accuracy = accuracy
+    stats_storage:store_stats({best_accuracy = best_accuracy})
   end
   if best_hit_targets < hit_targets then
     best_hit_targets = hit_targets
+    stats_storage:store_stats({best_hit_targets = best_hit_targets})
   end
 end
 
