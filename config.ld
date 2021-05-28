@@ -13,6 +13,7 @@ file = {
   "objects/impulse.lua",
   "objects/ui.lua",
   "objects/stats.lua",
+  "objects/beststats.lua",
 }
 topics = {
   "README.md",

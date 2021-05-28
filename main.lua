@@ -16,6 +16,7 @@ local Player = require("objects.player")
 local Impulse = require("objects.impulse")
 local Ui = require("objects.ui")
 local Stats = require("objects.stats")
+local BestStats = require("objects.beststats")
 require("gooi")
 require("luatable")
 require("compat52")
@@ -29,9 +30,8 @@ local impulses = {} -- {objects.Impulse,...}
 local ui = nil -- objects.Ui
 local keys = nil -- baton.Player
 local stats = nil -- objects.Stats
+local best_stats = nil -- objects.BestStats
 local stats_storage = nil -- StatsStorage
-local best_accuracy = 0
-local best_hit_targets = 0
 
 local function _enter_fullscreen()
   local os = love.system.getOS()
@@ -108,8 +108,10 @@ function love.load()
 
   stats = Stats:new()
   stats_storage = assert(factory.create_stats_storage("stats-db"))
-  best_accuracy = stats_storage:get_stats().best_accuracy
-  best_hit_targets = stats_storage:get_stats().best_hit_targets
+  best_stats = BestStats:new(
+    stats_storage:get_stats().best_accuracy,
+    stats_storage:get_stats().best_hit_targets
+  )
 
   tick.recur(function()
     local target = Target:new(world, screen, player, function(lifes)
@@ -166,12 +168,12 @@ function love.draw()
   local ui_margin = ui_grid_step / 4
   love.graphics.setColor(0, 0.5, 0)
   love.graphics.print(
-    "Best accuracy: " .. string.format("%.2f%%", 100 * best_accuracy),
+    "Best accuracy: " .. string.format("%.2f%%", 100 * best_stats._impulse_accuracy),
     screen.width - 0.6 * screen.height,
     ui_margin
   )
   love.graphics.print(
-    "Best targets: " .. tostring(best_hit_targets),
+    "Best targets: " .. tostring(best_stats._destroyed_targets),
     screen.width - 0.6 * screen.height,
     ui_margin + ui_grid_step / 4
   )
@@ -227,13 +229,13 @@ function love.update(dt)
 
   local preliminary_impulses = 50
   local accuracy = stats._hit_targets / stats._performed_impulses
-  if stats._performed_impulses > preliminary_impulses and best_accuracy < accuracy then
-    best_accuracy = accuracy
-    stats_storage:store_stats({best_accuracy = best_accuracy})
+  if stats._performed_impulses > preliminary_impulses and best_stats._impulse_accuracy < accuracy then
+    best_stats._impulse_accuracy = accuracy
+    stats_storage:store_stats({best_accuracy = best_stats._impulse_accuracy})
   end
-  if best_hit_targets < stats._destroyed_targets then
-    best_hit_targets = stats._destroyed_targets
-    stats_storage:store_stats({best_hit_targets = best_hit_targets})
+  if best_stats._destroyed_targets < stats._destroyed_targets then
+    best_stats._destroyed_targets = stats._destroyed_targets
+    stats_storage:store_stats({best_hit_targets = best_stats._destroyed_targets})
   end
 end
 
