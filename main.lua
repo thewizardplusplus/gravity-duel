@@ -29,6 +29,8 @@ local keys = nil -- baton.Player
 local performed_impulses = 0
 local hit_impulses = 0
 local hit_targets = 0
+local best_accuracy = 0
+local best_hit_targets = 0
 
 local function _enter_fullscreen()
   local os = love.system.getOS()
@@ -180,6 +182,18 @@ function love.draw()
     ui_margin,
     ui_margin + (performed_impulses ~= 0 and 3 * ui_grid_step / 4 or 2 * ui_grid_step / 4)
   )
+
+  love.graphics.setColor(0, 0.5, 0)
+  love.graphics.print(
+    "Best accuracy: " .. string.format("%.2f%%", 100 * best_accuracy),
+    screen.width - 0.6 * screen.height,
+    ui_margin
+  )
+  love.graphics.print(
+    "Best targets: " .. tostring(best_hit_targets),
+    screen.width - 0.6 * screen.height,
+    ui_margin + ui_grid_step / 4
+  )
 end
 
 function love.update(dt)
@@ -229,6 +243,15 @@ function love.update(dt)
 
   gooi.update(dt)
   keys:update()
+
+  local preliminary_impulses = 50
+  local accuracy = hit_impulses / performed_impulses
+  if performed_impulses > preliminary_impulses and best_accuracy < accuracy then
+    best_accuracy = accuracy
+  end
+  if best_hit_targets < hit_targets then
+    best_hit_targets = hit_targets
+  end
 end
 
 function love.resize()
