@@ -115,10 +115,7 @@ function love.load()
     local target = Target:new(world, screen, player, function(lifes)
       assert(typeutils.is_positive_number(lifes))
 
-      stats._hit_targets = stats._hit_targets + 1
-      if lifes == 0 then
-        stats._destroyed_targets = stats._destroyed_targets + 1
-      end
+      stats:hit_target(lifes)
     end)
     table.insert(targets, target)
   end, 2.5)

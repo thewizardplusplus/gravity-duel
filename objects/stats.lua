@@ -2,6 +2,7 @@
 -- @classmod Stats
 
 local middleclass = require("middleclass")
+local typeutils = require("typeutils")
 
 ---
 -- @table instance
@@ -24,6 +25,17 @@ end
 -- @function add_impulse
 function Stats:add_impulse()
   self._performed_impulses = self._performed_impulses + 1
+end
+
+---
+-- @tparam number target_lifes [0, ∞)
+function Stats:hit_target(target_lifes)
+  assert(typeutils.is_positive_number(target_lifes))
+
+  self._hit_targets = self._hit_targets + 1
+  if target_lifes == 0 then
+    self._destroyed_targets = self._destroyed_targets + 1
+  end
 end
 
 return Stats
