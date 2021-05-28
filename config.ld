@@ -4,6 +4,7 @@ file = {
   "mathutils.lua",
   "drawing.lua",
   "physics.lua",
+  "factory.lua",
   "statsstorage.lua",
   "models/rectangle.lua",
   "objects/target.lua",
