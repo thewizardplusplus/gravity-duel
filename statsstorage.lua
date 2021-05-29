@@ -21,17 +21,17 @@ function StatsStorage:initialize(path)
 
   self._db = flatdb(path)
   if not self._db.stats then
-    self._db.stats = {
-      best_accuracy = 0,
-      best_hit_targets = 0,
-    }
+    self._db.stats = {impulse_accuracy = 0, destroyed_targets = 0}
   end
 end
 
 ---
 -- @treturn BestStats
 function StatsStorage:get_stats()
-  return BestStats:new(self._db.stats.best_accuracy, self._db.stats.best_hit_targets)
+  return BestStats:new(
+    self._db.stats.impulse_accuracy,
+    self._db.stats.destroyed_targets
+  )
 end
 
 ---
@@ -40,8 +40,8 @@ function StatsStorage:store_stats(stats)
   assert(typeutils.is_instance(stats, BestStats))
 
   self._db.stats = {
-    best_accuracy = stats.impulse_accuracy,
-    best_hit_targets = stats.destroyed_targets,
+    impulse_accuracy = stats.impulse_accuracy,
+    destroyed_targets = stats.destroyed_targets,
   }
   self._db:save()
 end
