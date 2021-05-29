@@ -23,6 +23,14 @@ function Stats:initialize()
 end
 
 ---
+-- @treturn number [0, 1]
+function Stats:impulse_accuracy()
+  return self.performed_impulses ~= 0
+    and self.hit_targets / self.performed_impulses
+    or 0
+end
+
+---
 -- @tparam Rectangle screen
 function Stats:draw(screen)
   assert(typeutils.is_instance(screen, Rectangle))
@@ -43,17 +51,15 @@ function Stats:draw(screen)
     margin,
     margin + grid_step / 4
   )
-  if self.performed_impulses ~= 0 then
-    love.graphics.print(
-      "Accuracy: " .. string.format("%.2f%%", 100 * self.hit_targets / self.performed_impulses),
-      margin,
-      margin + 2 * grid_step / 4
-    )
-  end
+  love.graphics.print(
+    "Accuracy: " .. string.format("%.2f%%", 100 * self:impulse_accuracy()),
+    margin,
+    margin + 2 * grid_step / 4
+  )
   love.graphics.print(
     "Targets: " .. tostring(self.destroyed_targets),
     margin,
-    margin + (self.performed_impulses ~= 0 and 3 or 2) * grid_step / 4
+    margin + 3 * grid_step / 4
   )
 end
 
