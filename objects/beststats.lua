@@ -4,6 +4,7 @@
 local middleclass = require("middleclass")
 local typeutils = require("typeutils")
 local Rectangle = require("models.rectangle")
+local Stats = require("objects.stats")
 
 ---
 -- @table instance
@@ -46,6 +47,29 @@ function BestStats:draw(screen)
     screen.width - 0.6 * screen.height,
     margin + grid_step / 4
   )
+end
+
+---
+-- @tparam Stats stats
+-- @treturn bool was updated
+function BestStats:update(stats)
+  assert(typeutils.is_instance(stats, Stats))
+
+  local was_updated = false
+  local preliminary_impulses = 50
+  if
+    stats.performed_impulses > preliminary_impulses
+      and self.impulse_accuracy < stats:impulse_accuracy()
+  then
+    self.impulse_accuracy = stats:impulse_accuracy()
+    was_updated = true
+  end
+  if self.destroyed_targets < stats.destroyed_targets then
+    self.destroyed_targets = stats.destroyed_targets
+    was_updated = true
+  end
+
+  return was_updated
 end
 
 return BestStats
