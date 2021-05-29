@@ -1,5 +1,7 @@
 # Change Log
 
+## [v1.1](https://github.com/thewizardplusplus/gravity-duel/tree/v1.1) (2021-05-29)
+
 ## [v1.0](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0) (2021-05-22)
 
 ## [v1.0-beta.3](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-beta.3) (2021-05-21)
