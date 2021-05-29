@@ -16,7 +16,6 @@ local Player = require("objects.player")
 local Impulse = require("objects.impulse")
 local Ui = require("objects.ui")
 local Stats = require("objects.stats")
-local BestStats = require("objects.beststats")
 require("gooi")
 require("luatable")
 require("compat52")
@@ -108,10 +107,7 @@ function love.load()
 
   stats = Stats:new()
   stats_storage = assert(factory.create_stats_storage("stats-db"))
-  best_stats = BestStats:new(
-    stats_storage:get_stats().best_accuracy,
-    stats_storage:get_stats().best_hit_targets
-  )
+  best_stats = stats_storage:get_stats()
 
   tick.recur(function()
     local target = Target:new(world, screen, player, function(lifes)

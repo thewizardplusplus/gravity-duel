@@ -3,6 +3,7 @@
 
 local middleclass = require("middleclass")
 local flatdb = require("flatdb")
+local BestStats = require("objects.beststats")
 
 ---
 -- @table instance
@@ -27,12 +28,9 @@ function StatsStorage:initialize(path)
 end
 
 ---
--- @treturn tab
+-- @treturn BestStats
 function StatsStorage:get_stats()
-  return {
-    best_accuracy = self._db.stats.best_accuracy,
-    best_hit_targets = self._db.stats.best_hit_targets,
-  }
+  return BestStats:new(self._db.stats.best_accuracy, self._db.stats.best_hit_targets)
 end
 
 ---
