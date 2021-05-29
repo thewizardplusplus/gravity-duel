@@ -7,8 +7,8 @@ local Rectangle = require("models.rectangle")
 
 ---
 -- @table instance
--- @tfield number _impulse_accuracy
--- @tfield number _destroyed_targets
+-- @tfield number impulse_accuracy
+-- @tfield number destroyed_targets
 
 local BestStats = middleclass("BestStats")
 
@@ -21,8 +21,8 @@ function BestStats:initialize(impulse_accuracy, destroyed_targets)
   assert(typeutils.is_positive_number(impulse_accuracy))
   assert(typeutils.is_positive_number(destroyed_targets))
 
-  self._impulse_accuracy = impulse_accuracy
-  self._destroyed_targets = destroyed_targets
+  self.impulse_accuracy = impulse_accuracy
+  self.destroyed_targets = destroyed_targets
 end
 
 ---
@@ -37,12 +37,12 @@ function BestStats:draw(screen)
   local margin = grid_step / 4
   love.graphics.setColor(0, 0.5, 0)
   love.graphics.print(
-    "Best accuracy: " .. string.format("%.2f%%", 100 * self._impulse_accuracy),
+    "Best accuracy: " .. string.format("%.2f%%", 100 * self.impulse_accuracy),
     screen.width - 0.6 * screen.height,
     margin
   )
   love.graphics.print(
-    "Best targets: " .. tostring(self._destroyed_targets),
+    "Best targets: " .. tostring(self.destroyed_targets),
     screen.width - 0.6 * screen.height,
     margin + grid_step / 4
   )

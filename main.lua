@@ -212,13 +212,13 @@ function love.update(dt)
   keys:update()
 
   local preliminary_impulses = 50
-  if stats.performed_impulses > preliminary_impulses and best_stats._impulse_accuracy < stats:impulse_accuracy() then
-    best_stats._impulse_accuracy = stats:impulse_accuracy()
-    stats_storage:store_stats({best_accuracy = best_stats._impulse_accuracy})
+  if stats.performed_impulses > preliminary_impulses and best_stats.impulse_accuracy < stats:impulse_accuracy() then
+    best_stats.impulse_accuracy = stats:impulse_accuracy()
+    stats_storage:store_stats({best_accuracy = best_stats.impulse_accuracy})
   end
-  if best_stats._destroyed_targets < stats.destroyed_targets then
-    best_stats._destroyed_targets = stats.destroyed_targets
-    stats_storage:store_stats({best_hit_targets = best_stats._destroyed_targets})
+  if best_stats.destroyed_targets < stats.destroyed_targets then
+    best_stats.destroyed_targets = stats.destroyed_targets
+    stats_storage:store_stats({best_hit_targets = best_stats.destroyed_targets})
   end
 end
 
