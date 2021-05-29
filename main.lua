@@ -8,7 +8,7 @@ local baton = require("baton")
 local tick = require("tick")
 local typeutils = require("typeutils")
 local drawing = require("drawing")
-local factory = require("factory")
+local statsfactory = require("stats.statsfactory")
 local Rectangle = require("models.rectangle")
 local Target = require("objects.target")
 local Hole = require("objects.hole")
@@ -30,7 +30,7 @@ local ui = nil -- objects.Ui
 local keys = nil -- baton.Player
 local stats = nil -- objects.Stats
 local best_stats = nil -- objects.BestStats
-local stats_storage = nil -- StatsStorage
+local stats_storage = nil -- stats.StatsStorage
 
 local function _enter_fullscreen()
   local os = love.system.getOS()
@@ -106,7 +106,7 @@ function love.load()
   keys = assert(_load_keys("keys_config.json"))
 
   stats = Stats:new()
-  stats_storage = assert(factory.create_stats_storage("stats-db"))
+  stats_storage = assert(statsfactory.create_stats_storage("stats-db"))
   best_stats = stats_storage:get_stats()
 
   tick.recur(function()

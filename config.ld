@@ -4,8 +4,6 @@ file = {
   "mathutils.lua",
   "drawing.lua",
   "physics.lua",
-  "factory.lua",
-  "statsstorage.lua",
   "models/rectangle.lua",
   "objects/target.lua",
   "objects/hole.lua",
@@ -14,6 +12,8 @@ file = {
   "objects/ui.lua",
   "objects/stats.lua",
   "objects/beststats.lua",
+  "stats/statsfactory.lua",
+  "stats/statsstorage.lua",
 }
 topics = {
   "README.md",

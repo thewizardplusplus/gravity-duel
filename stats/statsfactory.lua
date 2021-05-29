@@ -1,15 +1,15 @@
 ---
--- @module factory
+-- @module statsfactory
 
-local StatsStorage = require("statsstorage")
+local StatsStorage = require("stats.statsstorage")
 
-local factory = {}
+local statsfactory = {}
 
 ---
 -- @tparam string path
 -- @treturn StatsStorage
 -- @error error message
-function factory.create_stats_storage(path)
+function statsfactory.create_stats_storage(path)
   assert(type(path) == "string")
 
   local ok = love.filesystem.createDirectory(path)
@@ -21,4 +21,4 @@ function factory.create_stats_storage(path)
   return StatsStorage:new(full_path)
 end
 
-return factory
+return statsfactory
