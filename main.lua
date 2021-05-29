@@ -209,10 +209,7 @@ function love.update(dt)
 
   local was_updated = best_stats:update(stats)
   if was_updated then
-    stats_storage:store_stats({
-      best_accuracy = best_stats.impulse_accuracy,
-      best_hit_targets = best_stats.destroyed_targets,
-    })
+    stats_storage:store_stats(best_stats)
   end
 end
 

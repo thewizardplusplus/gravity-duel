@@ -3,6 +3,7 @@
 
 local middleclass = require("middleclass")
 local flatdb = require("flatdb")
+local typeutils = require("typeutils")
 local BestStats = require("objects.beststats")
 
 ---
@@ -34,17 +35,14 @@ function StatsStorage:get_stats()
 end
 
 ---
--- @tparam tab stats
+-- @tparam BestStats stats
 function StatsStorage:store_stats(stats)
-  assert(type(stats) == "table")
+  assert(typeutils.is_instance(stats, BestStats))
 
   self._db.stats = {
-    best_accuracy = stats.best_accuracy
-      or self._db.stats.best_accuracy,
-    best_hit_targets = stats.best_hit_targets
-      or self._db.stats.best_hit_targets,
+    best_accuracy = stats.impulse_accuracy,
+    best_hit_targets = stats.destroyed_targets,
   }
-
   self._db:save()
 end
 
