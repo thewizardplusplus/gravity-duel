@@ -33,11 +33,14 @@ function Ui:initialize(screen, impulse_handler)
     y = screen.y + screen.height - grid_step - margin,
     size = grid_step,
   })
+  self._position_joystick:opacity(0.5)
+
   self._direction_joystick = gooi.newJoy({
     x = screen.x + screen.width - grid_step - margin,
     y = screen.y + screen.height - grid_step - margin,
     size = grid_step,
   })
+  self._direction_joystick:opacity(0.5)
   self._direction_joystick:noSpring()
 
   self._impulse_button = gooi.newButton({
@@ -47,6 +50,7 @@ function Ui:initialize(screen, impulse_handler)
     w = grid_step,
     h = grid_step / 2,
   })
+  self._impulse_button:opacity(0.5)
   self._impulse_button:onPress(impulse_handler)
 end
 
