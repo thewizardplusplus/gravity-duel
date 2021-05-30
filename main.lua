@@ -63,9 +63,19 @@ local function _load_keys(path)
       moved_right = {["$ref"] = "#/definitions/source_group"},
       moved_top = {["$ref"] = "#/definitions/source_group"},
       moved_bottom = {["$ref"] = "#/definitions/source_group"},
+      rotated_left = {["$ref"] = "#/definitions/source_group"},
+      rotated_right = {["$ref"] = "#/definitions/source_group"},
       impulse = {["$ref"] = "#/definitions/source_group"},
     },
-    required = {"moved_left", "moved_right", "moved_top", "moved_bottom", "impulse"},
+    required = {
+      "moved_left",
+      "moved_right",
+      "moved_top",
+      "moved_bottom",
+      "rotated_left",
+      "rotated_right",
+      "impulse",
+    },
     definitions = {
       source_group = {
         type = "array",
@@ -224,6 +234,15 @@ function love.update(dt)
     local player_angle_factor = 0.25
     player._collider:setAngle(player._collider:getAngle() + player_angle_factor * player_angle_delta)
   end
+
+  local player_angle_speed = 0.6 * dt
+  if keys:down("rotated_left") then
+    player._collider:setAngle(player._collider:getAngle() - player_angle_speed)
+  end
+  if keys:down("rotated_right") then
+    player._collider:setAngle(player._collider:getAngle() + player_angle_speed)
+  end
+
   player._collider:setAngularVelocity(0)
 
   gooi.update(dt)

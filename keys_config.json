@@ -1,7 +1,9 @@
 {
-  "moved_left": ["key:left", "key:a"],
-  "moved_right": ["key:right", "key:d"],
-  "moved_top": ["key:up", "key:w"],
-  "moved_bottom": ["key:down", "key:s"],
+  "moved_left": ["key:a"],
+  "moved_right": ["key:d"],
+  "moved_top": ["key:w"],
+  "moved_bottom": ["key:s"],
+  "rotated_left": ["key:left"],
+  "rotated_right": ["key:right"],
   "impulse": ["key:return", "key:space"]
 }
