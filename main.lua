@@ -133,6 +133,7 @@ function love.draw()
   drawing.draw_with_transformations(function()
     love.graphics.translate(ui_center_position_x, ui_center_position_y)
     love.graphics.rotate(-player:angle(true))
+    love.graphics.scale(0.75, 0.75)
     love.graphics.translate(-ui_center_position_x, -ui_center_position_y)
     love.graphics.translate(
       -(player_position_x - ui_center_position_x),
