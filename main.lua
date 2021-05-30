@@ -63,8 +63,9 @@ local function _load_keys(path)
       moved_right = {["$ref"] = "#/definitions/source_group"},
       moved_top = {["$ref"] = "#/definitions/source_group"},
       moved_bottom = {["$ref"] = "#/definitions/source_group"},
+      impulse = {["$ref"] = "#/definitions/source_group"},
     },
-    required = {"moved_left", "moved_right", "moved_top", "moved_bottom"},
+    required = {"moved_left", "moved_right", "moved_top", "moved_bottom", "impulse"},
     definitions = {
       source_group = {
         type = "array",
@@ -227,6 +228,12 @@ function love.update(dt)
 
   gooi.update(dt)
   keys:update()
+  if keys:pressed("impulse") then
+    stats:add_impulse()
+
+    local impulse = Impulse:new(world, screen, player)
+    table.insert(impulses, impulse)
+  end
 
   local was_updated = best_stats:update(stats)
   if was_updated then
