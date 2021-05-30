@@ -223,6 +223,7 @@ function love.update(dt)
     local player_angle_factor = 0.25
     player._collider:setAngle(player._collider:getAngle() + player_angle_factor * player_angle_delta)
   end
+  player._collider:setAngularVelocity(0)
 
   gooi.update(dt)
   keys:update()
