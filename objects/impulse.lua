@@ -27,16 +27,16 @@ function Impulse:initialize(world, screen, player)
   assert(typeutils.is_instance(screen, Rectangle))
   assert(typeutils.is_instance(player, Player))
 
-  local player_position_x, player_position_y = player:position()
   self._collider = physics.make_circle_collider(
     world,
     "dynamic",
-    player_position_x,
-    player_position_y,
+    0,
+    0,
     screen:grid_step() / 12
   )
   self._collider:setCollisionClass("Impulse")
   self._collider:setMass(1 / 36)
+  self._collider:setPosition(player:position())
 
   local impulse_speed = 2 * screen.height
   local dt = love.timer.getDelta()
