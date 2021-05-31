@@ -200,9 +200,19 @@ function love.update(dt)
     local hit = impulse:hit()
     if hit then
       impulse:destroy()
+      return false
     end
 
-    return not hit
+    local distance_to_player = mlib.vec2.len(mlib.vec2.sub(
+      mlib.vec2.new(impulse._collider:getPosition()),
+      mlib.vec2.new(player:position())
+    ))
+    if distance_to_player > 10 * screen:grid_step() then
+      impulse:destroy()
+      return false
+    end
+
+    return true
   end)
   table.eachi(impulses, function(impulse)
     table.eachi(holes, function(hole)
