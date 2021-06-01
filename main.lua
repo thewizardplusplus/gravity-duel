@@ -236,7 +236,7 @@ function love.update(dt)
   end
   player:rotate(player_angle_delta)
 
-  player._collider:setAngularVelocity(0)
+  player:reset_autorotation()
 
   gooi.update(dt)
   keys:update()

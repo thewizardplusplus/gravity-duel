@@ -132,6 +132,12 @@ function Player:rotate(angle_delta)
 end
 
 ---
+-- @function reset_autorotation
+function Player:reset_autorotation()
+  self._collider:setAngularVelocity(0)
+end
+
+---
 -- @function destroy
 function Player:destroy()
   self._collider:destroy()
