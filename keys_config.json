@@ -3,7 +3,7 @@
   "moved_right": ["key:d"],
   "moved_top": ["key:w"],
   "moved_bottom": ["key:s"],
-  "rotated_left": ["key:left"],
-  "rotated_right": ["key:right"],
+  "rotated_left": ["key:left", "key:j"],
+  "rotated_right": ["key:right", "key:l"],
   "impulse": ["key:return", "key:space"]
 }
