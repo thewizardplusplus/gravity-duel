@@ -124,6 +124,14 @@ function Player:set_direction(x, y)
 end
 
 ---
+-- @tparam number angle_delta
+function Player:rotate(angle_delta)
+  assert(type(angle_delta) == "number")
+
+  self._collider:setAngle(self._collider:getAngle() + angle_delta)
+end
+
+---
 -- @function destroy
 function Player:destroy()
   self._collider:destroy()

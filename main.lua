@@ -225,16 +225,16 @@ function love.update(dt)
   )
   player:move(screen, player_move_direction.x, player_move_direction.y)
 
-  local player_angle_factor = 0.25
-  local player_angle_speed = 0.6 * dt
-  local player_angle_delta = player_angle_factor * ui:player_angle_delta()
+  local player_ui_angle_factor = 0.25
+  local player_keys_angle_factor = 0.6
+  local player_angle_delta = player_ui_angle_factor * ui:player_angle_delta()
   if keys:down("rotated_left") then
-    player_angle_delta = player_angle_delta - player_angle_speed
+    player_angle_delta = player_angle_delta - player_keys_angle_factor * dt
   end
   if keys:down("rotated_right") then
-    player_angle_delta = player_angle_delta + player_angle_speed
+    player_angle_delta = player_angle_delta + player_keys_angle_factor * dt
   end
-  player._collider:setAngle(player._collider:getAngle() + player_angle_delta)
+  player:rotate(player_angle_delta)
 
   player._collider:setAngularVelocity(0)
 
