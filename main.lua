@@ -31,7 +31,6 @@ local keys = nil -- baton.Player
 local stats = nil -- objects.Stats
 local best_stats = nil -- objects.BestStats
 local stats_storage = nil -- stats.StatsStorage
-local prev_player_angle = 0
 
 local function _enter_fullscreen()
   local os = love.system.getOS()
@@ -226,24 +225,9 @@ function love.update(dt)
   )
   player:move(screen, player_move_direction.x, player_move_direction.y)
 
-  local ui_player_direction_x, ui_player_direction_y = ui:player_direction()
-  if ui_player_direction_x ~= 0 or ui_player_direction_y ~= 0 then
-    local player_angle = math.atan2(ui_player_direction_y, ui_player_direction_x)
-    if player_angle < 0 then
-      player_angle = 2 * math.pi + player_angle
-    end
-
-    local player_angle_delta = player_angle - prev_player_angle
-    if math.abs(player_angle_delta) > math.pi then
-      local player_angle_delta_sign = player_angle_delta > 0 and 1 or -1
-      player_angle_delta = player_angle_delta_sign * (2 * math.pi - math.abs(player_angle_delta))
-    end
-
-    prev_player_angle = player_angle
-
-    local player_angle_factor = 0.25
-    player._collider:setAngle(player._collider:getAngle() + player_angle_factor * player_angle_delta)
-  end
+  local player_angle_factor = 0.25
+  local player_angle_delta = ui:player_angle_delta()
+  player._collider:setAngle(player._collider:getAngle() + player_angle_factor * player_angle_delta)
 
   local player_angle_speed = 0.6 * dt
   if keys:down("rotated_left") then

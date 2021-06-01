@@ -11,6 +11,7 @@ require("gooi")
 -- @tfield gooi.component _position_joystick
 -- @tfield gooi.component _direction_joystick
 -- @tfield gooi.component _impulse_button
+-- @tfield number _prev_player_angle
 
 local Ui = middleclass("Ui")
 
@@ -52,6 +53,8 @@ function Ui:initialize(screen, impulse_handler)
   })
   self._impulse_button:opacity(0.5)
   self._impulse_button:onPress(impulse_handler)
+
+  self._prev_player_angle = 0
 end
 
 ---
@@ -76,6 +79,30 @@ end
 -- @treturn number y
 function Ui:player_direction()
   return self._direction_joystick:xValue(), self._direction_joystick:yValue()
+end
+
+---
+-- @treturn number
+function Ui:player_angle_delta()
+  local player_direction_x, player_direction_y = self:player_direction()
+  if player_direction_x == 0 and player_direction_y == 0 then
+    return 0
+  end
+
+  local player_angle = math.atan2(player_direction_y, player_direction_x)
+  if player_angle < 0 then
+    player_angle = 2 * math.pi + player_angle
+  end
+
+  local player_angle_delta = player_angle - self._prev_player_angle
+  if math.abs(player_angle_delta) > math.pi then
+    local player_angle_delta_sign = player_angle_delta > 0 and 1 or -1
+    player_angle_delta =
+      player_angle_delta_sign * (2 * math.pi - math.abs(player_angle_delta))
+  end
+
+  self._prev_player_angle = player_angle
+  return player_angle_delta
 end
 
 ---
