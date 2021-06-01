@@ -75,16 +75,10 @@ function Ui:player_position()
 end
 
 ---
--- @treturn number x
--- @treturn number y
-function Ui:player_direction()
-  return self._direction_joystick:xValue(), self._direction_joystick:yValue()
-end
-
----
 -- @treturn number
 function Ui:player_angle_delta()
-  local player_direction_x, player_direction_y = self:player_direction()
+  local player_direction_x, player_direction_y =
+    self._direction_joystick:xValue(), self._direction_joystick:yValue()
   if player_direction_x == 0 and player_direction_y == 0 then
     return 0
   end
