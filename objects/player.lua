@@ -112,18 +112,6 @@ function Player:move(screen, ui_direction_x, ui_direction_y)
 end
 
 ---
--- @tparam number x
--- @tparam number y
-function Player:set_direction(x, y)
-  assert(type(x) == "number")
-  assert(type(y) == "number")
-
-  if x ~= 0 or y ~= 0 then
-    self._collider:setAngle(math.atan2(y, x))
-  end
-end
-
----
 -- @tparam number angle_delta
 function Player:rotate(angle_delta)
   assert(type(angle_delta) == "number")
