@@ -240,7 +240,11 @@ function love.update(dt)
 
   gooi.update(dt)
   keys:update()
-  if keys:pressed("impulse") then
+  if
+    keys:pressed("impulse")
+    and mlib.vec2.len(player_move_direction) == 0
+    and player_angle_delta == 0
+  then
     stats:add_impulse()
 
     local impulse = Impulse:new(world, screen, player)
