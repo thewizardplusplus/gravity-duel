@@ -223,7 +223,6 @@ function love.update(dt)
     mlib.vec2.new(ui:player_position()),
     mlib.vec2.new(keys:get("moved"))
   )
-  player:move(screen, player_move_direction.x, player_move_direction.y)
 
   local player_ui_angle_factor = 0.25
   local player_keys_angle_factor = 0.6
@@ -234,7 +233,15 @@ function love.update(dt)
   if keys:down("rotated_right") then
     player_angle_delta = player_angle_delta + player_keys_angle_factor * dt
   end
-  player:rotate(player_angle_delta)
+
+  if player_angle_delta == 0 then
+    player:move(screen, player_move_direction.x, player_move_direction.y)
+  else
+    player:move(screen, 0, 0)
+  end
+  if mlib.vec2.len(player_move_direction) == 0 then
+    player:rotate(player_angle_delta)
+  end
 
   player:reset_autorotation()
 
