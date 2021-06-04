@@ -137,6 +137,11 @@ function love.load()
     table.insert(targets, target)
   end, 2.5)
 
+  tick.delay(function()
+    local kind = math.random() < 0.5 and "black" or "white"
+    local hole = Hole:new(kind, world, screen, player)
+    table.insert(holes, hole)
+  end, 0)
   tick.recur(function()
     local kind = math.random() < 0.5 and "black" or "white"
     local hole = Hole:new(kind, world, screen, player)
