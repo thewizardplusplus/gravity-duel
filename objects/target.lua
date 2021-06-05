@@ -6,6 +6,7 @@ local mlib = require("mlib")
 local typeutils = require("typeutils")
 local mathutils = require("mathutils")
 local Rectangle = require("models.rectangle")
+local Circle = require("models.circle")
 local Player = require("objects.player")
 local physics = require("physics")
 local drawing = require("drawing")
@@ -46,13 +47,11 @@ function Target:initialize(world, screen, player, life_decrement_handler)
   local direction =
     mlib.vec2.rotate(mlib.vec2.new(1, 0), player:angle() + additional_angle)
   local player_position_x, player_position_y = player:position()
-  self._collider = physics.make_circle_collider(
-    world,
-    "static",
+  self._collider = physics.make_circle_collider(world, "static", Circle:new(
     0,
     0,
     screen:grid_step() / 2
-  )
+  ))
   self._collider:setPosition(
     distance * direction.x + player_position_x,
     distance * direction.y + player_position_y

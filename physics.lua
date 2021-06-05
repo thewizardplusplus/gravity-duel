@@ -3,6 +3,7 @@
 
 local typeutils = require("typeutils")
 local Rectangle = require("models.rectangle")
+local Circle = require("models.circle")
 
 local physics = {}
 
@@ -30,18 +31,14 @@ end
 ---
 -- @tparam windfield.World world
 -- @tparam "static"|"dynamic" kind
--- @tparam number x [0, ∞)
--- @tparam number y [0, ∞)
--- @tparam number radius [0, ∞)
+-- @tparam Circle circle
 -- @treturn windfield.Collider
-function physics.make_circle_collider(world, kind, x, y, radius)
+function physics.make_circle_collider(world, kind, circle)
   assert(type(world) == "table")
   assert(kind == "static" or kind == "dynamic")
-  assert(typeutils.is_positive_number(x))
-  assert(typeutils.is_positive_number(y))
-  assert(typeutils.is_positive_number(radius))
+  assert(typeutils.is_instance(circle, Circle))
 
-  local collider = world:newCircleCollider(x, y, radius)
+  local collider = world:newCircleCollider(circle.x, circle.y, circle.radius)
   collider:setType(kind)
 
   return collider

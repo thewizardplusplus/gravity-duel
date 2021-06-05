@@ -5,6 +5,7 @@ file = {
   "drawing.lua",
   "physics.lua",
   "models/rectangle.lua",
+  "models/circle.lua",
   "objects/target.lua",
   "objects/hole.lua",
   "objects/player.lua",

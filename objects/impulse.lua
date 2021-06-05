@@ -5,6 +5,7 @@ local middleclass = require("middleclass")
 local mlib = require("mlib")
 local typeutils = require("typeutils")
 local Rectangle = require("models.rectangle")
+local Circle = require("models.circle")
 local Hole = require("objects.hole")
 local Player = require("objects.player")
 local physics = require("physics")
@@ -27,13 +28,11 @@ function Impulse:initialize(world, screen, player)
   assert(typeutils.is_instance(screen, Rectangle))
   assert(typeutils.is_instance(player, Player))
 
-  self._collider = physics.make_circle_collider(
-    world,
-    "dynamic",
+  self._collider = physics.make_circle_collider(world, "dynamic", Circle:new(
     0,
     0,
     screen:grid_step() / 12
-  )
+  ))
   self._collider:setCollisionClass("Impulse")
   self._collider:setMass(1 / 36)
   self._collider:setPosition(player:position())
