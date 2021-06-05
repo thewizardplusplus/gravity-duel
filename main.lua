@@ -102,6 +102,15 @@ local function _add_impulse()
   stats:add_impulse()
 end
 
+local function _add_target()
+  local target = Target:new(world, screen, player, function(lifes)
+    assert(typeutils.is_positive_number(lifes))
+
+    stats:hit_target(lifes)
+  end)
+  table.insert(targets, target)
+end
+
 function love.load()
   math.randomseed(os.time())
   love.setDeprecationOutput(true)
@@ -122,22 +131,8 @@ function love.load()
   stats_storage = assert(statsfactory.create_stats_storage("stats-db"))
   best_stats = stats_storage:get_stats()
 
-  tick.delay(function()
-    local target = Target:new(world, screen, player, function(lifes)
-      assert(typeutils.is_positive_number(lifes))
-
-      stats:hit_target(lifes)
-    end)
-    table.insert(targets, target)
-  end, 0)
-  tick.recur(function()
-    local target = Target:new(world, screen, player, function(lifes)
-      assert(typeutils.is_positive_number(lifes))
-
-      stats:hit_target(lifes)
-    end)
-    table.insert(targets, target)
-  end, 2.5)
+  tick.delay(_add_target, 0)
+  tick.recur(_add_target, 2.5)
 
   tick.delay(function()
     local kind = math.random() < 0.5 and "black" or "white"
