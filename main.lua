@@ -95,6 +95,13 @@ local function _load_keys(path)
   })
 end
 
+local function _add_impulse()
+  local impulse = Impulse:new(world, screen, player)
+  table.insert(impulses, impulse)
+
+  stats:add_impulse()
+end
+
 function love.load()
   math.randomseed(os.time())
   love.setDeprecationOutput(true)
@@ -108,12 +115,7 @@ function love.load()
 
   player = Player:new(world, screen)
 
-  ui = Ui:new(screen, function()
-    stats:add_impulse()
-
-    local impulse = Impulse:new(world, screen, player)
-    table.insert(impulses, impulse)
-  end)
+  ui = Ui:new(screen, _add_impulse)
   keys = assert(_load_keys("keys_config.json"))
 
   stats = Stats:new()
@@ -265,10 +267,7 @@ function love.update(dt)
     and mlib.vec2.len(player_move_direction) == 0
     and player_angle_delta == 0
   then
-    stats:add_impulse()
-
-    local impulse = Impulse:new(world, screen, player)
-    table.insert(impulses, impulse)
+    _add_impulse()
   end
 
   local was_updated = best_stats:update(stats)
@@ -293,12 +292,7 @@ function love.resize()
   player = Player:new(world, screen)
 
   ui:destroy()
-  ui = Ui:new(screen, function()
-    stats:add_impulse()
-
-    local impulse = Impulse:new(world, screen, player)
-    table.insert(impulses, impulse)
-  end)
+  ui = Ui:new(screen, _add_impulse)
 end
 
 function love.keypressed(key)
