@@ -158,25 +158,11 @@ function love.draw()
       -(player_position_y - ui_center_position_y)
     )
 
-    table.eachi(holes, function(hole)
-      hole:draw(screen)
-    end)
-
-    table.eachi(targets, function(target)
-      target:draw(screen)
-    end)
-
-    table.eachi(impulses, function(impulse)
-      impulse:draw(screen)
-    end)
-
-    player:draw(screen)
+    drawing.draw_drawables(screen, holes .. targets .. impulses .. {player})
   end)
 
   gooi.draw()
-
-  stats:draw(screen)
-  best_stats:draw(screen)
+  drawing.draw_drawables(screen, {stats, best_stats})
 end
 
 function love.update(dt)
