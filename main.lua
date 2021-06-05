@@ -47,7 +47,7 @@ local function _enter_fullscreen()
   return true
 end
 
-local function _make_screen()
+local function _create_screen()
   local x, y, width, height = love.window.getSafeArea()
   return Rectangle:new(x, y, width, height)
 end
@@ -122,7 +122,7 @@ function love.load()
   love.setDeprecationOutput(true)
   assert(_enter_fullscreen())
 
-  screen = _make_screen()
+  screen = _create_screen()
 
   world = windfield.newWorld(0, 0, true)
   world:addCollisionClass("Player")
@@ -256,7 +256,7 @@ function love.update(dt)
 end
 
 function love.resize()
-  screen = _make_screen()
+  screen = _create_screen()
 
   table.eachi(targets, Target.destroy)
   targets = {}
