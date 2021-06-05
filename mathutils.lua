@@ -1,6 +1,8 @@
 ---
 -- @module mathutils
 
+local typeutils = require("typeutils")
+
 local mathutils = {}
 
 ---
@@ -8,8 +10,8 @@ local mathutils = {}
 -- @tparam number maximum [minimum, ∞)
 -- @treturn number [minimum, maximum)
 function mathutils.random_in_range(minimum, maximum)
-  assert(type(minimum) == "number")
-  assert(type(maximum) == "number" and maximum >= minimum)
+  assert(typeutils.is_number(minimum))
+  assert(typeutils.is_number(maximum, minimum))
 
   return math.random() * (maximum - minimum) + minimum
 end

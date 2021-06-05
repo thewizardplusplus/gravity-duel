@@ -96,8 +96,8 @@ end
 -- @tparam number ui_direction_y
 function Player:move(screen, ui_direction_x, ui_direction_y)
   assert(typeutils.is_instance(screen, Rectangle))
-  assert(type(ui_direction_x) == "number")
-  assert(type(ui_direction_y) == "number")
+  assert(typeutils.is_number(ui_direction_x))
+  assert(typeutils.is_number(ui_direction_y))
 
   local player_speed = 10 * screen.height
   local dt = love.timer.getDelta()
@@ -114,7 +114,7 @@ end
 ---
 -- @tparam number angle_delta
 function Player:rotate(angle_delta)
-  assert(type(angle_delta) == "number")
+  assert(typeutils.is_number(angle_delta))
 
   self._collider:setAngle(self._collider:getAngle() + angle_delta)
 end
