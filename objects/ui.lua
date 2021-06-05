@@ -24,10 +24,9 @@ function Ui:initialize(screen, impulse_handler)
   assert(typeutils.is_instance(screen, Rectangle))
   assert(typeutils.is_callable(impulse_handler))
 
-  local grid_step = screen.height / 4
-  local font_size = grid_step / 5
-  gooi.setStyle({font = love.graphics.newFont(font_size)})
+  gooi.setStyle({font = love.graphics.newFont(screen:font_size())})
 
+  local grid_step = screen.height / 4
   local margin = grid_step / 4
   self._position_joystick = gooi.newJoy({
     x = screen.x + margin,

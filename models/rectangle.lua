@@ -38,4 +38,10 @@ function Rectangle:grid_step()
   return self.height / 8
 end
 
+---
+-- @treturn number [0, ∞)
+function Rectangle:font_size()
+  return self.height / 20
+end
+
 return Rectangle

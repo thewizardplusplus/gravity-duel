@@ -72,8 +72,7 @@ end
 function Target:draw(screen)
   assert(typeutils.is_instance(screen, Rectangle))
 
-  local font_size = screen.height / 20
-  love.graphics.setFont(love.graphics.newFont(font_size))
+  love.graphics.setFont(love.graphics.newFont(screen:font_size()))
 
   drawing.draw_collider(self._collider, function()
     love.graphics.setColor(0, 0.5, 0)
@@ -96,7 +95,7 @@ function Target:draw(screen)
     love.graphics.printf(
       tostring(self._current_lifes),
       -screen:grid_step() / 2,
-      -font_size / 2,
+      -screen:font_size() / 2,
       screen:grid_step(),
       "center"
     )
