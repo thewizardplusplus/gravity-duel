@@ -111,6 +111,12 @@ local function _add_target()
   table.insert(targets, target)
 end
 
+local function _add_hole()
+  local kind = math.random() < 0.5 and "black" or "white"
+  local hole = Hole:new(kind, world, screen, player)
+  table.insert(holes, hole)
+end
+
 function love.load()
   math.randomseed(os.time())
   love.setDeprecationOutput(true)
@@ -134,16 +140,8 @@ function love.load()
   tick.delay(_add_target, 0)
   tick.recur(_add_target, 2.5)
 
-  tick.delay(function()
-    local kind = math.random() < 0.5 and "black" or "white"
-    local hole = Hole:new(kind, world, screen, player)
-    table.insert(holes, hole)
-  end, 0)
-  tick.recur(function()
-    local kind = math.random() < 0.5 and "black" or "white"
-    local hole = Hole:new(kind, world, screen, player)
-    table.insert(holes, hole)
-  end, 2.5)
+  tick.delay(_add_hole, 0)
+  tick.recur(_add_hole, 2.5)
 end
 
 function love.draw()
