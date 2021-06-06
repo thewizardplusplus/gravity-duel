@@ -35,8 +35,6 @@ end
 function Stats:draw(screen)
   assert(typeutils.is_instance(screen, Rectangle))
 
-  love.graphics.setFont(love.graphics.newFont(screen:font_size()))
-
   local grid_step = screen.height / 4
   local margin = grid_step / 4
   love.graphics.setColor(1, 1, 1)

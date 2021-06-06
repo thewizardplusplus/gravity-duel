@@ -7,6 +7,16 @@ local Rectangle = require("models.rectangle")
 local drawing = {}
 
 ---
+-- @tparam Rectangle screen
+function drawing.set_font(screen)
+  assert(typeutils.is_instance(screen, Rectangle))
+
+  local font = love.graphics.newFont(screen:font_size())
+  love.graphics.setFont(font)
+  gooi.setStyle({font = font})
+end
+
+---
 -- @tparam func drawer func(): nil
 function drawing.draw_with_transformations(drawer)
   assert(typeutils.is_callable(drawer))

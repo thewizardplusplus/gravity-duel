@@ -123,6 +123,7 @@ function love.load()
   assert(_enter_fullscreen())
 
   screen = _create_screen()
+  drawing.set_font(screen)
 
   world = windfield.newWorld(0, 0, true)
   world:addCollisionClass("Player")
@@ -257,6 +258,7 @@ end
 
 function love.resize()
   screen = _create_screen()
+  drawing.set_font(screen)
 
   table.eachi(targets, Target.destroy)
   targets = {}

@@ -71,8 +71,6 @@ end
 function Target:draw(screen)
   assert(typeutils.is_instance(screen, Rectangle))
 
-  love.graphics.setFont(love.graphics.newFont(screen:font_size()))
-
   drawing.draw_collider(self._collider, function()
     love.graphics.setColor(0, 0.5, 0)
     love.graphics.circle("fill", 0, 0, screen:grid_step() / 2)
