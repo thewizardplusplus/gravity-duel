@@ -4,7 +4,9 @@
 local middleclass = require("middleclass")
 local typeutils = require("typeutils")
 local Rectangle = require("models.rectangle")
+local Label = require("models.label")
 local Stats = require("objects.stats")
+local drawing = require("drawing")
 
 ---
 -- @table instance
@@ -31,19 +33,16 @@ end
 function BestStats:draw(screen)
   assert(typeutils.is_instance(screen, Rectangle))
 
-  local grid_step = screen.height / 4
-  local margin = grid_step / 4
+  local x = screen.width - 0.6 * screen.height
+  local y = screen.height / 16
   love.graphics.setColor(0, 0.5, 0)
-  love.graphics.print(
-    "Best accuracy: " .. string.format("%.2f%%", 100 * self.impulse_accuracy),
-    screen.width - 0.6 * screen.height,
-    margin
-  )
-  love.graphics.print(
-    "Best targets: " .. tostring(self.destroyed_targets),
-    screen.width - 0.6 * screen.height,
-    margin + grid_step / 4
-  )
+  drawing.draw_labels(screen, x, y, {
+    Label:new(
+      "Best accuracy",
+      string.format("%.2f%%", 100 * self.impulse_accuracy)
+    ),
+    Label:new("Best targets", self.destroyed_targets),
+  })
 end
 
 ---

@@ -3,6 +3,7 @@
 
 local typeutils = require("typeutils")
 local Rectangle = require("models.rectangle")
+local Label = require("models.label")
 
 local drawing = {}
 
@@ -52,6 +53,29 @@ function drawing.draw_drawables(screen, drawables)
 
     drawable:draw(screen)
   end)
+end
+
+---
+-- @tparam Rectangle screen
+-- @tparam number x [0, ∞)
+-- @tparam number y [0, ∞)
+-- @tparam {Label,...} labels
+function drawing.draw_labels(screen, x, y, labels)
+  assert(typeutils.is_instance(screen, Rectangle))
+  assert(typeutils.is_positive_number(x))
+  assert(typeutils.is_positive_number(y))
+  assert(type(labels) == "table")
+
+  local grid_step = screen.height / 16
+  for index, label in ipairs(labels) do
+    assert(typeutils.is_instance(label, Label))
+
+    love.graphics.print(
+      string.format("%s: %s", label.title, label.value),
+      x,
+      y + (index - 1) * grid_step
+    )
+  end
 end
 
 return drawing

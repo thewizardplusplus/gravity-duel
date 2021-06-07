@@ -4,6 +4,8 @@
 local middleclass = require("middleclass")
 local typeutils = require("typeutils")
 local Rectangle = require("models.rectangle")
+local Label = require("models.label")
+local drawing = require("drawing")
 
 ---
 -- @table instance
@@ -35,29 +37,17 @@ end
 function Stats:draw(screen)
   assert(typeutils.is_instance(screen, Rectangle))
 
-  local grid_step = screen.height / 4
-  local margin = grid_step / 4
+  local margin = screen.height / 16
   love.graphics.setColor(1, 1, 1)
-  love.graphics.print(
-    "Impulses: " .. tostring(self.performed_impulses),
-    margin,
-    margin
-  )
-  love.graphics.print(
-    "Hits: " .. tostring(self.hit_targets),
-    margin,
-    margin + grid_step / 4
-  )
-  love.graphics.print(
-    "Accuracy: " .. string.format("%.2f%%", 100 * self:impulse_accuracy()),
-    margin,
-    margin + 2 * grid_step / 4
-  )
-  love.graphics.print(
-    "Targets: " .. tostring(self.destroyed_targets),
-    margin,
-    margin + 3 * grid_step / 4
-  )
+  drawing.draw_labels(screen, margin, margin, {
+    Label:new("Impulses", self.performed_impulses),
+    Label:new("Hits", self.hit_targets),
+    Label:new(
+      "Accuracy",
+      string.format("%.2f%%", 100 * self:impulse_accuracy())
+    ),
+    Label:new("Targets", self.destroyed_targets),
+  })
 end
 
 ---
