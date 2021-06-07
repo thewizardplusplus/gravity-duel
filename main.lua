@@ -117,6 +117,22 @@ local function _add_hole()
   table.insert(holes, hole)
 end
 
+local function _filter_destroyables(destroyables, filter)
+  assert(type(destroyables) == "table")
+  assert(typeutils.is_callable(filter))
+
+  return table.accept(destroyables, function(destroyable)
+    assert(typeutils.is_callable(destroyable.destroy))
+
+    local ok = filter(destroyable)
+    if not ok then
+      destroyable:destroy()
+    end
+
+    return ok
+  end)
+end
+
 function love.load()
   math.randomseed(os.time())
   love.setDeprecationOutput(true)
@@ -171,29 +187,14 @@ function love.update(dt)
   tick.update(dt)
 
   table.eachi(targets, Target.update)
-  targets = table.accept(targets, function(target)
-    local alive = target:alive()
-    if not alive then
-      target:destroy()
-    end
-
-    return alive
-  end)
+  targets = _filter_destroyables(targets, Target.alive)
 
   table.eachi(holes, Hole.update)
-  holes = table.accept(holes, function(hole)
-    local alive = hole:alive()
-    if not alive then
-      hole:destroy()
-    end
+  holes = _filter_destroyables(holes, Hole.alive)
 
-    return alive
-  end)
-
-  impulses = table.accept(impulses, function(impulse)
+  impulses = _filter_destroyables(impulses, function(impulse)
     local hit = impulse:hit()
     if hit then
-      impulse:destroy()
       return false
     end
 
@@ -202,7 +203,6 @@ function love.update(dt)
       mlib.vec2.new(player:position())
     ))
     if distance_to_player > 10 * screen:grid_step() then
-      impulse:destroy()
       return false
     end
 
@@ -260,14 +260,9 @@ function love.resize()
   screen = _create_screen()
   drawing.set_font(screen)
 
-  table.eachi(targets, Target.destroy)
-  targets = {}
-
-  table.eachi(holes, Hole.destroy)
-  holes = {}
-
-  table.eachi(impulses, Impulse.destroy)
-  impulses = {}
+  targets = _filter_destroyables(targets, function() return false end)
+  holes = _filter_destroyables(holes, function() return false end)
+  impulses = _filter_destroyables(impulses, function() return false end)
 
   player:destroy()
   player = Player:new(world, screen)
