@@ -8,15 +8,15 @@ local Stats = require("objects.stats")
 
 ---
 -- @table instance
--- @tfield number impulse_accuracy
--- @tfield number destroyed_targets
+-- @tfield number impulse_accuracy [0, ∞)
+-- @tfield number destroyed_targets [0, ∞)
 
 local BestStats = middleclass("BestStats")
 
 ---
 -- @function new
--- @tfield number impulse_accuracy [0, ∞)
--- @tfield number destroyed_targets [0, ∞)
+-- @tparam number impulse_accuracy [0, ∞)
+-- @tparam number destroyed_targets [0, ∞)
 -- @treturn BestStats
 function BestStats:initialize(impulse_accuracy, destroyed_targets)
   assert(typeutils.is_positive_number(impulse_accuracy))
