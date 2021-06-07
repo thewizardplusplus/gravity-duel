@@ -48,14 +48,10 @@ function Target:initialize(world, screen, player, life_decrement_handler)
     mlib.vec2.rotate(mlib.vec2.new(1, 0), player:angle() + additional_angle)
   local player_position_x, player_position_y = player:position()
   self._collider = physics.make_circle_collider(world, "static", Circle:new(
-    0,
-    0,
+    distance * direction.x + player_position_x,
+    distance * direction.y + player_position_y,
     screen:grid_step() / 2
   ))
-  self._collider:setPosition(
-    distance * direction.x + player_position_x,
-    distance * direction.y + player_position_y
-  )
 
   self._life_decrement_handler = life_decrement_handler
 end
