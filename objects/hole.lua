@@ -7,18 +7,22 @@ local typeutils = require("typeutils")
 local mathutils = require("mathutils")
 local Rectangle = require("models.rectangle")
 local Circle = require("models.circle")
+local Color = require("models.color")
+local TemporaryCircle = require("objects.temporarycircle")
 local Player = require("objects.player")
-local physics = require("physics")
-local drawing = require("drawing")
 
 ---
 -- @table instance
--- @tfield "black"|"white" _kind
--- @tfield number _initial_lifetime
+-- @tfield number _initial_lifetime [0, ∞)
 -- @tfield number _rest_lifetime
+-- @tfield number _border_width [0, ∞)
+-- @tfield number _radius [0, ∞)
+-- @tfield Color _fill_color
+-- @tfield Color _border_color
 -- @tfield windfield.Collider _collider
+-- @tfield "black"|"white" _kind
 
-local Hole = middleclass("Hole")
+local Hole = middleclass("Hole", TemporaryCircle)
 
 ---
 -- @function new
@@ -33,33 +37,46 @@ function Hole:initialize(kind, world, screen, player)
   assert(typeutils.is_instance(screen, Rectangle))
   assert(typeutils.is_instance(player, Player))
 
-  self._kind = kind
-
-  self._initial_lifetime = 5
-  self._rest_lifetime = self._initial_lifetime
+  local fill_color
+  local border_color
+  if kind == "black" then
+    fill_color = Color:new(0.3, 0.3, 0.3)
+    border_color = Color(0.15, 0.15, 0.15)
+  elseif kind == "white" then
+    fill_color = Color:new(0.75, 0.75, 0.75)
+    border_color = Color(0.55, 0.55, 0.55)
+  end
 
   local distance =
     mathutils.random_in_range(2 * screen:grid_step(), 5 * screen:grid_step())
   local angle = mathutils.random_in_range(0, 2 * math.pi)
   local direction = mlib.vec2.rotate(mlib.vec2.new(1, 0), angle)
   local player_position_x, player_position_y = player:position()
-  self._collider = physics.make_circle_collider(world, "static", Circle:new(
-    distance * direction.x + player_position_x,
-    distance * direction.y + player_position_y,
-    3 * screen:grid_step() / 4
-  ))
+  TemporaryCircle.initialize(
+    self,
+    world,
+    5,
+    screen:grid_step() / 10,
+    Circle:new(
+      distance * direction.x + player_position_x,
+      distance * direction.y + player_position_y,
+      3 * screen:grid_step() / 4
+    ),
+    fill_color,
+    border_color
+  )
+
+  self._kind = kind
 end
+
+---
+-- @function alive
+-- @treturn bool
 
 ---
 -- @treturn "black"|"white"
 function Hole:kind()
   return self._kind
-end
-
----
--- @treturn bool
-function Hole:alive()
-  return self._rest_lifetime > 0
 end
 
 ---
@@ -70,48 +87,13 @@ function Hole:position()
 end
 
 ---
+-- @function draw
 -- @tparam Rectangle screen
-function Hole:draw(screen)
-  assert(typeutils.is_instance(screen, Rectangle))
-
-  drawing.draw_collider(self._collider, function()
-    if self._kind == "black" then
-      love.graphics.setColor(0.3, 0.3, 0.3)
-    elseif self._kind == "white" then
-      love.graphics.setColor(0.75, 0.75, 0.75)
-    end
-    love.graphics.circle("fill", 0, 0, 3 * screen:grid_step() / 4)
-
-    local elapsed_lifetime_factor = self._rest_lifetime / self._initial_lifetime
-    if self._kind == "black" then
-      love.graphics.setColor(0.15, 0.15, 0.15)
-    elseif self._kind == "white" then
-      love.graphics.setColor(0.55, 0.55, 0.55)
-    end
-    love.graphics.setLineWidth(screen:grid_step() / 10)
-    love.graphics.arc(
-      "line",
-      "open",
-      0,
-      0,
-      3 * screen:grid_step() / 4,
-      2 * math.pi - math.pi / 2 - 2 * math.pi * elapsed_lifetime_factor,
-      2 * math.pi - math.pi / 2
-    )
-  end)
-end
 
 ---
 -- @function update
-function Hole:update()
-  local dt = love.timer.getDelta()
-  self._rest_lifetime = self._rest_lifetime - dt
-end
 
 ---
 -- @function destroy
-function Hole:destroy()
-  self._collider:destroy()
-end
 
 return Hole
