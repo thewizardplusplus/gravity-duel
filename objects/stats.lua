@@ -9,9 +9,9 @@ local drawing = require("drawing")
 
 ---
 -- @table instance
--- @tfield number performed_impulses
--- @tfield number hit_targets
--- @tfield number destroyed_targets
+-- @tfield number performed_impulses [0, ∞)
+-- @tfield number hit_targets [0, ∞)
+-- @tfield number destroyed_targets [0, ∞)
 
 local Stats = middleclass("Stats")
 
