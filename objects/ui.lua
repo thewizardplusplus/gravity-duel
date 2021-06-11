@@ -11,7 +11,7 @@ require("gooi")
 -- @tfield gooi.component _position_joystick
 -- @tfield gooi.component _direction_joystick
 -- @tfield gooi.component _impulse_button
--- @tfield number _prev_player_angle
+-- @tfield number _prev_player_angle [0, 2 * math.pi]
 
 local Ui = middleclass("Ui")
 
@@ -55,8 +55,8 @@ function Ui:initialize(screen, impulse_handler)
 end
 
 ---
--- @treturn number x
--- @treturn number y
+-- @treturn number x [0, ∞)
+-- @treturn number y [0, ∞)
 function Ui:center_position()
   local x = (self._position_joystick.x + self._direction_joystick.x) / 2
     + self._position_joystick.w / 2
@@ -65,14 +65,14 @@ function Ui:center_position()
 end
 
 ---
--- @treturn number x
--- @treturn number y
+-- @treturn number x [-1, 1]
+-- @treturn number y [-1, 1]
 function Ui:player_position()
   return self._position_joystick:xValue(), self._position_joystick:yValue()
 end
 
 ---
--- @treturn number
+-- @treturn number [-math.pi, math.pi]
 function Ui:player_angle_delta()
   local player_direction_x, player_direction_y =
     self._direction_joystick:xValue(), self._direction_joystick:yValue()
