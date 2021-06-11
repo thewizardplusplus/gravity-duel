@@ -46,6 +46,7 @@ end
 ---
 -- @tparam[opt=false] bool corrected_for_ui
 -- @treturn number
+--   [-math.pi, math.pi] or [0, 2 * math.pi] (if it is corrected for UI)
 function Player:angle(corrected_for_ui)
   corrected_for_ui = corrected_for_ui or false
 
@@ -92,12 +93,12 @@ end
 
 ---
 -- @tparam Rectangle screen
--- @tparam number ui_direction_x
--- @tparam number ui_direction_y
+-- @tparam number ui_direction_x [-1, 1]
+-- @tparam number ui_direction_y [-1, 1]
 function Player:move(screen, ui_direction_x, ui_direction_y)
   assert(typeutils.is_instance(screen, Rectangle))
-  assert(typeutils.is_number(ui_direction_x))
-  assert(typeutils.is_number(ui_direction_y))
+  assert(typeutils.is_number(ui_direction_x, -1, 1))
+  assert(typeutils.is_number(ui_direction_y, -1, 1))
 
   local player_speed = 10 * screen.height
   local dt = love.timer.getDelta()
