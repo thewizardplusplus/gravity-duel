@@ -70,6 +70,11 @@ function Hole:initialize(kind, world, screen, player)
 end
 
 ---
+-- @function position
+-- @treturn number x
+-- @treturn number y
+
+---
 -- @function alive
 -- @treturn bool
 
@@ -77,13 +82,6 @@ end
 -- @treturn "black"|"white"
 function Hole:kind()
   return self._kind
-end
-
----
--- @treturn number x
--- @treturn number y
-function Hole:position()
-  return self._collider:getPosition()
 end
 
 ---

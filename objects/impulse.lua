@@ -6,6 +6,7 @@ local mlib = require("mlib")
 local typeutils = require("typeutils")
 local Rectangle = require("models.rectangle")
 local Circle = require("models.circle")
+local Collider = require("objects.collider")
 local Hole = require("objects.hole")
 local Player = require("objects.player")
 local physics = require("physics")
@@ -16,6 +17,7 @@ local drawing = require("drawing")
 -- @tfield windfield.Collider _collider
 
 local Impulse = middleclass("Impulse")
+Impulse:include(Collider)
 
 ---
 -- @function new
@@ -45,6 +47,11 @@ function Impulse:initialize(world, screen, player)
     impulse_speed * dt * player_direction.y
   )
 end
+
+---
+-- @function position
+-- @treturn number x
+-- @treturn number y
 
 ---
 -- @treturn bool
@@ -87,8 +94,5 @@ end
 
 ---
 -- @function destroy
-function Impulse:destroy()
-  self._collider:destroy()
-end
 
 return Impulse

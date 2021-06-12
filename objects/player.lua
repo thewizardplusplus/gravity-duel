@@ -5,6 +5,7 @@ local middleclass = require("middleclass")
 local mlib = require("mlib")
 local typeutils = require("typeutils")
 local Rectangle = require("models.rectangle")
+local Collider = require("objects.collider")
 local physics = require("physics")
 local drawing = require("drawing")
 
@@ -13,6 +14,7 @@ local drawing = require("drawing")
 -- @tfield windfield.Collider _collider
 
 local Player = middleclass("Player")
+Player:include(Collider)
 
 ---
 -- @function new
@@ -37,11 +39,9 @@ function Player:initialize(world, screen)
 end
 
 ---
+-- @function position
 -- @treturn number x
 -- @treturn number y
-function Player:position()
-  return self._collider:getPosition()
-end
 
 ---
 -- @tparam[opt=false] bool corrected_for_ui
@@ -128,8 +128,5 @@ end
 
 ---
 -- @function destroy
-function Player:destroy()
-  self._collider:destroy()
-end
 
 return Player

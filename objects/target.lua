@@ -67,6 +67,11 @@ function Target:initialize(world, screen, player, life_decrement_handler)
 end
 
 ---
+-- @function position
+-- @treturn number x
+-- @treturn number y
+
+---
 -- @treturn bool
 function Target:alive()
   return TemporaryCircle.alive(self) and self._current_lifes > 0

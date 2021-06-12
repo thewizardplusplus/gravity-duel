@@ -199,7 +199,7 @@ function love.update(dt)
     end
 
     local distance_to_player = mlib.vec2.len(mlib.vec2.sub(
-      mlib.vec2.new(impulse._collider:getPosition()),
+      mlib.vec2.new(impulse:position()),
       mlib.vec2.new(player:position())
     ))
     if distance_to_player > 10 * screen:grid_step() then

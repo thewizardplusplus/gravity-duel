@@ -6,6 +6,7 @@ local typeutils = require("typeutils")
 local Rectangle = require("models.rectangle")
 local Circle = require("models.circle")
 local Color = require("models.color")
+local Collider = require("objects.collider")
 local physics = require("physics")
 local drawing = require("drawing")
 
@@ -20,6 +21,7 @@ local drawing = require("drawing")
 -- @tfield windfield.Collider _collider
 
 local TemporaryCircle = middleclass("TemporaryCircle")
+TemporaryCircle:include(Collider)
 
 ---
 -- @function new
@@ -54,6 +56,11 @@ function TemporaryCircle:initialize(
 
   self._collider = physics.make_circle_collider(world, "static", circle)
 end
+
+---
+-- @function position
+-- @treturn number x
+-- @treturn number y
 
 ---
 -- @treturn bool
@@ -94,8 +101,5 @@ end
 
 ---
 -- @function destroy
-function TemporaryCircle:destroy()
-  self._collider:destroy()
-end
 
 return TemporaryCircle
