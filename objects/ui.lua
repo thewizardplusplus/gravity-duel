@@ -67,7 +67,7 @@ end
 ---
 -- @treturn number x [-1, 1]
 -- @treturn number y [-1, 1]
-function Ui:player_position()
+function Ui:player_move_direction()
   return self._position_joystick:xValue(), self._position_joystick:yValue()
 end
 

@@ -213,7 +213,7 @@ function love.update(dt)
   end)
 
   local player_move_direction = mlib.vec2.add(
-    mlib.vec2.new(ui:player_position()),
+    mlib.vec2.new(ui:player_move_direction()),
     mlib.vec2.new(keys:get("moved"))
   )
 
