@@ -2,12 +2,10 @@
 -- @classmod Target
 
 local middleclass = require("middleclass")
-local mlib = require("mlib")
 local typeutils = require("typeutils")
-local mathutils = require("mathutils")
 local Rectangle = require("models.rectangle")
-local Circle = require("models.circle")
 local Color = require("models.color")
+local Range = require("models.range")
 local TemporaryCircle = require("objects.temporarycircle")
 local Player = require("objects.player")
 local drawing = require("drawing")
@@ -16,8 +14,8 @@ local drawing = require("drawing")
 -- @table instance
 -- @tfield number _initial_lifetime [0, ∞)
 -- @tfield number _rest_lifetime
--- @tfield number _border_width [0, ∞)
 -- @tfield number _radius [0, ∞)
+-- @tfield number _border_width [0, ∞)
 -- @tfield Color _fill_color
 -- @tfield Color _border_color
 -- @tfield windfield.Collider _collider
@@ -40,22 +38,15 @@ function Target:initialize(world, screen, player, life_decrement_handler)
   assert(typeutils.is_instance(player, Player))
   assert(typeutils.is_callable(life_decrement_handler))
 
-  local distance =
-    mathutils.random_in_range(2 * screen:grid_step(), 5 * screen:grid_step())
-  local additional_angle = mathutils.random_in_range(-math.pi / 3, math.pi / 3)
-  local direction =
-    mlib.vec2.rotate(mlib.vec2.new(1, 0), player:angle() + additional_angle)
-  local player_position_x, player_position_y = player:position()
   TemporaryCircle.initialize(
     self,
-    world,
     5,
+    world,
+    player,
+    Range:new(2 * screen:grid_step(), 	5 * screen:grid_step()),
+    Range:new(-math.pi / 3, math.pi / 3),
+    screen:grid_step() / 2,
     screen:grid_step() / 10,
-    Circle:new(
-      distance * direction.x + player_position_x,
-      distance * direction.y + player_position_y,
-      screen:grid_step() / 2
-    ),
     Color:new(0, 0.5, 0),
     Color:new(0, 0.3, 0)
   )

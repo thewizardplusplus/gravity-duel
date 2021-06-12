@@ -2,12 +2,10 @@
 -- @classmod Hole
 
 local middleclass = require("middleclass")
-local mlib = require("mlib")
 local typeutils = require("typeutils")
-local mathutils = require("mathutils")
 local Rectangle = require("models.rectangle")
-local Circle = require("models.circle")
 local Color = require("models.color")
+local Range = require("models.range")
 local TemporaryCircle = require("objects.temporarycircle")
 local Player = require("objects.player")
 
@@ -15,8 +13,8 @@ local Player = require("objects.player")
 -- @table instance
 -- @tfield number _initial_lifetime [0, ∞)
 -- @tfield number _rest_lifetime
--- @tfield number _border_width [0, ∞)
 -- @tfield number _radius [0, ∞)
+-- @tfield number _border_width [0, ∞)
 -- @tfield Color _fill_color
 -- @tfield Color _border_color
 -- @tfield windfield.Collider _collider
@@ -47,21 +45,15 @@ function Hole:initialize(kind, world, screen, player)
     border_color = Color(0.55, 0.55, 0.55)
   end
 
-  local distance =
-    mathutils.random_in_range(2 * screen:grid_step(), 5 * screen:grid_step())
-  local angle = mathutils.random_in_range(0, 2 * math.pi)
-  local direction = mlib.vec2.rotate(mlib.vec2.new(1, 0), angle)
-  local player_position_x, player_position_y = player:position()
   TemporaryCircle.initialize(
     self,
-    world,
     5,
+    world,
+    player,
+    Range:new(2 * screen:grid_step(), 	5 * screen:grid_step()),
+    Range:new(-math.pi, math.pi),
+    3 * screen:grid_step() / 4,
     screen:grid_step() / 10,
-    Circle:new(
-      distance * direction.x + player_position_x,
-      distance * direction.y + player_position_y,
-      3 * screen:grid_step() / 4
-    ),
     fill_color,
     border_color
   )

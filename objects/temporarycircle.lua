@@ -2,11 +2,15 @@
 -- @classmod TemporaryCircle
 
 local middleclass = require("middleclass")
+local mlib = require("mlib")
 local typeutils = require("typeutils")
+local mathutils = require("mathutils")
 local Rectangle = require("models.rectangle")
 local Circle = require("models.circle")
 local Color = require("models.color")
+local Range = require("models.range")
 local Collider = require("objects.collider")
+local Player = require("objects.player")
 local physics = require("physics")
 local drawing = require("drawing")
 
@@ -14,8 +18,8 @@ local drawing = require("drawing")
 -- @table instance
 -- @tfield number _initial_lifetime [0, ∞)
 -- @tfield number _rest_lifetime
--- @tfield number _border_width [0, ∞)
 -- @tfield number _radius [0, ∞)
+-- @tfield number _border_width [0, ∞)
 -- @tfield Color _fill_color
 -- @tfield Color _border_color
 -- @tfield windfield.Collider _collider
@@ -25,36 +29,58 @@ TemporaryCircle:include(Collider)
 
 ---
 -- @function new
--- @tparam windfield.World world
 -- @tparam number initial_lifetime [0, ∞)
+-- @tparam windfield.World world
+-- @tparam Player player
+-- @tparam Range distance_range
+-- @tparam Range additional_angle_range
+-- @tparam number radius [0, ∞)
 -- @tparam number border_width [0, ∞)
--- @tparam Circle circle
 -- @tparam Color fill_color
 -- @tparam Color border_color
 -- @treturn TemporaryCircle
 function TemporaryCircle:initialize(
-  world,
   initial_lifetime,
+  world,
+  player,
+  distance_range,
+  additional_angle_range,
+  radius,
   border_width,
-  circle,
   fill_color,
   border_color
 )
-  assert(type(world) == "table")
   assert(typeutils.is_positive_number(initial_lifetime))
+  assert(type(world) == "table")
+  assert(typeutils.is_instance(player, Player))
+  assert(typeutils.is_instance(distance_range, Range))
+  assert(typeutils.is_instance(additional_angle_range, Range))
+  assert(typeutils.is_positive_number(radius))
   assert(typeutils.is_positive_number(border_width))
-  assert(typeutils.is_instance(circle, Circle))
   assert(typeutils.is_instance(fill_color, Color))
   assert(typeutils.is_instance(border_color, Color))
 
   self._initial_lifetime = initial_lifetime
   self._rest_lifetime = initial_lifetime
+  self._radius = radius
   self._border_width = border_width
-  self._radius = circle.radius
   self._fill_color = fill_color
   self._border_color = border_color
 
-  self._collider = physics.make_circle_collider(world, "static", circle)
+  local distance =
+    mathutils.random_in_range(distance_range.minimum, distance_range.maximum)
+  local additional_angle = mathutils.random_in_range(
+    additional_angle_range.minimum,
+    additional_angle_range.maximum
+  )
+  local direction =
+    mlib.vec2.rotate(mlib.vec2.new(1, 0), player:angle() + additional_angle)
+  local player_position_x, player_position_y = player:position()
+  self._collider = physics.make_circle_collider(world, "static", Circle:new(
+    distance * direction.x + player_position_x,
+    distance * direction.y + player_position_y,
+    radius
+  ))
 end
 
 ---

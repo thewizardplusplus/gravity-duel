@@ -8,6 +8,7 @@ file = {
   "models/circle.lua",
   "models/color.lua",
   "models/label.lua",
+  "models/range.lua",
   "objects/collider.lua",
   "objects/temporarycircle.lua",
   "objects/target.lua",
