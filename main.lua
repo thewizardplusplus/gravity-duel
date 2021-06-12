@@ -198,10 +198,8 @@ function love.update(dt)
       return false
     end
 
-    local distance_to_player = mlib.vec2.len(mlib.vec2.sub(
-      mlib.vec2.new(impulse:position()),
-      mlib.vec2.new(player:position())
-    ))
+    local distance_to_player =
+      mlib.vec2.len(mlib.vec2.new(impulse:vector_to(player)))
     if distance_to_player > 10 * screen:grid_step() then
       return false
     end

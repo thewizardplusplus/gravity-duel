@@ -60,6 +60,19 @@ function Impulse:hit()
 end
 
 ---
+-- @treturn number x
+-- @treturn number y
+function Impulse:vector_to(collider)
+  assert(typeutils.is_callable(collider.position))
+
+  local vector = mlib.vec2.sub(
+    mlib.vec2.new(collider:position()),
+    mlib.vec2.new(self:position())
+  )
+  return vector.x, vector.y
+end
+
+---
 -- @tparam Rectangle screen
 function Impulse:draw(screen)
   assert(typeutils.is_instance(screen, Rectangle))
@@ -77,10 +90,7 @@ function Impulse:apply_hole(screen, hole)
   assert(typeutils.is_instance(screen, Rectangle))
   assert(typeutils.is_instance(hole, Hole))
 
-  local vector = mlib.vec2.sub(
-    mlib.vec2.new(hole:position()),
-    mlib.vec2.new(self._collider:getPosition())
-  )
+  local vector = mlib.vec2.new(self:vector_to(hole))
   if hole:kind() == "white" then
     vector = mlib.vec2.mul(vector, -1)
   end
