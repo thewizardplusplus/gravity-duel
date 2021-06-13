@@ -63,7 +63,7 @@ end
 -- @treturn number x
 -- @treturn number y
 function Impulse:vector_to(collider)
-  assert(typeutils.is_callable(collider.position))
+  assert(type(collider) == "table" and typeutils.is_callable(collider.position))
 
   local vector = mlib.vec2.sub(
     mlib.vec2.new(collider:position()),

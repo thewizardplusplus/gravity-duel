@@ -122,7 +122,8 @@ local function _filter_destroyables(destroyables, filter)
   assert(typeutils.is_callable(filter))
 
   return table.accept(destroyables, function(destroyable)
-    assert(typeutils.is_callable(destroyable.destroy))
+    assert(type(destroyable) == "table"
+      and typeutils.is_callable(destroyable.destroy))
 
     local ok = filter(destroyable)
     if not ok then

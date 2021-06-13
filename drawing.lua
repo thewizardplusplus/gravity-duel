@@ -31,7 +31,9 @@ end
 -- @tparam windfield.Collider collider
 -- @tparam func drawer func(): nil
 function drawing.draw_collider(collider, drawer)
-  assert(type(collider) == "table")
+  assert(type(collider) == "table"
+    and typeutils.is_callable(collider.getPosition)
+    and typeutils.is_callable(collider.getAngle))
   assert(typeutils.is_callable(drawer))
 
   drawing.draw_with_transformations(function()
@@ -49,7 +51,7 @@ function drawing.draw_drawables(screen, drawables)
   assert(type(drawables) == "table")
 
   table.eachi(drawables, function(drawable)
-    assert(typeutils.is_callable(drawable.draw))
+    assert(type(drawable) == "table" and typeutils.is_callable(drawable.draw))
 
     drawable:draw(screen)
   end)
