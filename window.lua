@@ -1,6 +1,8 @@
 ---
 -- @module window
 
+local Rectangle = require("models.rectangle")
+
 local window = {}
 
 ---
@@ -19,6 +21,13 @@ function window.enter_fullscreen()
   end
 
   return true
+end
+
+---
+-- @treturn Rectangle
+function window.create_screen()
+  local x, y, width, height = love.window.getSafeArea()
+  return Rectangle:new(x, y, width, height)
 end
 
 return window

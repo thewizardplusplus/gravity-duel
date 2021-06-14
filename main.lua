@@ -10,7 +10,6 @@ local typeutils = require("typeutils")
 local window = require("window")
 local drawing = require("drawing")
 local statsfactory = require("stats.statsfactory")
-local Rectangle = require("models.rectangle")
 local Target = require("objects.target")
 local Hole = require("objects.hole")
 local Player = require("objects.player")
@@ -32,11 +31,6 @@ local keys = nil -- baton.Player
 local stats = nil -- objects.Stats
 local best_stats = nil -- objects.BestStats
 local stats_storage = nil -- stats.StatsStorage
-
-local function _create_screen()
-  local x, y, width, height = love.window.getSafeArea()
-  return Rectangle:new(x, y, width, height)
-end
 
 local function _load_keys(path)
   assert(type(path) == "string")
@@ -125,7 +119,7 @@ function love.load()
   love.setDeprecationOutput(true)
   assert(window.enter_fullscreen())
 
-  screen = _create_screen()
+  screen = window.create_screen()
   drawing.set_font(screen)
 
   world = windfield.newWorld(0, 0, true)
@@ -242,7 +236,7 @@ function love.update(dt)
 end
 
 function love.resize()
-  screen = _create_screen()
+  screen = window.create_screen()
   drawing.set_font(screen)
 
   targets = _filter_destroyables(targets, function() return false end)
