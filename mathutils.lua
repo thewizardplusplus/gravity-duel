@@ -2,18 +2,17 @@
 -- @module mathutils
 
 local typeutils = require("typeutils")
+local Range = require("models.range")
 
 local mathutils = {}
 
 ---
--- @tparam number minimum
--- @tparam number maximum [minimum, ∞)
--- @treturn number [minimum, maximum)
-function mathutils.random_in_range(minimum, maximum)
-  assert(typeutils.is_number(minimum))
-  assert(typeutils.is_number(maximum, minimum))
+-- @tparam Range range
+-- @treturn number [range.minimum, range.maximum)
+function mathutils.random_in_range(range)
+  assert(typeutils.is_instance(range, Range))
 
-  return math.random() * (maximum - minimum) + minimum
+  return math.random() * (range.maximum - range.minimum) + range.minimum
 end
 
 return mathutils

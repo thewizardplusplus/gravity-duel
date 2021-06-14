@@ -67,12 +67,8 @@ function TemporaryCircle:initialize(
   self._fill_color = fill_color
   self._border_color = border_color
 
-  local distance =
-    mathutils.random_in_range(distance_range.minimum, distance_range.maximum)
-  local additional_angle = mathutils.random_in_range(
-    additional_angle_range.minimum,
-    additional_angle_range.maximum
-  )
+  local distance = mathutils.random_in_range(distance_range)
+  local additional_angle = mathutils.random_in_range(additional_angle_range)
   local direction =
     mlib.vec2.rotate(mlib.vec2.new(1, 0), player:angle() + additional_angle)
   local player_position_x, player_position_y = player:position()
