@@ -61,6 +61,36 @@ function Player:angle(corrected_for_ui)
 end
 
 ---
+-- @tparam[opt=1] number base_direction_x [-1, 1]
+-- @tparam[optchain=0] number base_direction_y [-1, 1]
+-- @tparam[optchain=0] number additional_angle
+-- @tparam[optchain=false] bool corrected_for_ui
+-- @treturn number x [-1, 1]
+-- @treturn number y [-1, 1]
+function Player:direction(
+  base_direction_x,
+  base_direction_y,
+  additional_angle,
+  corrected_for_ui
+)
+  base_direction_x = base_direction_x or 1
+  base_direction_y = base_direction_y or 0
+  additional_angle = additional_angle or 0
+  corrected_for_ui = corrected_for_ui or false
+
+  assert(typeutils.is_number(base_direction_x, -1, 1))
+  assert(typeutils.is_number(base_direction_y, -1, 1))
+  assert(typeutils.is_number(additional_angle))
+  assert(type(corrected_for_ui) == "boolean")
+
+  local direction = mlib.vec2.rotate(
+    mlib.vec2.new(base_direction_x, base_direction_y),
+    self:angle(corrected_for_ui) + additional_angle
+  )
+  return direction.x, direction.y
+end
+
+---
 -- @tparam Rectangle screen
 function Player:draw(screen)
   assert(typeutils.is_instance(screen, Rectangle))
@@ -102,13 +132,11 @@ function Player:move(screen, ui_direction_x, ui_direction_y)
 
   local player_speed = 10 * screen.height
   local dt = love.timer.getDelta()
-  local player_ui_direction = mlib.vec2.rotate(
-    mlib.vec2.new(ui_direction_x, ui_direction_y),
-    self:angle(true)
-  )
+  local player_direction_x, player_direction_y =
+    self:direction(ui_direction_x, ui_direction_y, nil, true)
   self._collider:setLinearVelocity(
-    player_speed * dt * player_ui_direction.x,
-    player_speed * dt * player_ui_direction.y
+    player_speed * dt * player_direction_x,
+    player_speed * dt * player_direction_y
   )
 end
 

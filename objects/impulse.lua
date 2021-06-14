@@ -41,10 +41,10 @@ function Impulse:initialize(world, screen, player)
 
   local impulse_speed = 2 * screen.height
   local dt = love.timer.getDelta()
-  local player_direction = mlib.vec2.rotate(mlib.vec2.new(1, 0), player:angle())
+  local player_direction_x, player_direction_y = player:direction()
   self._collider:applyLinearImpulse(
-    impulse_speed * dt * player_direction.x,
-    impulse_speed * dt * player_direction.y
+    impulse_speed * dt * player_direction_x,
+    impulse_speed * dt * player_direction_y
   )
 end
 

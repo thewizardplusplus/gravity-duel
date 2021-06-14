@@ -2,7 +2,6 @@
 -- @classmod TemporaryCircle
 
 local middleclass = require("middleclass")
-local mlib = require("mlib")
 local typeutils = require("typeutils")
 local mathutils = require("mathutils")
 local Rectangle = require("models.rectangle")
@@ -69,12 +68,12 @@ function TemporaryCircle:initialize(
 
   local distance = mathutils.random_in_range(distance_range)
   local additional_angle = mathutils.random_in_range(additional_angle_range)
-  local direction =
-    mlib.vec2.rotate(mlib.vec2.new(1, 0), player:angle() + additional_angle)
+  local player_direction_x, player_direction_y =
+    player:direction(nil, nil, additional_angle)
   local player_position_x, player_position_y = player:position()
   self._collider = physics.make_circle_collider(world, "static", Circle:new(
-    distance * direction.x + player_position_x,
-    distance * direction.y + player_position_y,
+    distance * player_direction_x + player_position_x,
+    distance * player_direction_y + player_position_y,
     radius
   ))
 end
