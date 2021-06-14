@@ -7,6 +7,7 @@ local mlib = require("mlib")
 local baton = require("baton")
 local tick = require("tick")
 local typeutils = require("typeutils")
+local window = require("window")
 local drawing = require("drawing")
 local statsfactory = require("stats.statsfactory")
 local Rectangle = require("models.rectangle")
@@ -31,21 +32,6 @@ local keys = nil -- baton.Player
 local stats = nil -- objects.Stats
 local best_stats = nil -- objects.BestStats
 local stats_storage = nil -- stats.StatsStorage
-
-local function _enter_fullscreen()
-  local os = love.system.getOS()
-  local is_mobile_os = table.find({"Android", "iOS"}, os)
-  if not is_mobile_os then
-    return true
-  end
-
-  local ok = love.window.setFullscreen(true, "desktop")
-  if not ok then
-    return false, "unable to enter fullscreen"
-  end
-
-  return true
-end
 
 local function _create_screen()
   local x, y, width, height = love.window.getSafeArea()
@@ -137,7 +123,7 @@ end
 function love.load()
   math.randomseed(os.time())
   love.setDeprecationOutput(true)
-  assert(_enter_fullscreen())
+  assert(window.enter_fullscreen())
 
   screen = _create_screen()
   drawing.set_font(screen)
