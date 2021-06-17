@@ -4,6 +4,7 @@
 local middleclass = require("middleclass")
 local mlib = require("mlib")
 local typeutils = require("typeutils")
+local mathutils = require("mathutils")
 local Rectangle = require("models.rectangle")
 local Circle = require("models.circle")
 local Collider = require("objects.collider")
@@ -40,12 +41,12 @@ function Impulse:initialize(world, screen, player)
   self._collider:setMass(1 / 36)
 
   local impulse_speed = 2 * screen.height
-  local dt = love.timer.getDelta()
   local player_direction_x, player_direction_y = player:direction()
-  self._collider:applyLinearImpulse(
-    impulse_speed * dt * player_direction_x,
-    impulse_speed * dt * player_direction_y
-  )
+  self._collider:applyLinearImpulse(mathutils.transform_vector(
+    player_direction_x,
+    player_direction_y,
+    impulse_speed
+  ))
 end
 
 ---
@@ -90,16 +91,21 @@ function Impulse:apply_hole(screen, hole)
   assert(typeutils.is_instance(screen, Rectangle))
   assert(typeutils.is_instance(hole, Hole))
 
-  local vector = mlib.vec2.new(self:vector_to(hole))
+  local vector_to_hole = mlib.vec2.new(self:vector_to(hole))
   if hole:kind() == "white" then
-    vector = mlib.vec2.mul(vector, -1)
+    vector_to_hole = mlib.vec2.mul(vector_to_hole, -1)
   end
 
   local factor = 1000000 * math.pow(screen.height / 400, 3)
-  local distance = mlib.vec2.len(vector)
-  local direction = mlib.vec2.normalize(vector)
-  local force = mlib.vec2.mul(direction, factor / math.pow(distance, 2))
-  self._collider:applyForce(force.x, force.y)
+  factor = factor / math.pow(mlib.vec2.len(vector_to_hole), 2)
+
+  local direction_to_hole = mlib.vec2.normalize(vector_to_hole)
+  self._collider:applyForce(mathutils.transform_vector(
+    direction_to_hole.x,
+    direction_to_hole.y,
+    factor,
+    false
+  ))
 end
 
 ---

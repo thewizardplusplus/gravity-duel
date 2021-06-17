@@ -70,10 +70,16 @@ function TemporaryCircle:initialize(
   local additional_angle = mathutils.random_in_range(additional_angle_range)
   local player_direction_x, player_direction_y =
     player:direction(nil, nil, additional_angle)
-  local player_position_x, player_position_y = player:position()
+  local circle_position_x, circle_position_y = mathutils.transform_vector(
+    player_direction_x,
+    player_direction_y,
+    distance,
+    false,
+    player:position()
+  )
   self._collider = physics.make_circle_collider(world, "static", Circle:new(
-    distance * player_direction_x + player_position_x,
-    distance * player_direction_y + player_position_y,
+    circle_position_x,
+    circle_position_y,
     radius
   ))
 end

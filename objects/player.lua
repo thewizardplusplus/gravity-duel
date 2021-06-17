@@ -4,6 +4,7 @@
 local middleclass = require("middleclass")
 local mlib = require("mlib")
 local typeutils = require("typeutils")
+local mathutils = require("mathutils")
 local Rectangle = require("models.rectangle")
 local Collider = require("objects.collider")
 local physics = require("physics")
@@ -131,13 +132,13 @@ function Player:move(screen, ui_direction_x, ui_direction_y)
   assert(typeutils.is_number(ui_direction_y, -1, 1))
 
   local player_speed = 10 * screen.height
-  local dt = love.timer.getDelta()
   local player_direction_x, player_direction_y =
     self:direction(ui_direction_x, ui_direction_y, nil, true)
-  self._collider:setLinearVelocity(
-    player_speed * dt * player_direction_x,
-    player_speed * dt * player_direction_y
-  )
+  self._collider:setLinearVelocity(mathutils.transform_vector(
+    player_direction_x,
+    player_direction_y,
+    player_speed
+  ))
 end
 
 ---
