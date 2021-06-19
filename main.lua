@@ -2,7 +2,6 @@ local require_paths =
   {"?.lua", "?/init.lua", "vendor/?.lua", "vendor/?/init.lua"}
 love.filesystem.setRequirePath(table.concat(require_paths, ";"))
 
-local windfield = require("windfield")
 local mlib = require("mlib")
 local baton = require("baton")
 local tick = require("tick")
@@ -10,10 +9,7 @@ local typeutils = require("typeutils")
 local window = require("window")
 local drawing = require("drawing")
 local statsfactory = require("stats.statsfactory")
-local Target = require("objects.target")
-local Hole = require("objects.hole")
-local Player = require("objects.player")
-local Impulse = require("objects.impulse")
+local Scene = require("objects.scene")
 local Ui = require("objects.ui")
 local Stats = require("objects.stats")
 require("gooi")
@@ -21,11 +17,7 @@ require("luatable")
 require("compat52")
 
 local screen = nil -- models.Rectangle
-local world = nil -- windfield.World
-local targets = {} -- {objects.Target,...}
-local holes = {} -- {objects.Hole,...}
-local player = nil -- objects.Player
-local impulses = {} -- {objects.Impulse,...}
+local scene = nil -- objects.Scene
 local ui = nil -- objects.Ui
 local keys = nil -- baton.Player
 local stats = nil -- objects.Stats
@@ -76,42 +68,20 @@ local function _load_keys(path)
 end
 
 local function _add_impulse()
-  local impulse = Impulse:new(world, screen, player)
-  table.insert(impulses, impulse)
-
+  scene:add_impulse(screen)
   stats:add_impulse()
 end
 
 local function _add_target()
-  local target = Target:new(world, screen, player, function(lifes)
+  scene:add_target(screen, function(lifes)
     assert(typeutils.is_positive_number(lifes))
 
     stats:hit_target(lifes)
   end)
-  table.insert(targets, target)
 end
 
 local function _add_hole()
-  local kind = math.random() < 0.5 and "black" or "white"
-  local hole = Hole:new(kind, world, screen, player)
-  table.insert(holes, hole)
-end
-
-local function _filter_destroyables(destroyables, filter)
-  assert(type(destroyables) == "table")
-  assert(typeutils.is_callable(filter))
-
-  return table.accept(destroyables, function(destroyable)
-    assert(type(destroyable) == "table"
-      and typeutils.is_callable(destroyable.destroy))
-
-    local ok = filter(destroyable)
-    if not ok then
-      destroyable:destroy()
-    end
-
-    return ok
-  end)
+  scene:add_hole(screen)
 end
 
 function love.load()
@@ -122,11 +92,7 @@ function love.load()
   screen = window.create_screen()
   drawing.set_font(screen)
 
-  world = windfield.newWorld(0, 0, true)
-  world:addCollisionClass("Player")
-  world:addCollisionClass("Impulse", {ignores = {"Player", "Impulse"}})
-
-  player = Player:new(world, screen)
+  scene = Scene:new(screen)
 
   ui = Ui:new(screen, _add_impulse)
   keys = assert(_load_keys("keys_config.json"))
@@ -143,55 +109,14 @@ function love.load()
 end
 
 function love.draw()
-  local ui_center_position_x, ui_center_position_y = ui:center_position()
-  local player_position_x, player_position_y = player:position()
-  love.graphics.setColor(0.5, 0.5, 0.5)
-  drawing.draw_with_transformations(function()
-    love.graphics.translate(ui_center_position_x, ui_center_position_y)
-    love.graphics.rotate(-player:angle(true))
-    love.graphics.scale(0.75, 0.75)
-    love.graphics.translate(-ui_center_position_x, -ui_center_position_y)
-    love.graphics.translate(
-      -(player_position_x - ui_center_position_x),
-      -(player_position_y - ui_center_position_y)
-    )
-
-    drawing.draw_drawables(screen, holes .. targets .. impulses .. {player})
-  end)
-
+  scene:draw(screen, ui:center_position())
   gooi.draw()
   drawing.draw_drawables(screen, {stats, best_stats})
 end
 
 function love.update(dt)
-  world:update(dt)
+  scene:update(screen)
   tick.update(dt)
-
-  table.eachi(targets, Target.update)
-  targets = _filter_destroyables(targets, Target.alive)
-
-  table.eachi(holes, Hole.update)
-  holes = _filter_destroyables(holes, Hole.alive)
-
-  impulses = _filter_destroyables(impulses, function(impulse)
-    local hit = impulse:hit()
-    if hit then
-      return false
-    end
-
-    local distance_to_player =
-      mlib.vec2.len(mlib.vec2.new(impulse:vector_to(player)))
-    if distance_to_player > 10 * screen:grid_step() then
-      return false
-    end
-
-    return true
-  end)
-  table.eachi(impulses, function(impulse)
-    table.eachi(holes, function(hole)
-      impulse:apply_hole(screen, hole)
-    end)
-  end)
 
   local player_move_direction = mlib.vec2.add(
     mlib.vec2.new(ui:player_move_direction()),
@@ -209,15 +134,13 @@ function love.update(dt)
   end
 
   if player_angle_delta == 0 then
-    player:move(screen, player_move_direction.x, player_move_direction.y)
+    scene._player:move(screen, player_move_direction.x, player_move_direction.y)
   else
-    player:move(screen, 0, 0)
+    scene._player:move(screen, 0, 0)
   end
   if mlib.vec2.len(player_move_direction) == 0 then
-    player:rotate(player_angle_delta)
+    scene._player:rotate(player_angle_delta)
   end
-
-  player:reset_autorotation()
 
   gooi.update(dt)
   keys:update()
@@ -239,12 +162,8 @@ function love.resize()
   screen = window.create_screen()
   drawing.set_font(screen)
 
-  targets = _filter_destroyables(targets, function() return false end)
-  holes = _filter_destroyables(holes, function() return false end)
-  impulses = _filter_destroyables(impulses, function() return false end)
-
-  player:destroy()
-  player = Player:new(world, screen)
+  scene:destroy()
+  scene = Scene:new(screen)
 
   ui:destroy()
   ui = Ui:new(screen, _add_impulse)

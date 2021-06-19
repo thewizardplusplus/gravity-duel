@@ -16,6 +16,7 @@ file = {
   "objects/hole.lua",
   "objects/player.lua",
   "objects/impulse.lua",
+  "objects/scene.lua",
   "objects/ui.lua",
   "objects/stats.lua",
   "objects/beststats.lua",
