@@ -4,7 +4,6 @@
 local middleclass = require("middleclass")
 local typeutils = require("typeutils")
 local Rectangle = require("models.rectangle")
-require("gooi")
 
 ---
 -- @table instance
