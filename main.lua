@@ -72,16 +72,12 @@ local function _add_impulse()
   stats:add_impulse()
 end
 
-local function _add_target()
-  scene:add_target(screen, function(lifes)
-    assert(typeutils.is_positive_number(lifes))
+local function _repeat(period, handler)
+  assert(typeutils.is_positive_number(period))
+  assert(typeutils.is_callable(handler))
 
-    stats:hit_target(lifes)
-  end)
-end
-
-local function _add_hole()
-  scene:add_hole(screen)
+  tick.delay(handler, 0)
+  tick.recur(handler, period)
 end
 
 function love.load()
@@ -101,11 +97,14 @@ function love.load()
   stats_storage = assert(statsfactory.create_stats_storage("stats-db"))
   best_stats = stats_storage:get_stats()
 
-  tick.delay(_add_target, 0)
-  tick.recur(_add_target, 2.5)
+  _repeat(2.5, function()
+    scene:add_target(screen, function(lifes)
+      assert(typeutils.is_positive_number(lifes))
 
-  tick.delay(_add_hole, 0)
-  tick.recur(_add_hole, 2.5)
+      stats:hit_target(lifes)
+    end)
+  end)
+  _repeat(2.5, function() scene:add_hole(screen) end)
 end
 
 function love.draw()
