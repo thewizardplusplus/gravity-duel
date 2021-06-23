@@ -155,6 +155,33 @@ function Scene:update(screen)
 end
 
 ---
+-- @tparam Rectangle screen
+-- @tparam number move_direction_x [-1, 1]
+-- @tparam number move_direction_y [-1, 1]
+-- @tparam number angle_delta
+function Scene:control_player(
+  screen,
+  move_direction_x,
+  move_direction_y,
+  angle_delta
+)
+  assert(typeutils.is_instance(screen, Rectangle))
+  assert(typeutils.is_number(move_direction_x, -1, 1))
+  assert(typeutils.is_number(move_direction_y, -1, 1))
+  assert(typeutils.is_number(angle_delta))
+
+  if angle_delta == 0 then
+    self._player:set_velocity(screen, move_direction_x, move_direction_y)
+  else
+    self._player:set_velocity(screen, 0, 0)
+  end
+
+  if move_direction_x == 0 and move_direction_y == 0 then
+    self._player:rotate(angle_delta)
+  end
+end
+
+---
 -- @function destroy
 function Scene:destroy()
   _filter_destroyables(

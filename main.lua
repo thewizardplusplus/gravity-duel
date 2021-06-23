@@ -131,14 +131,12 @@ function love.update(dt)
     player_angle_delta = player_angle_delta + player_keys_angle_factor * dt
   end
 
-  if player_angle_delta == 0 then
-    scene._player:set_velocity(screen, player_move_direction.x, player_move_direction.y)
-  else
-    scene._player:set_velocity(screen, 0, 0)
-  end
-  if mlib.vec2.len(player_move_direction) == 0 then
-    scene._player:rotate(player_angle_delta)
-  end
+  scene:control_player(
+    screen,
+    player_move_direction.x,
+    player_move_direction.y,
+    player_angle_delta
+  )
 
   gooi.update(dt)
   keys:update()
