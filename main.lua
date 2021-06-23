@@ -122,9 +122,8 @@ function love.update(dt)
     mlib.vec2.new(keys:get("moved"))
   )
 
-  local player_ui_angle_factor = 0.25
   local player_keys_angle_factor = 0.6
-  local player_angle_delta = player_ui_angle_factor * ui:player_angle_delta()
+  local player_angle_delta = ui:player_angle_delta()
   if keys:down("rotated_left") then
     player_angle_delta = player_angle_delta - player_keys_angle_factor * dt
   end

@@ -92,7 +92,9 @@ function Ui:player_angle_delta()
   end
 
   self._prev_player_angle = player_angle
-  return player_angle_delta
+
+  local player_angle_delta_factor = 0.25
+  return player_angle_delta_factor * player_angle_delta
 end
 
 ---
