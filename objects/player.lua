@@ -126,7 +126,7 @@ end
 -- @tparam Rectangle screen
 -- @tparam number ui_direction_x [-1, 1]
 -- @tparam number ui_direction_y [-1, 1]
-function Player:move(screen, ui_direction_x, ui_direction_y)
+function Player:set_velocity(screen, ui_direction_x, ui_direction_y)
   assert(typeutils.is_instance(screen, Rectangle))
   assert(typeutils.is_number(ui_direction_x, -1, 1))
   assert(typeutils.is_number(ui_direction_y, -1, 1))

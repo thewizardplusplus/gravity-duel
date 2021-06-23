@@ -132,9 +132,9 @@ function love.update(dt)
   end
 
   if player_angle_delta == 0 then
-    scene._player:move(screen, player_move_direction.x, player_move_direction.y)
+    scene._player:set_velocity(screen, player_move_direction.x, player_move_direction.y)
   else
-    scene._player:move(screen, 0, 0)
+    scene._player:set_velocity(screen, 0, 0)
   end
   if mlib.vec2.len(player_move_direction) == 0 then
     scene._player:rotate(player_angle_delta)
