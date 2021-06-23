@@ -18,6 +18,7 @@ file = {
   "objects/impulse.lua",
   "objects/scene.lua",
   "objects/ui.lua",
+  "objects/controls.lua",
   "objects/stats.lua",
   "objects/beststats.lua",
   "stats/statsfactory.lua",
