@@ -6,6 +6,7 @@ local tick = require("tick")
 local typeutils = require("typeutils")
 local window = require("window")
 local drawing = require("drawing")
+local miscutils = require("miscutils")
 local statsfactory = require("stats.statsfactory")
 local Scene = require("objects.scene")
 local Controls = require("objects.controls")
@@ -26,14 +27,6 @@ local function _add_impulse()
   stats:add_impulse()
 end
 
-local function _repeat(period, handler)
-  assert(typeutils.is_positive_number(period))
-  assert(typeutils.is_callable(handler))
-
-  tick.delay(handler, 0)
-  tick.recur(handler, period)
-end
-
 function love.load()
   math.randomseed(os.time())
   love.setDeprecationOutput(true)
@@ -51,14 +44,14 @@ function love.load()
   stats_storage = assert(statsfactory.create_stats_storage("stats-db"))
   best_stats = stats_storage:get_stats()
 
-  _repeat(2.5, function()
+  miscutils.repeat_at_intervals(2.5, function()
     scene:add_target(screen, function(lifes)
       assert(typeutils.is_positive_number(lifes))
 
       stats:hit_target(lifes)
     end)
   end)
-  _repeat(2.5, function() scene:add_hole(screen) end)
+  miscutils.repeat_at_intervals(2.5, function() scene:add_hole(screen) end)
 end
 
 function love.draw()

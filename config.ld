@@ -5,6 +5,7 @@ file = {
   "window.lua",
   "drawing.lua",
   "physics.lua",
+  "miscutils.lua",
   "models/rectangle.lua",
   "models/circle.lua",
   "models/color.lua",
