@@ -62,29 +62,18 @@ local Controls = middleclass("Controls")
 ---
 -- @function new
 -- @tparam Rectangle screen
+-- @tparam string keys_config_path
 -- @tparam func impulse_handler func(): nil
 -- @treturn Controls
-function Controls:initialize(screen, impulse_handler)
+-- @raise error message
+function Controls:initialize(screen, keys_config_path, impulse_handler)
   assert(typeutils.is_instance(screen, Rectangle))
+  assert(type(keys_config_path) == "string")
   assert(typeutils.is_callable(impulse_handler))
 
   self._ui = Ui:new(screen, impulse_handler)
+  self._keys = assert(_load_keys(keys_config_path))
   self._impulse_handler = impulse_handler
-end
-
----
--- @tparam string path
--- @error error message
-function Controls:load_keys(path)
-  assert(type(path) == "string")
-
-  local keys, loading_err = _load_keys(path)
-  if not keys then
-    return nil, loading_err
-  end
-
-  self._keys = keys
-  return true
 end
 
 ---

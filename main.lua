@@ -36,9 +36,7 @@ function love.load()
   drawing.set_font(screen)
 
   scene = Scene:new(screen)
-
-  controls = Controls:new(screen, _add_impulse)
-  assert(controls:load_keys("keys_config.json"))
+  controls = Controls:new(screen, "keys_config.json", _add_impulse)
 
   stats = Stats:new()
   stats_storage = assert(statsfactory.create_stats_storage("stats-db"))
@@ -87,8 +85,7 @@ function love.resize()
 
   miscutils.filter_destroyables({scene, controls}, function() return false end)
   scene = Scene:new(screen)
-  controls = Controls:new(screen, _add_impulse)
-  assert(controls:load_keys("keys_config.json"))
+  controls = Controls:new(screen, "keys_config.json", _add_impulse)
 end
 
 function love.keypressed(key)
