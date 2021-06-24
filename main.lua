@@ -85,10 +85,8 @@ function love.resize()
   screen = window.create_screen()
   drawing.set_font(screen)
 
-  scene:destroy()
+  miscutils.filter_destroyables({scene, controls}, function() return false end)
   scene = Scene:new(screen)
-
-  controls:destroy()
   controls = Controls:new(screen, _add_impulse)
   assert(controls:load_keys("keys_config.json"))
 end

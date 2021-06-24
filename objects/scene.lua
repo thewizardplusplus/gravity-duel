@@ -5,29 +5,13 @@ local middleclass = require("middleclass")
 local windfield = require("windfield")
 local mlib = require("mlib")
 local typeutils = require("typeutils")
+local miscutils = require("miscutils")
 local Rectangle = require("models.rectangle")
 local Target = require("objects.target")
 local Hole = require("objects.hole")
 local Player = require("objects.player")
 local Impulse = require("objects.impulse")
 local drawing = require("drawing")
-
-local function _filter_destroyables(destroyables, filter)
-  assert(type(destroyables) == "table")
-  assert(typeutils.is_callable(filter))
-
-  return table.accept(destroyables, function(destroyable)
-    assert(type(destroyable) == "table"
-      and typeutils.is_callable(destroyable.destroy))
-
-    local ok = filter(destroyable)
-    if not ok then
-      destroyable:destroy()
-    end
-
-    return ok
-  end)
-end
 
 ---
 -- @table instance
@@ -130,23 +114,24 @@ function Scene:update(screen)
 
     updatable:update()
   end)
-  self._targets = _filter_destroyables(self._targets, Target.alive)
-  self._holes = _filter_destroyables(self._holes, Hole.alive)
+  self._targets = miscutils.filter_destroyables(self._targets, Target.alive)
+  self._holes = miscutils.filter_destroyables(self._holes, Hole.alive)
 
-  self._impulses = _filter_destroyables(self._impulses, function(impulse)
-    local hit = impulse:hit()
-    if hit then
-      return false
-    end
+  self._impulses =
+    miscutils.filter_destroyables(self._impulses, function(impulse)
+      local hit = impulse:hit()
+      if hit then
+        return false
+      end
 
-    local distance_to_player =
-      mlib.vec2.len(mlib.vec2.new(impulse:vector_to(self._player)))
-    if distance_to_player > 10 * screen:grid_step() then
-      return false
-    end
+      local distance_to_player =
+        mlib.vec2.len(mlib.vec2.new(impulse:vector_to(self._player)))
+      if distance_to_player > 10 * screen:grid_step() then
+        return false
+      end
 
-    return true
-  end)
+      return true
+    end)
   table.eachi(self._impulses, function(impulse)
     table.eachi(self._holes, function(hole)
       impulse:apply_hole(screen, hole)
@@ -184,7 +169,7 @@ end
 ---
 -- @function destroy
 function Scene:destroy()
-  _filter_destroyables(
+  miscutils.filter_destroyables(
     self._targets .. self._holes .. self._impulses
       .. {self._player, self._world},
     function() return false end

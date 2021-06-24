@@ -17,4 +17,25 @@ function miscutils.repeat_at_intervals(interval, handler)
   tick.recur(handler, interval)
 end
 
+---
+-- @tparam {tab,...} destroyables group of tables with the destroy() method
+-- @tparam func filter func(destroyable: tab): bool
+-- @treturn {tab,...}
+function miscutils.filter_destroyables(destroyables, filter)
+  assert(type(destroyables) == "table")
+  assert(typeutils.is_callable(filter))
+
+  return table.accept(destroyables, function(destroyable)
+    assert(type(destroyable) == "table"
+      and typeutils.is_callable(destroyable.destroy))
+
+    local ok = filter(destroyable)
+    if not ok then
+      destroyable:destroy()
+    end
+
+    return ok
+  end)
+end
+
 return miscutils
