@@ -53,11 +53,14 @@ end
 
 ---
 -- @table instance
--- @tfield objects.Ui _ui
+-- @tfield gooi.component _position_joystick
+-- @tfield gooi.component _direction_joystick
+-- @tfield gooi.component _impulse_button
+-- @tfield number _prev_player_angle [0, 2 * math.pi]
 -- @tfield baton.Player _keys
 -- @tfield func _impulse_handler func(): nil
 
-local Controls = middleclass("Controls")
+local Controls = middleclass("Controls", Ui)
 
 ---
 -- @function new
@@ -71,24 +74,23 @@ function Controls:initialize(screen, keys_config_path, impulse_handler)
   assert(type(keys_config_path) == "string")
   assert(typeutils.is_callable(impulse_handler))
 
-  self._ui = Ui:new(screen, impulse_handler)
+  Ui.initialize(self, screen, impulse_handler)
+
   self._keys = assert(_load_keys(keys_config_path))
   self._impulse_handler = impulse_handler
 end
 
 ---
+-- @function center_position
 -- @treturn number x [0, ∞)
 -- @treturn number y [0, ∞)
-function Controls:center_position()
-  return self._ui:center_position()
-end
 
 ---
 -- @treturn number x [-1, 1]
 -- @treturn number y [-1, 1]
 function Controls:player_move_direction()
   local player_move_direction = mlib.vec2.add(
-    mlib.vec2.new(self._ui:player_move_direction()),
+    mlib.vec2.new(Ui.player_move_direction(self)),
     mlib.vec2.new(self._keys:get("moved"))
   )
   return player_move_direction.x, player_move_direction.y
@@ -113,7 +115,7 @@ end
 ---
 -- @treturn number [-math.pi, math.pi]
 function Controls:player_angle_delta()
-  local player_angle_delta = self._ui:player_angle_delta()
+  local player_angle_delta = Ui.player_angle_delta(self)
 
   local player_keys_angle_factor = 0.6
   local dt = love.timer.getDelta()
@@ -130,8 +132,5 @@ end
 
 ---
 -- @function destroy
-function Controls:destroy()
-  self._ui:destroy()
-end
 
 return Controls
