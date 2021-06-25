@@ -16,10 +16,16 @@ local StatsStorage = middleclass("StatsStorage")
 -- @function new
 -- @tparam string path
 -- @treturn StatsStorage
+-- @raise error message
 function StatsStorage:initialize(path)
   assert(type(path) == "string")
 
-  self._db = flatdb(path)
+  local ok = love.filesystem.createDirectory(path)
+  assert(ok, "unable to create the stats DB")
+
+  local full_path = love.filesystem.getSaveDirectory() .. "/" .. path
+  self._db = flatdb(full_path)
+
   if not self._db.stats then
     self._db.stats = {impulse_accuracy = 0, destroyed_targets = 0}
   end

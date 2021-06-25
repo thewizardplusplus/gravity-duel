@@ -22,7 +22,6 @@ file = {
   "objects/controls.lua",
   "objects/stats.lua",
   "objects/beststats.lua",
-  "stats/statsfactory.lua",
   "stats/statsstorage.lua",
 }
 topics = {
