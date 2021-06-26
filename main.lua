@@ -9,8 +9,7 @@ local drawing = require("drawing")
 local miscutils = require("miscutils")
 local Scene = require("objects.scene")
 local Controls = require("objects.controls")
-local Stats = require("objects.stats")
-local StatsStorage = require("stats.statsstorage")
+local StatsManager = require("stats.statsmanager")
 require("gooi")
 require("luatable")
 require("compat52")
@@ -18,13 +17,11 @@ require("compat52")
 local screen = nil -- models.Rectangle
 local scene = nil -- objects.Scene
 local controls = nil -- objects.Controls
-local stats = nil -- objects.Stats
-local best_stats = nil -- objects.BestStats
-local stats_storage = nil -- stats.StatsStorage
+local stats_manager = nil -- stats.StatsManager
 
 local function _add_impulse()
   scene:add_impulse(screen)
-  stats:add_impulse()
+  stats_manager:add_impulse()
 end
 
 function love.load()
@@ -37,16 +34,13 @@ function love.load()
 
   scene = Scene:new(screen)
   controls = Controls:new(screen, "keys_config.json", _add_impulse)
-
-  stats = Stats:new()
-  stats_storage = StatsStorage("stats-db")
-  best_stats = stats_storage:get_stats()
+  stats_manager = StatsManager("stats-db")
 
   miscutils.repeat_at_intervals(2.5, function()
     scene:add_target(screen, function(lifes)
       assert(typeutils.is_positive_number(lifes))
 
-      stats:hit_target(lifes)
+      stats_manager:hit_target(lifes)
     end)
   end)
   miscutils.repeat_at_intervals(2.5, function() scene:add_hole(screen) end)
@@ -55,12 +49,13 @@ end
 function love.draw()
   scene:draw(screen, controls:center_position())
   gooi.draw()
-  drawing.draw_drawables(screen, {stats, best_stats})
+  stats_manager:draw(screen)
 end
 
 function love.update(dt)
   scene:update(screen)
   controls:update()
+  stats_manager:update()
   tick.update(dt)
   gooi.update(dt)
 
@@ -72,11 +67,6 @@ function love.update(dt)
     player_move_direction_y,
     controls:player_angle_delta()
   )
-
-  local was_updated = best_stats:update(stats)
-  if was_updated then
-    stats_storage:store_stats(best_stats)
-  end
 end
 
 function love.resize()

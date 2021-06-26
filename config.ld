@@ -23,6 +23,7 @@ file = {
   "objects/stats.lua",
   "objects/beststats.lua",
   "stats/statsstorage.lua",
+  "stats/statsmanager.lua",
 }
 topics = {
   "README.md",
