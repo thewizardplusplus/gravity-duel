@@ -101,13 +101,7 @@ end
 function Controls:update()
   self._keys:update()
 
-  local player_move_direction_x, player_move_direction_y =
-    self:player_move_direction()
-  if
-    self._keys:pressed("impulse")
-    and (player_move_direction_x == 0 and player_move_direction_y == 0)
-    and self:player_angle_delta() == 0
-  then
+  if self._keys:pressed("impulse") and self:_impulse_allowed() then
     self._impulse_handler()
   end
 end
@@ -132,5 +126,14 @@ end
 
 ---
 -- @function destroy
+
+---
+-- @treturn bool
+function Controls:_impulse_allowed()
+  local player_move_direction_x, player_move_direction_y =
+    self:player_move_direction()
+  return (player_move_direction_x == 0 and player_move_direction_y == 0)
+    and self:player_angle_delta() == 0
+end
 
 return Controls
