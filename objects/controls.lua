@@ -74,7 +74,11 @@ function Controls:initialize(screen, keys_config_path, impulse_handler)
   assert(type(keys_config_path) == "string")
   assert(typeutils.is_callable(impulse_handler))
 
-  Ui.initialize(self, screen, impulse_handler)
+  Ui.initialize(self, screen, function()
+    if self:_impulse_allowed() then
+      impulse_handler()
+    end
+  end)
 
   self._keys = assert(_load_keys(keys_config_path))
   self._impulse_handler = impulse_handler
