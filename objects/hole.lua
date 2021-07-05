@@ -39,10 +39,10 @@ function Hole:initialize(kind, world, screen, player)
   local border_color
   if kind == "black" then
     fill_color = Color:new(0.3, 0.3, 0.3)
-    border_color = Color(0.15, 0.15, 0.15)
+    border_color = Color:new(0.15, 0.15, 0.15)
   elseif kind == "white" then
     fill_color = Color:new(0.75, 0.75, 0.75)
-    border_color = Color(0.55, 0.55, 0.55)
+    border_color = Color:new(0.55, 0.55, 0.55)
   end
 
   TemporaryCircle.initialize(

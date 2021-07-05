@@ -24,7 +24,7 @@ local StatsManager = middleclass("StatsManager")
 function StatsManager:initialize(storage_path)
   assert(type(storage_path) == "string")
 
-  self._stats_storage = StatsStorage(storage_path)
+  self._stats_storage = StatsStorage:new(storage_path)
   self._stats = Stats:new()
   self._best_stats = self._stats_storage:get_stats()
 end

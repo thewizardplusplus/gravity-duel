@@ -34,7 +34,7 @@ function love.load()
 
   scene = Scene:new(screen)
   controls = Controls:new(screen, "keys_config.json", _add_impulse)
-  stats_manager = StatsManager("stats-db")
+  stats_manager = StatsManager:new("stats-db")
 
   miscutils.repeat_at_intervals(2.5, function()
     scene:add_target(screen, function(lifes)
