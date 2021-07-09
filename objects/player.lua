@@ -26,11 +26,11 @@ function Player:initialize(world, screen)
   assert(type(world) == "table")
   assert(typeutils.is_instance(screen, Rectangle))
 
+  local screen_center_x, screen_center_y = screen:center()
   self._collider =
     physics.make_rectangle_collider(world, "dynamic", Rectangle:new(
-      screen.x + screen.width / 2
-        - screen:grid_step() / 2 - screen:grid_step() / 6,
-      screen.y + screen.height / 2 - screen:grid_step() / 2,
+      screen_center_x - screen:grid_step() / 2 - screen:grid_step() / 6,
+      screen_center_y - screen:grid_step() / 2,
       screen:grid_step() + screen:grid_step() / 3,
       screen:grid_step()
     ))

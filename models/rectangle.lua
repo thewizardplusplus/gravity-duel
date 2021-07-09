@@ -35,6 +35,13 @@ end
 ---
 -- @treturn number x [0, ∞)
 -- @treturn number y [0, ∞)
+function Rectangle:center()
+  return self.x + self.width / 2, self.y + self.height / 2
+end
+
+---
+-- @treturn number x [0, ∞)
+-- @treturn number y [0, ∞)
 function Rectangle:maximum()
   return self.x + self.width, self.y + self.height
 end
