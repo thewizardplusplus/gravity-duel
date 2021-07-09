@@ -23,29 +23,28 @@ function Ui:initialize(screen, impulse_handler)
   assert(typeutils.is_instance(screen, Rectangle))
   assert(typeutils.is_callable(impulse_handler))
 
-  local grid_step = screen.height / 4
-  local margin = grid_step / 4
+  local margin = screen:ui_grid_step() / 4
   self._position_joystick = gooi.newJoy({
     x = screen.x + margin,
-    y = screen.y + screen.height - grid_step - margin,
-    size = grid_step,
+    y = screen.y + screen.height - screen:ui_grid_step() - margin,
+    size = screen:ui_grid_step(),
   })
   self._position_joystick:opacity(0.5)
 
   self._direction_joystick = gooi.newJoy({
-    x = screen.x + screen.width - grid_step - margin,
-    y = screen.y + screen.height - grid_step - margin,
-    size = grid_step,
+    x = screen.x + screen.width - screen:ui_grid_step() - margin,
+    y = screen.y + screen.height - screen:ui_grid_step() - margin,
+    size = screen:ui_grid_step(),
   })
   self._direction_joystick:opacity(0.5)
   self._direction_joystick:noSpring()
 
   self._impulse_button = gooi.newButton({
     text = "~~>",
-    x = screen.x + screen.width - grid_step - margin,
-    y = screen.y + screen.height - 1.625 * grid_step - margin,
-    w = grid_step,
-    h = grid_step / 2,
+    x = screen.x + screen.width - screen:ui_grid_step() - margin,
+    y = screen.y + screen.height - 1.625 * screen:ui_grid_step() - margin,
+    w = screen:ui_grid_step(),
+    h = screen:ui_grid_step() / 2,
   })
   self._impulse_button:opacity(0.5)
   self._impulse_button:onPress(impulse_handler)

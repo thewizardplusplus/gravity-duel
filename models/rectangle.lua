@@ -40,6 +40,12 @@ end
 
 ---
 -- @treturn number [0, ∞)
+function Rectangle:ui_grid_step()
+  return self.height / 4
+end
+
+---
+-- @treturn number [0, ∞)
 function Rectangle:font_size()
   return self.height / 20
 end
