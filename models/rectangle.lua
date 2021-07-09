@@ -33,6 +33,13 @@ function Rectangle:initialize(x, y, width, height)
 end
 
 ---
+-- @treturn number x [0, ∞)
+-- @treturn number y [0, ∞)
+function Rectangle:maximum()
+  return self.x + self.width, self.y + self.height
+end
+
+---
 -- @treturn number [0, ∞)
 function Rectangle:grid_step()
   return self.height / 8
