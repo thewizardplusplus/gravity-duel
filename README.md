@@ -35,13 +35,13 @@ $ cd gravity-duel
 Make a ZIP archive containing it:
 
 ```
-$ git archive --format zip --output gravity-duel.zip HEAD
+$ git archive --format zip --output gravity_duel.zip HEAD
 ```
 
 Change its extension from `.zip` to `.love`:
 
 ```
-$ mv gravity-duel.zip gravity-duel.love
+$ mv gravity_duel.zip gravity_duel.love
 ```
 
 Transfer the resulting file to the Android device.
