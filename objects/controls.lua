@@ -75,7 +75,7 @@ function Controls:initialize(screen, keys_config_path, impulse_handler)
   assert(typeutils.is_callable(impulse_handler))
 
   Ui.initialize(self, screen, function()
-    if self:_impulse_allowed() then
+    if self:_is_impulse_allowed() then
       impulse_handler()
     end
   end)
@@ -104,13 +104,13 @@ end
 -- @function update
 function Controls:update()
   self._keys:update()
-  if self._keys:pressed("impulse") and self:_impulse_allowed() then
+  if self._keys:pressed("impulse") and self:_is_impulse_allowed() then
     self._impulse_handler()
   end
 
   self._position_joystick:setEnabled(not self:_is_player_rotating())
   self._direction_joystick:setEnabled(not self:_is_player_moving())
-  self._impulse_button:setEnabled(self:_impulse_allowed())
+  self._impulse_button:setEnabled(self:_is_impulse_allowed())
 end
 
 ---
@@ -151,8 +151,8 @@ end
 
 ---
 -- @treturn bool
-function Controls:_impulse_allowed()
-  return not self:_is_player_moving() and not self:_is_player_rotating()
+function Controls:_is_impulse_allowed()
+  return not (self:_is_player_moving() or self:_is_player_rotating())
 end
 
 return Controls
