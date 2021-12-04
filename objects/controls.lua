@@ -108,7 +108,7 @@ function Controls:update()
     self._impulse_handler()
   end
 
-  self._position_joystick:setEnabled(self:player_angle_delta() == 0)
+  self._position_joystick:setEnabled(not self:_is_player_rotating())
   self._direction_joystick:setEnabled(not self:_is_player_moving())
   self._impulse_button:setEnabled(self:_impulse_allowed())
 end
@@ -145,8 +145,14 @@ end
 
 ---
 -- @treturn bool
+function Controls:_is_player_rotating()
+  return self:player_angle_delta() ~= 0 or self._direction_joystick.pressed
+end
+
+---
+-- @treturn bool
 function Controls:_impulse_allowed()
-  return not self:_is_player_moving() and self:player_angle_delta() == 0
+  return not self:_is_player_moving() and not self:_is_player_rotating()
 end
 
 return Controls
