@@ -104,10 +104,16 @@ end
 -- @function update
 function Controls:update()
   self._keys:update()
-
   if self._keys:pressed("impulse") and self:_impulse_allowed() then
     self._impulse_handler()
   end
+
+  self._position_joystick:setEnabled(self:player_angle_delta() == 0)
+
+  local player_move_direction_x, player_move_direction_y = self:player_move_direction()
+  self._direction_joystick:setEnabled(player_move_direction_x == 0 and player_move_direction_y == 0)
+
+  self._impulse_button:setEnabled(self:_impulse_allowed())
 end
 
 ---
