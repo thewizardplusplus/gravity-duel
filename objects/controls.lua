@@ -109,10 +109,7 @@ function Controls:update()
   end
 
   self._position_joystick:setEnabled(self:player_angle_delta() == 0)
-
-  local player_move_direction_x, player_move_direction_y = self:player_move_direction()
-  self._direction_joystick:setEnabled(player_move_direction_x == 0 and player_move_direction_y == 0)
-
+  self._direction_joystick:setEnabled(not self:_is_player_moving())
   self._impulse_button:setEnabled(self:_impulse_allowed())
 end
 
@@ -139,11 +136,17 @@ end
 
 ---
 -- @treturn bool
-function Controls:_impulse_allowed()
+function Controls:_is_player_moving()
   local player_move_direction_x, player_move_direction_y =
     self:player_move_direction()
-  return (player_move_direction_x == 0 and player_move_direction_y == 0)
-    and self:player_angle_delta() == 0
+  return player_move_direction_x ~= 0 or player_move_direction_y ~= 0
+    or self._position_joystick.pressed
+end
+
+---
+-- @treturn bool
+function Controls:_impulse_allowed()
+  return not self:_is_player_moving() and self:player_angle_delta() == 0
 end
 
 return Controls
