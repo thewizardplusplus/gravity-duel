@@ -175,19 +175,18 @@
 
 ## [v1.0-beta](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-beta) (2021-05-06)
 
+- The player:
 - Process the player separately
 - Make the player larger
 - Draw the player ledges
+  - Fix the initial angle of the player
+- The impulse:
 - Add the impulse button
 - Rename the `physics.make_collider()` function to `physics.make_rectangle_collider()`
 - Add the `physics.make_circle_collider()` function
 - Generate the player impulses
 - Disable collisions between the player and its impulses
 - Apply a velocity to the player impulses
-- Fix applying of a velocity to the player impulses
-- Fix the player drawing
-- Fix the initial angle of the player
-- Fix the physical body of the player
 - Destroy a player impulse on its hit
 
 ## [v1.0-alpha.1](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-alpha.1) (2021-05-02)
