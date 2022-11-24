@@ -192,12 +192,14 @@
 
 ## [v1.0-alpha.1](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-alpha.1) (2021-05-02)
 
+- Update the [LDoc](https://github.com/lunarmodules/LDoc) configuration
+- The debug stones:
 - Install the [windfield](https://github.com/a327ex/windfield) library
 - Initialize the debug stones
+  - Implement the custom drawing of the debug stones
+  - The player stone:
 - Control the player stone
-- Implement the custom drawing of the stones
 - Pin the player stone to the screen center
-- Update the [LDoc](https://github.com/lunarmodules/LDoc) configuration
 
 ## [v1.0-alpha](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-alpha) (2021-04-28)
 
