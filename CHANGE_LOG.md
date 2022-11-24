@@ -202,7 +202,8 @@
 ## [v1.0-alpha](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-alpha) (2021-04-28)
 
 - Add basics of the project
+- Add the [LDoc](https://github.com/lunarmodules/LDoc) configuration
+- The joysticks:
 - Install the [GOOi](https://github.com/tavuntu/gooi) library
 - Add the joysticks
 - Display the states of the joysticks
-- Add the [LDoc](https://github.com/lunarmodules/LDoc) configuration
