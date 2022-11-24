@@ -160,51 +160,56 @@
 
 ## [v1.0-beta.1](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-beta.1) (2021-05-10)
 
-- Fix the player position
-- Rotate the scene around the player
-- Make the player movement local
-- Install the [Baton](https://github.com/tesselode/baton) library
-- Load the keys config
-- Process the keys
 - Set the font size
-- Tune the player speed
-- Tune the player impulse speed
-- Tune the debug stone mass
-- Tune the player mass
-- Tune the player impulse mass
+- The player:
+  - Fix the player position
+  - Rotate the scene around the player
+  - Make the player movement local
+- Tune the physics settings:
+  - Tune the debug stone mass
+  - Tune the player physics settings:
+    - Tune the player speed
+    - Tune the player mass
+  - Tune the player impulse physics settings:
+    - Tune the player impulse speed
+    - Tune the player impulse mass
+- The control keys:
+  - Install the [Baton](https://github.com/tesselode/baton) library
+  - Load the control keys config
+  - Process the control keys
 
 ## [v1.0-beta](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-beta) (2021-05-06)
 
 - The player:
-- Process the player separately
-- Make the player larger
-- Draw the player ledges
+  - Process the player separately
+  - Make the player larger
+  - Draw the player ledges
   - Fix the initial angle of the player
 - The impulse:
-- Add the impulse button
-- Rename the `physics.make_collider()` function to `physics.make_rectangle_collider()`
-- Add the `physics.make_circle_collider()` function
-- Generate the player impulses
-- Disable collisions between the player and its impulses
-- Apply a velocity to the player impulses
-- Destroy a player impulse on its hit
+  - Add the impulse button
+  - Rename the `physics.make_collider()` function to `physics.make_rectangle_collider()`
+  - Add the `physics.make_circle_collider()` function
+  - Generate the player impulses
+  - Disable collisions between the player and its impulses
+  - Apply a velocity to the player impulses
+  - Destroy a player impulse on its hit
 
 ## [v1.0-alpha.1](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-alpha.1) (2021-05-02)
 
 - Update the [LDoc](https://github.com/lunarmodules/LDoc) configuration
 - The debug stones:
-- Install the [windfield](https://github.com/a327ex/windfield) library
-- Initialize the debug stones
+  - Install the [windfield](https://github.com/a327ex/windfield) library
+  - Initialize the debug stones
   - Implement the custom drawing of the debug stones
   - The player stone:
-- Control the player stone
-- Pin the player stone to the screen center
+    - Control the player stone
+    - Pin the player stone to the screen center
 
 ## [v1.0-alpha](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-alpha) (2021-04-28)
 
 - Add basics of the project
 - Add the [LDoc](https://github.com/lunarmodules/LDoc) configuration
 - The joysticks:
-- Install the [GOOi](https://github.com/tavuntu/gooi) library
-- Add the joysticks
-- Display the states of the joysticks
+  - Install the [GOOi](https://github.com/tavuntu/gooi) library
+  - Add the joysticks
+  - Display the states of the joysticks
