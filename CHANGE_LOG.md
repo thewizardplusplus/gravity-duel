@@ -131,32 +131,35 @@
 
 ## [v1.0-beta.2](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-beta.2) (2021-05-18)
 
-- Add the `drawing.draw_with_transformations()` function
-- Add the `drawing.draw_collider()` function
-- Add the `Player:initialize()` method
-- Add the `Player:draw()` method
-- Add the `Player:position()` method
-- Add the `Player:angle()` method
-- Add the `Player:destroy()` method
 - Add the `Rectangle:grid_step()` method
-- Add the `Impulse:initialize()` method
-- Add the `Impulse:draw()` method
-- Add the `Impulse:hit()` method
-- Add the `Impulse:destroy()` method
-- Destroy all the player impulses on the screen reset
-- Simplify the processing of the destroyed player impulses
-- Fix the code style in the `Player:initialize()` method
-- Add the `Ui:initialize()` method
-- Add the `Ui:destroy()` method
-- Add the `Ui:center_position()` method
-- Tune the font in the `Ui:initialize()` method
-- Simplify the main code
-- Add the `_load_keys()` function
-- Add the `Ui:player_position()` method
-- Add the `Ui:player_direction()` method
-- Add the `Player:set_direction()` method
-- Fix the `Player:angle()` method
-- Add the `Player:move()` method
+- The main code:
+  - Simplify the main code
+  - Add the `_load_keys()` function
+- The player:
+  - Add the `Player:initialize()` method
+  - Add the `Player:draw()` method
+  - Add the `Player:position()` method
+  - Add the `Player:move()` method
+  - Add the `Player:angle()` method
+  - Add the `Player:set_direction()` method
+  - Add the `Player:destroy()` method
+- The player impulse:
+  - Add the `Impulse:initialize()` method
+  - Add the `Impulse:draw()` method
+  - Add the `Impulse:hit()` method
+  - Add the `Impulse:destroy()` method
+  - Destroy all the player impulses on the screen reset
+  - Simplify the processing of the destroyed player impulses
+- The UI:
+  - Add the `Ui:initialize()` method
+  - Tune the font in the `Ui:initialize()` method
+  - Add the `Ui:center_position()` method
+  - Add the `Ui:player_position()` method
+  - Add the `Ui:player_direction()` method
+  - Add the `Ui:destroy()` method
+- The drawing utilities:
+  - Add the `drawing.draw_with_transformations()` function
+  - Add the `drawing.draw_collider()` function
 
 ## [v1.0-beta.1](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-beta.1) (2021-05-10)
 
