@@ -120,14 +120,13 @@
 
 ## [v1.0-beta.3](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-beta.3) (2021-05-21)
 
-- Add the `Target` class
-- Add lifes to the `Target` class
-- Add a lifetime to the `Target` class
-- Install the [tick](https://github.com/rxi/tick) library
-- Fix the creation of the targets
-- Randomize the creation of the targets
-- Fix the `Target:initialize()` method
-- Display the number of the hit targets
+- The target:
+  - Add the `Target` class
+  - Add lifes to the `Target` class
+  - Install the [tick](https://github.com/rxi/tick) library
+  - Add a lifetime to the `Target` class
+  - Randomize the creation of the targets
+  - Display the number of the hit targets
 
 ## [v1.0-beta.2](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-beta.2) (2021-05-18)
 
