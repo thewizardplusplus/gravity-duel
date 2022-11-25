@@ -110,13 +110,13 @@
 
 ## [v1.0](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0) (2021-05-22)
 
-- Add the `Hole` class
-- Add a kind to the `Hole` class
-- Apply the gravity to the player impulses
-- Add the `Hole:position()` method
-- Add the `Hole:kind()` method
-- Add the `Impulse:apply_hole()` method
-- Tune the hole power
+- The hole:
+  - Add the `Hole` class
+  - Add a kind to the `Hole` class
+  - Add the `Hole:position()` method
+  - Add the `Hole:kind()` method
+  - Apply the gravity to the player impulses
+  - Add the `Impulse:apply_hole()` method
 
 ## [v1.0-beta.3](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-beta.3) (2021-05-21)
 
