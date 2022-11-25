@@ -185,8 +185,8 @@
   - Make the player larger
   - Draw the player ledges
   - Fix the initial angle of the player
-- The impulse:
-  - Add the impulse button
+- The player impulse:
+  - Add the player impulse button
   - Rename the `physics.make_collider()` function to `physics.make_rectangle_collider()`
   - Add the `physics.make_circle_collider()` function
   - Generate the player impulses
