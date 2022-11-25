@@ -84,29 +84,29 @@
 
 ## [v1.1](https://github.com/thewizardplusplus/gravity-duel/tree/v1.1) (2021-05-29)
 
-- Count and display the performed player impulses
-- Count and display the hit player impulses
-- Count and display the accuracy of the player impulses
-- Process the best stats
-- Install the [MessagePack](https://github.com/markstinson/lua-MessagePack) library
-- Install the [FlatDB](https://github.com/uleelx/FlatDB) library
-- Add the `StatsStorage` class
-- Add the `factory.create_stats_storage()` function
-- Save the best stats
-- Add the `Stats:initialize()` method
-- Add the `Stats:add_impulse()` method
-- Add the `Stats:hit_target()` method
-- Add the `Stats:draw()` method
-- Add the `BestStats:initialize()` method
-- Add the `BestStats:draw()` method
-- Make public the `Stats` class fields
-- Add the `Stats:impulse_accuracy()` method
-- Make public the `BestStats` class fields
-- Add the `BestStats:update()` method
-- Use the `BestStats` class in the `StatsStorage:get_stats()` method
-- Use the `BestStats` class in the `StatsStorage:store_stats()` method
-- Rename the `StatsStorage` class fields
-- Add the `stats` module
+- The stats:
+  - Count and display the stats:
+    - Count and display the performed player impulses
+    - Count and display the hit player impulses
+    - Count and display the accuracy of the player impulses
+  - Count and display the best stats:
+    - Process the best stats
+    - Save the best stats
+  - The `Stats` class:
+    - Add the `Stats:initialize()` method
+    - Add the `Stats:add_impulse()` method
+    - Add the `Stats:hit_target()` method
+    - Add the `Stats:impulse_accuracy()` method
+    - Add the `Stats:draw()` method
+  - The `BestStats` class:
+    - Add the `BestStats:initialize()` method
+    - Add the `BestStats:update()` method
+    - Add the `BestStats:draw()` method
+  - The `StatsStorage` class:
+    - Install the [MessagePack](https://github.com/markstinson/lua-MessagePack) library
+    - Install the [FlatDB](https://github.com/uleelx/FlatDB) library
+    - Add the `StatsStorage` class
+    - Add the `factory.create_stats_storage()` function
 
 ## [v1.0](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0) (2021-05-22)
 
