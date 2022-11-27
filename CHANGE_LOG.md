@@ -62,25 +62,22 @@
 
 ## [v1.2](https://github.com/thewizardplusplus/gravity-duel/tree/v1.2) (2021-06-04)
 
-- Fix the player rotation
 - Fix the graphical scale
-- Reset the automatic player rotation
-- Make the UI components transparent
-- Support the impulse performing by a keyboard
-- Support the player rotation by a keyboard
-- Fix the `Impulse:initialize()` method
-- Remove the too far player impulses
-- Add the `Ui:player_angle_delta()` method
-- Remove the `Ui:player_direction()` method
-- Simplify the main code of the player rotation
-- Add the `Player:rotate()` method
-- Add the `Player:reset_autorotation()` method
-- Remove the `Player:set_direction()` method
 - Extend the keys config
-- Disable the impulse performing during the player movement or rotation
-- Disable the simultaneous performing of the player movement and rotation
 - Create targets from the game beginning
 - Create holes from the game beginning
+- The player:
+  - Support the player rotation by a keyboard
+  - Disable the simultaneous performing of the player movement and rotation
+  - Reset the automatic player rotation
+  - Simplify the main code of the player rotation
+- The player impulse:
+  - Support the player impulse performing by a keyboard
+  - Disable the player impulse performing during the player movement or rotation
+  - Remove the too far player impulses
+- The UI:
+  - Make the UI components transparent
+  - Add the `Ui:player_angle_delta()` method
 
 ## [v1.1](https://github.com/thewizardplusplus/gravity-duel/tree/v1.1) (2021-05-29)
 
