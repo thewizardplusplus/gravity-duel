@@ -2,20 +2,18 @@
 
 ## [v1.3.1](https://github.com/thewizardplusplus/gravity-duel/tree/v1.3.1) (2021-12-04)
 
-- Add the `Controls:_impulse_allowed()` method
-- Fix the `Controls:initialize()` method
-- Fix the code style
-- Add the disclaimer in the `README.md` file
-- Add the `Rectangle:ui_grid_step()` method
-- Add the `Rectangle:maximum()` method
-- Add the `Rectangle:center()` method
-- Fix the running description in the `README.md` file
-- Complete the `.gitignore` file
-- Fix the `Controls:update()` method
-- Add the `Controls:_is_player_moving()` method
-- Add the `Controls:_is_player_rotating()` method
-- Fix the `Controls:_is_impulse_allowed()` method
-- Fix the version in the [makelove](https://github.com/pfirsich/makelove) configuration
+- The `Rectangle` class:
+  - Add the `Rectangle:ui_grid_step()` method
+  - Add the `Rectangle:maximum()` method
+  - Add the `Rectangle:center()` method
+- The UI:
+  - Add the `Controls:_is_player_moving()` method
+  - Add the `Controls:_is_player_rotating()` method
+  - Add the `Controls:_is_impulse_allowed()` method
+  - Fix the `Controls:update()` method
+- The `README.md` file:
+  - Add the disclaimer in the `README.md` file
+  - Fix the running description in the `README.md` file
 
 ## [v1.3](https://github.com/thewizardplusplus/gravity-duel/tree/v1.3) (2021-06-26)
 
@@ -26,12 +24,12 @@
 - Add the `StatsManager` class
 - Add the `typeutils.is_number()` function
 - The main code:
-- Add the `_add_impulse()` function
-- Add the `_add_target()` function
-- Add the `_add_hole()` function
+  - Add the `_add_impulse()` function
+  - Add the `_add_target()` function
+  - Add the `_add_hole()` function
   - Rename the `_make_screen()` function to `_create_screen()`
 - The `Circle` class:
-- Add the `Circle` class
+  - Add the `Circle` class
   - Support negative coordinates in the `Circle` class
   - Add the `TemporaryCircle` class
 - The player:
@@ -46,18 +44,18 @@
   - Add the `Controls` class
   - Make the `Ui` class a parent for the `Controls` class
 - The drawing utilities:
-- Add the `drawing.draw_drawables()` function
-- Add the `drawing.set_font()` function
-- Add the `drawing.draw_labels()` function
+  - Add the `drawing.draw_drawables()` function
+  - Add the `drawing.set_font()` function
+  - Add the `drawing.draw_labels()` function
 - The window utilities:
-- Add the `window.enter_fullscreen()` function
-- Add the `window.create_screen()` function
+  - Add the `window.enter_fullscreen()` function
+  - Add the `window.create_screen()` function
 - The math utilities:
-- Add the `mathutils.transform_vector()` function
+  - Add the `mathutils.transform_vector()` function
   - Fix the `mathutils.random_in_range()` function
 - The miscellaneous utilities:
-- Add the `miscutils.repeat_at_intervals()` function
-- Add the `miscutils.filter_destroyables()` function
+  - Add the `miscutils.repeat_at_intervals()` function
+  - Add the `miscutils.filter_destroyables()` function
 - The documentation:
   - Fix the documentation of the `Player` class
   - Fix the documentation of the `Stats` class
