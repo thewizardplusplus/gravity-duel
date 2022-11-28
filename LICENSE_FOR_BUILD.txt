@@ -6,7 +6,7 @@ This distribution contains code from the following projects (full license text b
  - Gravity Duel
 	Website: https://github.com/thewizardplusplus/gravity-duel
 	License: MIT/Expat
-	Copyright (C) 2021 thewizardplusplus <thewizardplusplus@yandex.ru>
+	Copyright (C) 2021-2022 thewizardplusplus <thewizardplusplus@yandex.ru>
 
  - LOVE
 	Website: https://love2d.org/

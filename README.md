@@ -67,4 +67,4 @@ $ love .
 
 The MIT License (MIT)
 
-Copyright &copy; 2021 thewizardplusplus
+Copyright &copy; 2021-2022 thewizardplusplus

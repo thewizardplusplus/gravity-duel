@@ -9,7 +9,7 @@ build_directory = "builds"
 
 [windows.exe_metadata]
 CompanyName = "Personal"
-LegalCopyright = "Copyright (C) 2021 thewizardplusplus <thewizardplusplus@yandex.ru>"
+LegalCopyright = "Copyright (C) 2021-2022 thewizardplusplus <thewizardplusplus@yandex.ru>"
 FileVersion = "v1.3.1"
 FileDescription = "gravity-duel v1.3.1"
 
@@ -17,4 +17,4 @@ FileDescription = "gravity-duel v1.3.1"
 [macos.app_metadata]
 CFBundleIdentifier = "ru.thewizardplusplus.gravity-duel" # should be in reverse-DNS format
 CFBundleShortVersionString = "v1.3.1"
-NSHumanReadableCopyright = "Copyright (C) 2021 thewizardplusplus <thewizardplusplus@yandex.ru>"
+NSHumanReadableCopyright = "Copyright (C) 2021-2022 thewizardplusplus <thewizardplusplus@yandex.ru>"
