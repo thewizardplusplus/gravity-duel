@@ -19,46 +19,50 @@
 
 ## [v1.3](https://github.com/thewizardplusplus/gravity-duel/tree/v1.3) (2021-06-26)
 
+- Improve the type assertions
+- Add the `Collider` mixin
+- Add the `Impulse:vector_to()` method
+- Add the `Rectangle:font_size()` method
+- Add the `StatsManager` class
+- Add the `typeutils.is_number()` function
+- The main code:
 - Add the `_add_impulse()` function
 - Add the `_add_target()` function
 - Add the `_add_hole()` function
-- Add the `typeutils.is_number()` function
-- Add the `Rectangle:font_size()` method
+  - Rename the `_make_screen()` function to `_create_screen()`
+- The `Circle` class:
 - Add the `Circle` class
+  - Support negative coordinates in the `Circle` class
+  - Add the `TemporaryCircle` class
+- The player:
+  - Add the `Player:direction()` method
+  - Rename the `Player:move()` method to `Player:set_velocity()`
+- The scene:
+  - Add the `Scene` class
+  - Add the `Scene:control_player()` method
+- The UI:
+  - Rename the `Ui:player_position()` method to `Ui:player_move_direction()`
+  - Fix the `Ui:player_angle_delta()` method
+  - Add the `Controls` class
+  - Make the `Ui` class a parent for the `Controls` class
+- The drawing utilities:
 - Add the `drawing.draw_drawables()` function
-- Rename the `_make_screen()` function to `_create_screen()`
 - Add the `drawing.set_font()` function
-- Add the `_filter_destroyables()` function
-- Fix the docs of the `BestStats` class
-- Support negative coordinates in the `Circle` class
 - Add the `drawing.draw_labels()` function
-- Add the `TemporaryCircle` class
-- Fix the docs of the `Stats` class
-- Fix the docs of the `Player` class
-- Fix the docs of the `Ui` class
-- Add the `Collider` mixin
-- Add the `Impulse:vector_to()` method
-- Rename the `Ui:player_position()` method to `Ui:player_move_direction()`
-- Extend the `TemporaryCircle:initialize()` method
-- Improve the type assertions
-- Fix the `mathutils.random_in_range()` function
+- The window utilities:
 - Add the `window.enter_fullscreen()` function
 - Add the `window.create_screen()` function
-- Add the `Player:direction()` method
+- The math utilities:
 - Add the `mathutils.transform_vector()` function
-- Add the `Scene` class
-- Add the `_repeat()` function
-- Remove the redundant import from the `Ui` class
-- Fix the `Ui:player_angle_delta()` method
-- Rename the `Player:move()` method to `Player:set_velocity()`
-- Add the `Scene:control_player()` method
-- Add the `Controls` class
+  - Fix the `mathutils.random_in_range()` function
+- The miscellaneous utilities:
 - Add the `miscutils.repeat_at_intervals()` function
 - Add the `miscutils.filter_destroyables()` function
-- Fix the `Controls:initialize()` method
-- Make the `Ui` class a parent for the `Controls` class
-- Fix the `StatsStorage:initialize()` method
-- Add the `StatsManager` class
+- The documentation:
+  - Fix the documentation of the `Player` class
+  - Fix the documentation of the `Stats` class
+  - Fix the documentation of the `BestStats` class
+  - Fix the documentation of the `Ui` class
 
 ## [v1.2](https://github.com/thewizardplusplus/gravity-duel/tree/v1.2) (2021-06-04)
 
