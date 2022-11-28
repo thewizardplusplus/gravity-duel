@@ -2,6 +2,8 @@
 
 ## [v1.3.1](https://github.com/thewizardplusplus/gravity-duel/tree/v1.3.1) (2021-12-04)
 
+Improve the disabling of the player impulse performing during the player movement or rotation and of simultaneous performing of these actions.
+
 - The `Rectangle` class:
   - Add the `Rectangle:ui_grid_step()` method
   - Add the `Rectangle:maximum()` method
@@ -16,6 +18,8 @@
   - Fix the running description in the `README.md` file
 
 ## [v1.3](https://github.com/thewizardplusplus/gravity-duel/tree/v1.3) (2021-06-26)
+
+Perform refactoring.
 
 - Improve the type assertions
 - Add the `Collider` mixin
@@ -64,6 +68,8 @@
 
 ## [v1.2](https://github.com/thewizardplusplus/gravity-duel/tree/v1.2) (2021-06-04)
 
+Support for the player rotation and player impulse performing by a keyboard; disable the player impulse performing during the player movement or rotation and simultaneous performing of these actions.
+
 - Fix the graphical scale
 - Extend the keys config
 - Create targets from the game beginning
@@ -82,6 +88,8 @@
   - Add the `Ui:player_angle_delta()` method
 
 ## [v1.1](https://github.com/thewizardplusplus/gravity-duel/tree/v1.1) (2021-05-29)
+
+Collect the total and best stats.
 
 - The stats:
   - Count and display the stats:
@@ -109,6 +117,8 @@
 
 ## [v1.0](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0) (2021-05-22)
 
+Major version. Implement black and white holes.
+
 - The hole:
   - Add the `Hole` class
   - Add a kind to the `Hole` class
@@ -119,6 +129,8 @@
 
 ## [v1.0-beta.3](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-beta.3) (2021-05-21)
 
+Implement targets.
+
 - The target:
   - Add the `Target` class
   - Add lifes to the `Target` class
@@ -128,6 +140,8 @@
   - Display the number of the hit targets
 
 ## [v1.0-beta.2](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-beta.2) (2021-05-18)
+
+Perform refactoring.
 
 - Add the `Rectangle:grid_step()` method
 - The main code:
@@ -161,6 +175,8 @@
 
 ## [v1.0-beta.1](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-beta.1) (2021-05-10)
 
+Move and rotate the scene around the player; support for controlling via keyboard keys.
+
 - Set the font size
 - The player:
   - Fix the player position
@@ -181,6 +197,8 @@
 
 ## [v1.0-beta](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-beta) (2021-05-06)
 
+Implement the player and the player impulse performing.
+
 - The player:
   - Process the player separately
   - Make the player larger
@@ -197,6 +215,8 @@
 
 ## [v1.0-alpha.1](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-alpha.1) (2021-05-02)
 
+Implement the debug stones.
+
 - Update the [LDoc](https://github.com/lunarmodules/LDoc) configuration
 - The debug stones:
   - Install the [windfield](https://github.com/a327ex/windfield) library
@@ -207,6 +227,8 @@
     - Pin the player stone to the screen center
 
 ## [v1.0-alpha](https://github.com/thewizardplusplus/gravity-duel/tree/v1.0-alpha) (2021-04-28)
+
+Implement the joysticks.
 
 - Add basics of the project
 - Add the [LDoc](https://github.com/lunarmodules/LDoc) configuration
