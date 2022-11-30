@@ -6,6 +6,54 @@
 
 _**Disclaimer:** this game was written directly on an Android smartphone with the [QLua](https://play.google.com/store/apps/details?id=com.quseit.qlua5pro2) IDE and the [LÖVE for Android](https://play.google.com/store/apps/details?id=org.love2d.android) app._
 
+## Features
+
+- entities:
+  - the player:
+    - the player can only perform one possible action at a time;
+    - the possible actions:
+      - movement:
+        - forward;
+        - backward;
+        - to the right;
+        - to the left;
+      - rotation:
+        - to the right;
+        - to the left;
+      - player impulse performing;
+  - the target:
+    - appearance:
+      - at a random point in time;
+      - in the segment in front of the player;
+    - restricted lifetime:
+      - by duration;
+      - by quantity of hits of player impulses;
+  - the hole:
+    - kinds:
+      - the black holes;
+      - the white holes;
+    - appearance:
+      - at a random point in time;
+      - in the segment in front of the player;
+    - restricted lifetime:
+      - by duration;
+    - change trajectories of player impulses in accordance with gravity effects:
+      - the black hole attracts them;
+      - the white hole pulls away them;
+- game stats:
+  - metrics:
+    - current:
+      - quantity of performed player impulses;
+      - quantity of hit targets;
+      - accuracy of player impulses;
+      - quantity of destroyed targets;
+    - best:
+      - accuracy of player impulses;
+      - quantity of destroyed targets;
+  - storing the game stats in the [FlatDB](https://github.com/uleelx/FlatDB) database:
+    - save only the best metrics;
+    - save only when the best metrics change.
+
 ## Building
 
 Clone this repository:
