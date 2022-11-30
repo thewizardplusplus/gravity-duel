@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.3.2](https://github.com/thewizardplusplus/gravity-duel/tree/v1.3.2) (2022-11-30)
+
+Describe the releases.
+
+- Describe the releases:
+  - Describe the change logs for the releases
+  - Describe the features for the last release
+
 ## [v1.3.1](https://github.com/thewizardplusplus/gravity-duel/tree/v1.3.1) (2021-12-04)
 
 Improve the disabling of the player impulse performing during the player movement or rotation and of simultaneous performing of these actions.
