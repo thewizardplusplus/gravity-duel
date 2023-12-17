@@ -2,7 +2,7 @@
 -- @classmod TemporaryCircle
 
 local middleclass = require("middleclass")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 local mathutils = require("mathutils")
 local Rectangle = require("models.rectangle")
 local Circle = require("models.circle")
@@ -49,15 +49,15 @@ function TemporaryCircle:initialize(
   fill_color,
   border_color
 )
-  assert(typeutils.is_positive_number(initial_lifetime))
-  assert(type(world) == "table")
-  assert(typeutils.is_instance(player, Player))
-  assert(typeutils.is_instance(distance_range, Range))
-  assert(typeutils.is_instance(additional_angle_range, Range))
-  assert(typeutils.is_positive_number(radius))
-  assert(typeutils.is_positive_number(border_width))
-  assert(typeutils.is_instance(fill_color, Color))
-  assert(typeutils.is_instance(border_color, Color))
+  assertions.is_number(initial_lifetime)
+  assertions.is_table(world)
+  assertions.is_instance(player, Player)
+  assertions.is_instance(distance_range, Range)
+  assertions.is_instance(additional_angle_range, Range)
+  assertions.is_number(radius)
+  assertions.is_number(border_width)
+  assertions.is_instance(fill_color, Color)
+  assertions.is_instance(border_color, Color)
 
   self._initial_lifetime = initial_lifetime
   self._rest_lifetime = initial_lifetime
@@ -98,7 +98,7 @@ end
 ---
 -- @tparam Rectangle screen
 function TemporaryCircle:draw(screen)
-  assert(typeutils.is_instance(screen, Rectangle))
+  assertions.is_instance(screen, Rectangle)
 
   drawing.draw_collider(self._collider, function()
     love.graphics.setColor(self._fill_color:channels())

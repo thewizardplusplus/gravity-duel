@@ -4,7 +4,7 @@
 local middleclass = require("middleclass")
 local windfield = require("windfield")
 local mlib = require("mlib")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 local miscutils = require("miscutils")
 local Rectangle = require("models.rectangle")
 local Target = require("objects.target")
@@ -28,7 +28,7 @@ local Scene = middleclass("Scene")
 -- @tparam Rectangle screen
 -- @treturn Scene
 function Scene:initialize(screen)
-  assert(typeutils.is_instance(screen, Rectangle))
+  assertions.is_instance(screen, Rectangle)
 
   self._world = windfield.newWorld(0, 0, true)
   self._world:addCollisionClass("Player")
@@ -46,9 +46,9 @@ end
 -- @tparam number center_position_x [0, ∞)
 -- @tparam number center_position_y [0, ∞)
 function Scene:draw(screen, center_position_x, center_position_y)
-  assert(typeutils.is_instance(screen, Rectangle))
-  assert(typeutils.is_positive_number(center_position_x))
-  assert(typeutils.is_positive_number(center_position_y))
+  assertions.is_instance(screen, Rectangle)
+  assertions.is_number(center_position_x)
+  assertions.is_number(center_position_y)
 
   local player_position_x, player_position_y = self._player:position()
   drawing.draw_with_transformations(function()
@@ -72,8 +72,8 @@ end
 -- @tparam Rectangle screen
 -- @tparam func life_decrement_handler func(lifes: number): nil
 function Scene:add_target(screen, life_decrement_handler)
-  assert(typeutils.is_instance(screen, Rectangle))
-  assert(typeutils.is_callable(life_decrement_handler))
+  assertions.is_instance(screen, Rectangle)
+  assertions.is_function(life_decrement_handler)
 
   local target =
     Target:new(self._world, screen, self._player, life_decrement_handler)
@@ -83,7 +83,7 @@ end
 ---
 -- @tparam Rectangle screen
 function Scene:add_hole(screen)
-  assert(typeutils.is_instance(screen, Rectangle))
+  assertions.is_instance(screen, Rectangle)
 
   local kind = math.random() < 0.5 and "black" or "white"
   local hole = Hole:new(kind, self._world, screen, self._player)
@@ -93,7 +93,7 @@ end
 ---
 -- @tparam Rectangle screen
 function Scene:add_impulse(screen)
-  assert(typeutils.is_instance(screen, Rectangle))
+  assertions.is_instance(screen, Rectangle)
 
   local impulse = Impulse:new(self._world, screen, self._player)
   table.insert(self._impulses, impulse)
@@ -102,15 +102,14 @@ end
 ---
 -- @tparam Rectangle screen
 function Scene:update(screen)
-  assert(typeutils.is_instance(screen, Rectangle))
+  assertions.is_instance(screen, Rectangle)
 
   local dt = love.timer.getDelta()
   self._world:update(dt)
   self._player:reset_autorotation()
 
   table.eachi(self._targets .. self._holes, function(updatable)
-    assert(type(updatable) == "table"
-      and typeutils.is_callable(updatable.update))
+    assertions.is_table(updatable)
 
     updatable:update()
   end)
@@ -119,6 +118,8 @@ function Scene:update(screen)
 
   self._impulses =
     miscutils.filter_destroyables(self._impulses, function(impulse)
+      assertions.is_instance(impulse, Impulse)
+
       local hit = impulse:hit()
       if hit then
         return false
@@ -133,7 +134,11 @@ function Scene:update(screen)
       return true
     end)
   table.eachi(self._impulses, function(impulse)
+    assertions.is_instance(impulse, Impulse)
+
     table.eachi(self._holes, function(hole)
+      assertions.is_instance(hole, Hole)
+
       impulse:apply_hole(screen, hole)
     end)
   end)
@@ -150,10 +155,10 @@ function Scene:control_player(
   move_direction_y,
   angle_delta
 )
-  assert(typeutils.is_instance(screen, Rectangle))
-  assert(typeutils.is_number(move_direction_x, -1, 1))
-  assert(typeutils.is_number(move_direction_y, -1, 1))
-  assert(typeutils.is_number(angle_delta))
+  assertions.is_instance(screen, Rectangle)
+  assertions.is_number(move_direction_x)
+  assertions.is_number(move_direction_y)
+  assertions.is_number(angle_delta)
 
   if angle_delta == 0 then
     self._player:set_velocity(screen, move_direction_x, move_direction_y)
