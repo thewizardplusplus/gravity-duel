@@ -3,7 +3,7 @@
 
 local middleclass = require("middleclass")
 local flatdb = require("flatdb")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 local BestStats = require("objects.beststats")
 
 ---
@@ -18,7 +18,7 @@ local StatsStorage = middleclass("StatsStorage")
 -- @treturn StatsStorage
 -- @raise error message
 function StatsStorage:initialize(path)
-  assert(type(path) == "string")
+  assertions.is_string(path)
 
   local ok = love.filesystem.createDirectory(path)
   assert(ok, "unable to create the stats DB")
@@ -43,7 +43,7 @@ end
 ---
 -- @tparam BestStats stats
 function StatsStorage:store_stats(stats)
-  assert(typeutils.is_instance(stats, BestStats))
+  assertions.is_instance(stats, BestStats)
 
   self._db.stats = {
     impulse_accuracy = stats.impulse_accuracy,
