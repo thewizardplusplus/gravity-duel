@@ -2,7 +2,7 @@
 -- @classmod Color
 
 local middleclass = require("middleclass")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 
 ---
 -- @table instance
@@ -19,9 +19,9 @@ local Color = middleclass("Color")
 -- @tparam number blue [0, 1]
 -- @treturn Color
 function Color:initialize(red, green, blue)
-  assert(typeutils.is_positive_number(red, 1))
-  assert(typeutils.is_positive_number(green, 1))
-  assert(typeutils.is_positive_number(blue, 1))
+  assertions.is_number(red)
+  assertions.is_number(green)
+  assertions.is_number(blue)
 
   self.red = red
   self.green = green

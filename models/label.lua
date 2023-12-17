@@ -2,6 +2,7 @@
 -- @classmod Label
 
 local middleclass = require("middleclass")
+local assertions = require("luatypechecks.assertions")
 
 ---
 -- @table instance
@@ -16,7 +17,7 @@ local Label = middleclass("Label")
 -- @tparam any value it will be cast to a string with the tostring() function
 -- @treturn Label
 function Label:initialize(title, value)
-  assert(type(title) == "string")
+  assertions.is_string(title)
 
   self.title = title
   self.value = tostring(value)
