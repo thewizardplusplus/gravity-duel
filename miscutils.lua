@@ -2,7 +2,8 @@
 -- @module miscutils
 
 local tick = require("tick")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
+local checks = require("luatypechecks.checks")
 
 local miscutils = {}
 
@@ -10,8 +11,8 @@ local miscutils = {}
 -- @tparam number interval [0, ∞)
 -- @tparam func handler func(): nil
 function miscutils.repeat_at_intervals(interval, handler)
-  assert(typeutils.is_positive_number(interval))
-  assert(typeutils.is_callable(handler))
+  assertions.is_number(interval)
+  assertions.is_function(handler)
 
   tick.delay(handler, 0)
   tick.recur(handler, interval)
@@ -22,12 +23,11 @@ end
 -- @tparam func filter func(destroyable: tab): bool
 -- @treturn {tab,...}
 function miscutils.filter_destroyables(destroyables, filter)
-  assert(type(destroyables) == "table")
-  assert(typeutils.is_callable(filter))
+  assertions.is_sequence(destroyables, checks.is_table)
+  assertions.is_function(filter)
 
   return table.accept(destroyables, function(destroyable)
-    assert(type(destroyable) == "table"
-      and typeutils.is_callable(destroyable.destroy))
+    assertions.is_table(destroyable)
 
     local ok = filter(destroyable)
     if not ok then
