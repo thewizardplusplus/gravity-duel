@@ -1,5 +1,7 @@
 # Gravity Duel
 
+[![lint](https://github.com/thewizardplusplus/gravity-duel/actions/workflows/lint.yaml/badge.svg)](https://github.com/thewizardplusplus/gravity-duel/actions/workflows/lint.yaml)
+
 ![](docs/screenshot.png)
 
 2D puzzle game for Android inspired by various shoot 'em up games reduced to a duel of two players and combined with gravity effects (but only for impulses).
