@@ -2,7 +2,7 @@
 -- @classmod StatsManager
 
 local middleclass = require("middleclass")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 local drawing = require("drawing")
 local Rectangle = require("models.rectangle")
 local Stats = require("objects.stats")
@@ -22,7 +22,7 @@ local StatsManager = middleclass("StatsManager")
 -- @treturn StatsManager
 -- @raise error message
 function StatsManager:initialize(storage_path)
-  assert(type(storage_path) == "string")
+  assertions.is_string(storage_path)
 
   self._stats_storage = StatsStorage:new(storage_path)
   self._stats = Stats:new()
@@ -32,7 +32,7 @@ end
 ---
 -- @tparam Rectangle screen
 function StatsManager:draw(screen)
-  assert(typeutils.is_instance(screen, Rectangle))
+  assertions.is_instance(screen, Rectangle)
 
   drawing.draw_drawables(screen, {self._stats, self._best_stats})
 end
@@ -55,7 +55,7 @@ end
 ---
 -- @tparam number target_lifes [0, ∞)
 function StatsManager:hit_target(target_lifes)
-  assert(typeutils.is_positive_number(target_lifes))
+  assertions.is_number(target_lifes)
 
   self._stats:hit_target(target_lifes)
 end
