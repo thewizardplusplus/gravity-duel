@@ -1,7 +1,7 @@
 ---
 -- @module physics
 
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 local Rectangle = require("models.rectangle")
 local Circle = require("models.circle")
 
@@ -13,10 +13,9 @@ local physics = {}
 -- @tparam Rectangle rectangle
 -- @treturn windfield.Collider
 function physics.make_rectangle_collider(world, kind, rectangle)
-  assert(type(world) == "table"
-    and typeutils.is_callable(world.newRectangleCollider))
-  assert(kind == "static" or kind == "dynamic")
-  assert(typeutils.is_instance(rectangle, Rectangle))
+  assertions.is_table(world)
+  assertions.is_enumeration(kind, {"static", "dynamic"})
+  assertions.is_instance(rectangle, Rectangle)
 
   local collider = world:newRectangleCollider(
     rectangle.x,
@@ -35,10 +34,9 @@ end
 -- @tparam Circle circle
 -- @treturn windfield.Collider
 function physics.make_circle_collider(world, kind, circle)
-  assert(type(world) == "table"
-    and typeutils.is_callable(world.newCircleCollider))
-  assert(kind == "static" or kind == "dynamic")
-  assert(typeutils.is_instance(circle, Circle))
+  assertions.is_table(world)
+  assertions.is_enumeration(kind, {"static", "dynamic"})
+  assertions.is_instance(circle, Circle)
 
   local collider = world:newCircleCollider(circle.x, circle.y, circle.radius)
   collider:setType(kind)
