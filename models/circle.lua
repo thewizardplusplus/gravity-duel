@@ -2,7 +2,7 @@
 -- @classmod Circle
 
 local middleclass = require("middleclass")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 
 ---
 -- @table instance
@@ -19,9 +19,9 @@ local Circle = middleclass("Circle")
 -- @tparam number radius [0, ∞)
 -- @treturn Circle
 function Circle:initialize(x, y, radius)
-  assert(typeutils.is_number(x))
-  assert(typeutils.is_number(y))
-  assert(typeutils.is_positive_number(radius))
+  assertions.is_number(x)
+  assertions.is_number(y)
+  assertions.is_number(radius)
 
   self.x = x
   self.y = y
