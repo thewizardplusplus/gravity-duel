@@ -2,7 +2,7 @@
 -- @classmod Target
 
 local middleclass = require("middleclass")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 local Rectangle = require("models.rectangle")
 local Color = require("models.color")
 local Range = require("models.range")
@@ -33,10 +33,10 @@ local Target = middleclass("Target", TemporaryCircle)
 -- @tfield func life_decrement_handler func(lifes: number): nil
 -- @treturn Target
 function Target:initialize(world, screen, player, life_decrement_handler)
-  assert(type(world) == "table")
-  assert(typeutils.is_instance(screen, Rectangle))
-  assert(typeutils.is_instance(player, Player))
-  assert(typeutils.is_callable(life_decrement_handler))
+  assertions.is_table(world)
+  assertions.is_instance(screen, Rectangle)
+  assertions.is_instance(player, Player)
+  assertions.is_function(life_decrement_handler)
 
   TemporaryCircle.initialize(
     self,
@@ -71,7 +71,7 @@ end
 ---
 -- @tparam Rectangle screen
 function Target:draw(screen)
-  assert(typeutils.is_instance(screen, Rectangle))
+  assertions.is_instance(screen, Rectangle)
 
   TemporaryCircle.draw(self, screen)
 

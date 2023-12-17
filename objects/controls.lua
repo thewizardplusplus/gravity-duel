@@ -4,12 +4,13 @@
 local baton = require("baton")
 local middleclass = require("middleclass")
 local mlib = require("mlib")
+local assertions = require("luatypechecks.assertions")
 local typeutils = require("typeutils")
 local Rectangle = require("models.rectangle")
 local Ui = require("objects.ui")
 
 local function _load_keys(path)
-  assert(type(path) == "string")
+  assertions.is_string(path)
 
   local data, loading_err = typeutils.load_json(path, {
     type = "object",
@@ -70,9 +71,9 @@ local Controls = middleclass("Controls", Ui)
 -- @treturn Controls
 -- @raise error message
 function Controls:initialize(screen, keys_config_path, impulse_handler)
-  assert(typeutils.is_instance(screen, Rectangle))
-  assert(type(keys_config_path) == "string")
-  assert(typeutils.is_callable(impulse_handler))
+  assertions.is_instance(screen, Rectangle)
+  assertions.is_string(keys_config_path)
+  assertions.is_function(impulse_handler)
 
   Ui.initialize(self, screen, function()
     if self:_is_impulse_allowed() then

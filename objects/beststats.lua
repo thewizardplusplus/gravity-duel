@@ -2,7 +2,7 @@
 -- @classmod BestStats
 
 local middleclass = require("middleclass")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 local Rectangle = require("models.rectangle")
 local Label = require("models.label")
 local Stats = require("objects.stats")
@@ -21,8 +21,8 @@ local BestStats = middleclass("BestStats")
 -- @tparam number destroyed_targets [0, ∞)
 -- @treturn BestStats
 function BestStats:initialize(impulse_accuracy, destroyed_targets)
-  assert(typeutils.is_positive_number(impulse_accuracy))
-  assert(typeutils.is_positive_number(destroyed_targets))
+  assertions.is_number(impulse_accuracy)
+  assertions.is_number(destroyed_targets)
 
   self.impulse_accuracy = impulse_accuracy
   self.destroyed_targets = destroyed_targets
@@ -31,7 +31,7 @@ end
 ---
 -- @tparam Rectangle screen
 function BestStats:draw(screen)
-  assert(typeutils.is_instance(screen, Rectangle))
+  assertions.is_instance(screen, Rectangle)
 
   local x = screen.width - 0.6 * screen.height
   local y = screen.height / 16
@@ -49,7 +49,7 @@ end
 -- @tparam Stats stats
 -- @treturn bool was updated
 function BestStats:update(stats)
-  assert(typeutils.is_instance(stats, Stats))
+  assertions.is_instance(stats, Stats)
 
   local was_updated = false
   local preliminary_impulses = 50
