@@ -2,7 +2,7 @@
 -- @classmod Range
 
 local middleclass = require("middleclass")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 
 ---
 -- @table instance
@@ -17,8 +17,8 @@ local Range = middleclass("Range")
 -- @tparam number maximum [minimum, ∞)
 -- @treturn Range
 function Range:initialize(minimum, maximum)
-  assert(typeutils.is_number(minimum))
-  assert(typeutils.is_number(maximum, minimum))
+  assertions.is_number(minimum)
+  assertions.is_number(maximum)
 
   self.minimum = minimum
   self.maximum = maximum
