@@ -3,7 +3,7 @@ local require_paths =
 love.filesystem.setRequirePath(table.concat(require_paths, ";"))
 
 local tick = require("tick")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 local window = require("window")
 local drawing = require("drawing")
 local miscutils = require("miscutils")
@@ -38,7 +38,7 @@ function love.load()
 
   miscutils.repeat_at_intervals(2.5, function()
     scene:add_target(screen, function(lifes)
-      assert(typeutils.is_positive_number(lifes))
+      assertions.is_number(lifes)
 
       stats_manager:hit_target(lifes)
     end)
@@ -53,6 +53,8 @@ function love.draw()
 end
 
 function love.update(dt)
+  assertions.is_number(dt)
+
   scene:update(screen)
   controls:update()
   stats_manager:update()
@@ -79,6 +81,8 @@ function love.resize()
 end
 
 function love.keypressed(key)
+  assertions.is_string(key)
+
   if key == "escape" then
     love.event.quit()
   end
