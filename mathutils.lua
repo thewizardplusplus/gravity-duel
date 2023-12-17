@@ -2,7 +2,7 @@
 -- @module mathutils
 
 local mlib = require("mlib")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 local Range = require("models.range")
 
 local mathutils = {}
@@ -11,7 +11,7 @@ local mathutils = {}
 -- @tparam Range range
 -- @treturn number [range.minimum, range.maximum)
 function mathutils.random_in_range(range)
-  assert(typeutils.is_instance(range, Range))
+  assertions.is_instance(range, Range)
 
   return math.random() * (range.maximum - range.minimum) + range.minimum
 end
@@ -37,12 +37,12 @@ function mathutils.transform_vector(
   offset_x = offset_x or 0
   offset_y = offset_y or 0
 
-  assert(typeutils.is_number(x))
-  assert(typeutils.is_number(y))
-  assert(typeutils.is_number(factor))
-  assert(type(with_time) == "boolean")
-  assert(typeutils.is_number(offset_x))
-  assert(typeutils.is_number(offset_y))
+  assertions.is_number(x)
+  assertions.is_number(y)
+  assertions.is_number(factor)
+  assertions.is_boolean(with_time)
+  assertions.is_number(offset_x)
+  assertions.is_number(offset_y)
 
   if with_time then
     local dt = love.timer.getDelta()
