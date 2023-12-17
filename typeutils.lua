@@ -4,61 +4,8 @@
 local json = require("json")
 local jsonschema = require("jsonschema")
 local assertions = require("luatypechecks.assertions")
-local checks = require("luatypechecks.checks")
 
 local typeutils = {}
-
----
--- @tparam any value
--- @tparam[opt=-math.huge] number minimum
--- @tparam[optchain=math.huge] number maximum [minimum, ∞)
--- @treturn bool
-function typeutils.is_number(value, minimum, maximum)
-  minimum = minimum or -math.huge
-  maximum = maximum or math.huge
-
-  assertions.is_number(minimum)
-  assertions.is_number(maximum)
-
-  return checks.is_number(value)
-    and value >= minimum
-    and value <= maximum
-end
-
----
--- @tparam any value
--- @tparam[opt=math.huge] number limit [0, ∞)
--- @treturn bool
-function typeutils.is_positive_number(value, limit)
-  limit = limit or math.huge
-
-  assertions.is_number(limit)
-
-  return typeutils.is_number(value, 0, limit)
-end
-
----
--- @tparam any value
--- @treturn bool
-function typeutils.is_callable(value)
-  if checks.is_function(value) then
-    return true
-  end
-
-  return typeutils._has_metamethod(value, "__call")
-end
-
----
--- @tparam any value
--- @tparam tab class class created via the middleclass library
--- @treturn bool
-function typeutils.is_instance(value, class)
-  assertions.is_table(class)
-
-  return checks.is_table(value)
-    and typeutils.is_callable(value.isInstanceOf)
-    and value:isInstanceOf(class)
-end
 
 ---
 -- @tparam string path
@@ -91,17 +38,6 @@ function typeutils.load_json(path, schema)
   end
 
   return data
-end
-
----
--- @tparam any value
--- @tparam string metamethod
--- @treturn bool
-function typeutils._has_metamethod(value, metamethod)
-  assertions.is_string(metamethod)
-
-  local metatable = getmetatable(value)
-  return metatable and typeutils.is_callable(metatable[metamethod])
 end
 
 ---
