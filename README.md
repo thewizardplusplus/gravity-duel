@@ -1,5 +1,7 @@
 # Gravity Duel
 
+[![doc:build](https://github.com/thewizardplusplus/gravity-duel/actions/workflows/doc.yaml/badge.svg)](https://github.com/thewizardplusplus/gravity-duel/actions/workflows/doc.yaml)
+[![doc:link](https://img.shields.io/badge/doc%3Alink-link-blue?logo=github)](https://thewizardplusplus.github.io/gravity-duel/)
 [![lint](https://github.com/thewizardplusplus/gravity-duel/actions/workflows/lint.yaml/badge.svg)](https://github.com/thewizardplusplus/gravity-duel/actions/workflows/lint.yaml)
 
 ![](docs/screenshot.png)
