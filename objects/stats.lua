@@ -2,7 +2,7 @@
 -- @classmod Stats
 
 local middleclass = require("middleclass")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 local Rectangle = require("models.rectangle")
 local Label = require("models.label")
 local drawing = require("drawing")
@@ -35,7 +35,7 @@ end
 ---
 -- @tparam Rectangle screen
 function Stats:draw(screen)
-  assert(typeutils.is_instance(screen, Rectangle))
+  assertions.is_instance(screen, Rectangle)
 
   local margin = screen.height / 16
   love.graphics.setColor(1, 1, 1)
@@ -59,7 +59,7 @@ end
 ---
 -- @tparam number target_lifes [0, ∞)
 function Stats:hit_target(target_lifes)
-  assert(typeutils.is_positive_number(target_lifes))
+  assertions.is_number(target_lifes)
 
   self.hit_targets = self.hit_targets + 1
   if target_lifes == 0 then

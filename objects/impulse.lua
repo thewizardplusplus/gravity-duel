@@ -3,7 +3,7 @@
 
 local middleclass = require("middleclass")
 local mlib = require("mlib")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 local mathutils = require("mathutils")
 local Rectangle = require("models.rectangle")
 local Circle = require("models.circle")
@@ -27,9 +27,9 @@ Impulse:include(Collider)
 -- @tparam Player player
 -- @treturn Impulse
 function Impulse:initialize(world, screen, player)
-  assert(type(world) == "table")
-  assert(typeutils.is_instance(screen, Rectangle))
-  assert(typeutils.is_instance(player, Player))
+  assertions.is_table(world)
+  assertions.is_instance(screen, Rectangle)
+  assertions.is_instance(player, Player)
 
   local player_position_x, player_position_y = player:position()
   self._collider = physics.make_circle_collider(world, "dynamic", Circle:new(
@@ -64,7 +64,7 @@ end
 -- @treturn number x
 -- @treturn number y
 function Impulse:vector_to(collider)
-  assert(type(collider) == "table" and typeutils.is_callable(collider.position))
+  assertions.is_table(collider)
 
   local vector = mlib.vec2.sub(
     mlib.vec2.new(collider:position()),
@@ -76,7 +76,7 @@ end
 ---
 -- @tparam Rectangle screen
 function Impulse:draw(screen)
-  assert(typeutils.is_instance(screen, Rectangle))
+  assertions.is_instance(screen, Rectangle)
 
   love.graphics.setColor(0, 0.5, 1)
   drawing.draw_collider(self._collider, function()
@@ -88,8 +88,8 @@ end
 -- @tparam Rectangle screen
 -- @tparam Hole hole
 function Impulse:apply_hole(screen, hole)
-  assert(typeutils.is_instance(screen, Rectangle))
-  assert(typeutils.is_instance(hole, Hole))
+  assertions.is_instance(screen, Rectangle)
+  assertions.is_instance(hole, Hole)
 
   local vector_to_hole = mlib.vec2.new(self:vector_to(hole))
   if hole:kind() == "white" then
