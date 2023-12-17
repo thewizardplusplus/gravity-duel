@@ -2,7 +2,7 @@
 -- @classmod Hole
 
 local middleclass = require("middleclass")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 local Rectangle = require("models.rectangle")
 local Color = require("models.color")
 local Range = require("models.range")
@@ -30,10 +30,10 @@ local Hole = middleclass("Hole", TemporaryCircle)
 -- @tparam Player player
 -- @treturn Hole
 function Hole:initialize(kind, world, screen, player)
-  assert(kind == "black" or kind == "white")
-  assert(type(world) == "table")
-  assert(typeutils.is_instance(screen, Rectangle))
-  assert(typeutils.is_instance(player, Player))
+  assertions.is_enumeration(kind, {"black", "white"})
+  assertions.is_table(world)
+  assertions.is_instance(screen, Rectangle)
+  assertions.is_instance(player, Player)
 
   local fill_color
   local border_color

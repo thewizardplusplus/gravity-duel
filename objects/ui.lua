@@ -2,7 +2,7 @@
 -- @classmod Ui
 
 local middleclass = require("middleclass")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 local Rectangle = require("models.rectangle")
 
 ---
@@ -20,8 +20,8 @@ local Ui = middleclass("Ui")
 -- @tparam func impulse_handler func(): nil
 -- @treturn Ui
 function Ui:initialize(screen, impulse_handler)
-  assert(typeutils.is_instance(screen, Rectangle))
-  assert(typeutils.is_callable(impulse_handler))
+  assertions.is_instance(screen, Rectangle)
+  assertions.is_function(impulse_handler)
 
   local screen_maximum_x, screen_maximum_y = screen:maximum()
   local margin = screen:ui_grid_step() / 4

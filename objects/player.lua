@@ -3,7 +3,7 @@
 
 local middleclass = require("middleclass")
 local mlib = require("mlib")
-local typeutils = require("typeutils")
+local assertions = require("luatypechecks.assertions")
 local mathutils = require("mathutils")
 local Rectangle = require("models.rectangle")
 local Collider = require("objects.collider")
@@ -23,8 +23,8 @@ Player:include(Collider)
 -- @tparam Rectangle screen
 -- @treturn Player
 function Player:initialize(world, screen)
-  assert(type(world) == "table")
-  assert(typeutils.is_instance(screen, Rectangle))
+  assertions.is_table(world)
+  assertions.is_instance(screen, Rectangle)
 
   local screen_center_x, screen_center_y = screen:center()
   self._collider =
@@ -51,7 +51,7 @@ end
 function Player:angle(corrected_for_ui)
   corrected_for_ui = corrected_for_ui or false
 
-  assert(type(corrected_for_ui) == "boolean")
+  assertions.is_boolean(corrected_for_ui)
 
   local angle = self._collider:getAngle()
   if corrected_for_ui then
@@ -79,10 +79,10 @@ function Player:direction(
   additional_angle = additional_angle or 0
   corrected_for_ui = corrected_for_ui or false
 
-  assert(typeutils.is_number(base_direction_x, -1, 1))
-  assert(typeutils.is_number(base_direction_y, -1, 1))
-  assert(typeutils.is_number(additional_angle))
-  assert(type(corrected_for_ui) == "boolean")
+  assertions.is_number(base_direction_x)
+  assertions.is_number(base_direction_y)
+  assertions.is_number(additional_angle)
+  assertions.is_boolean(corrected_for_ui)
 
   local direction = mlib.vec2.rotate(
     mlib.vec2.new(base_direction_x, base_direction_y),
@@ -94,7 +94,7 @@ end
 ---
 -- @tparam Rectangle screen
 function Player:draw(screen)
-  assert(typeutils.is_instance(screen, Rectangle))
+  assertions.is_instance(screen, Rectangle)
 
   love.graphics.setColor(0.5, 0.5, 0.5)
   drawing.draw_collider(self._collider, function()
@@ -127,9 +127,9 @@ end
 -- @tparam number ui_direction_x [-1, 1]
 -- @tparam number ui_direction_y [-1, 1]
 function Player:set_velocity(screen, ui_direction_x, ui_direction_y)
-  assert(typeutils.is_instance(screen, Rectangle))
-  assert(typeutils.is_number(ui_direction_x, -1, 1))
-  assert(typeutils.is_number(ui_direction_y, -1, 1))
+  assertions.is_instance(screen, Rectangle)
+  assertions.is_number(ui_direction_x)
+  assertions.is_number(ui_direction_y)
 
   local player_speed = 10 * screen.height
   local player_direction_x, player_direction_y =
@@ -144,7 +144,7 @@ end
 ---
 -- @tparam number angle_delta
 function Player:rotate(angle_delta)
-  assert(typeutils.is_number(angle_delta))
+  assertions.is_number(angle_delta)
 
   self._collider:setAngle(self._collider:getAngle() + angle_delta)
 end
