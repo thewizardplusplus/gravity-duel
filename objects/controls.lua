@@ -12,7 +12,7 @@ local Ui = require("objects.ui")
 local function _load_keys(path)
   assertions.is_string(path)
 
-  local data, loading_err = typeutils.load_json(path, {
+  local data, err = typeutils.load_from_json(path, {
     type = "object",
     properties = {
       moved_left = {["$ref"] = "#/definitions/source_group"},
@@ -41,7 +41,7 @@ local function _load_keys(path)
     },
   })
   if not data then
-    return nil, "unable to load the keys: " .. loading_err
+    return nil, "unable to load the keys: " .. err
   end
 
   return baton.new({
