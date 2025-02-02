@@ -14,6 +14,8 @@ require("gooi")
 require("luatable")
 require("compat52")
 
+local CONTROLS_PATH = "controls.json"
+
 local screen = nil -- models.Rectangle
 local scene = nil -- objects.Scene
 local controls = nil -- objects.Controls
@@ -33,7 +35,7 @@ function love.load()
   drawing.set_font(screen)
 
   scene = Scene:new(screen)
-  controls = Controls:new(screen, "keys_config.json", _add_impulse)
+  controls = Controls:new(screen, CONTROLS_PATH, _add_impulse)
   stats_manager = StatsManager:new("stats-db")
 
   miscutils.repeat_at_intervals(2.5, function()
@@ -77,7 +79,7 @@ function love.resize()
 
   miscutils.filter_destroyables({scene, controls}, function() return false end)
   scene = Scene:new(screen)
-  controls = Controls:new(screen, "keys_config.json", _add_impulse)
+  controls = Controls:new(screen, CONTROLS_PATH, _add_impulse)
 end
 
 function love.keypressed(key)
