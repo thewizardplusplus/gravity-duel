@@ -1,3 +1,5 @@
+-- luacheck: no max comment line length
+
 ---
 -- @classmod Controls
 
@@ -5,52 +7,12 @@ local baton = require("baton")
 local middleclass = require("middleclass")
 local mlib = require("mlib")
 local assertions = require("luatypechecks.assertions")
-local typeutils = require("typeutils")
+local json = require("luaserialization.json")
 local Rectangle = require("models.rectangle")
 local Ui = require("objects.ui")
 
-local function _load_keys(path)
-  assertions.is_string(path)
-
-  local data, loading_err = typeutils.load_json(path, {
-    type = "object",
-    properties = {
-      moved_left = {["$ref"] = "#/definitions/source_group"},
-      moved_right = {["$ref"] = "#/definitions/source_group"},
-      moved_top = {["$ref"] = "#/definitions/source_group"},
-      moved_bottom = {["$ref"] = "#/definitions/source_group"},
-      rotated_left = {["$ref"] = "#/definitions/source_group"},
-      rotated_right = {["$ref"] = "#/definitions/source_group"},
-      impulse = {["$ref"] = "#/definitions/source_group"},
-    },
-    required = {
-      "moved_left",
-      "moved_right",
-      "moved_top",
-      "moved_bottom",
-      "rotated_left",
-      "rotated_right",
-      "impulse",
-    },
-    definitions = {
-      source_group = {
-        type = "array",
-        items = {type = "string", pattern = "^%a+:%w+$"},
-        minItems = 1,
-      },
-    },
-  })
-  if not data then
-    return nil, "unable to load the keys: " .. loading_err
-  end
-
-  return baton.new({
-    controls = data,
-    pairs = {
-      moved = {"moved_left", "moved_right", "moved_top", "moved_bottom"},
-    },
-  })
-end
+local _MOVED_CONTROLS =
+  {"moved_left", "moved_right", "moved_top", "moved_bottom"}
 
 ---
 -- @table instance
@@ -64,15 +26,83 @@ end
 local Controls = middleclass("Controls", Ui)
 
 ---
+-- @function controls_schema
+-- @static
+-- @treturn tab JSON Schema for the controls
+--   (see the [luaserialization](https://github.com/thewizardplusplus/luaserialization) library)
+function Controls.static.controls_schema()
+  local source_group = {
+    type = "array",
+    items = {
+      type = "string",
+      anyOf = {
+        { pattern = "^key:[%w%p]+$" },
+        { pattern = "^sc:[%w%p]+$" },
+        { pattern = "^mouse:%d+$" },
+        { pattern = "^axis:%w+[+-]$" },
+        { pattern = "^button:%w+$" },
+        { pattern = "^hat:%d+%a+$" },
+      },
+    },
+    minItems = 1,
+  }
+
+  return {
+    type = "object",
+    properties = {
+      moved_left = source_group,
+      moved_right = source_group,
+      moved_top = source_group,
+      moved_bottom = source_group,
+      rotated_left = source_group,
+      rotated_right = source_group,
+      impulse = source_group,
+    },
+    required = table.merge(_MOVED_CONTROLS, {
+      "rotated_left",
+      "rotated_right",
+      "impulse",
+    }),
+  }
+end
+
+---
+-- @function load_keys
+-- @static
+-- @tparam string controls_path
+-- @treturn baton.Player
+-- @error error message
+function Controls.static.load_keys(controls_path)
+  assertions.is_string(controls_path)
+
+  local controls, err = json.load_from_json(
+    controls_path,
+    Controls.controls_schema(),
+    nil,
+    function(path)
+      assertions.is_string(path)
+
+      local data, err = love.filesystem.read(path)
+      return data, data == nil and err or nil
+    end
+  )
+  if not controls then
+    return nil, "unable to load the controls: " .. err
+  end
+
+  return baton.new({ controls = controls, pairs = { moved = _MOVED_CONTROLS } })
+end
+
+---
 -- @function new
 -- @tparam Rectangle screen
--- @tparam string keys_config_path
+-- @tparam string controls_path
 -- @tparam func impulse_handler func(): nil
 -- @treturn Controls
 -- @raise error message
-function Controls:initialize(screen, keys_config_path, impulse_handler)
+function Controls:initialize(screen, controls_path, impulse_handler)
   assertions.is_instance(screen, Rectangle)
-  assertions.is_string(keys_config_path)
+  assertions.is_string(controls_path)
   assertions.is_function(impulse_handler)
 
   Ui.initialize(self, screen, function()
@@ -81,7 +111,12 @@ function Controls:initialize(screen, keys_config_path, impulse_handler)
     end
   end)
 
-  self._keys = assert(_load_keys(keys_config_path))
+  local keys, err = Controls.load_keys(controls_path)
+  if not keys then
+    error("unable to load the keys: " .. err)
+  end
+
+  self._keys = keys
   self._impulse_handler = impulse_handler
 end
 
