@@ -9,6 +9,7 @@ for _, module in ipairs({
   "models.color",
   "models.label",
   "models.range",
+  "models.rectangle",
 }) do
   require(module .. "_test")
 end
