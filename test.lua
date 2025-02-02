@@ -11,6 +11,7 @@ for _, module in ipairs({
   "models.range",
   "models.rectangle",
   "objects.beststats",
+  "objects.stats",
 }) do
   require(module .. "_test")
 end
