@@ -1,8 +1,12 @@
+-- luacheck: no max comment line length
+
 ---
 -- @classmod Color
 
 local middleclass = require("middleclass")
 local assertions = require("luatypechecks.assertions")
+local Nameable = require("luaserialization.nameable")
+local Stringifiable = require("luaserialization.stringifiable")
 
 ---
 -- @table instance
@@ -11,6 +15,8 @@ local assertions = require("luatypechecks.assertions")
 -- @tfield number blue [0, 1]
 
 local Color = middleclass("Color")
+Color:include(Nameable)
+Color:include(Stringifiable)
 
 ---
 -- @function new
@@ -27,6 +33,22 @@ function Color:initialize(red, green, blue)
   self.green = green
   self.blue = blue
 end
+
+---
+-- @treturn tab table with instance fields
+--   (see the [luaserialization](https://github.com/thewizardplusplus/luaserialization) library)
+function Color:__data()
+  return {
+    red = self.red,
+    green = self.green,
+    blue = self.blue,
+  }
+end
+
+---
+-- @function __tostring
+-- @treturn string stringified table with instance fields
+--   (see the [luaserialization](https://github.com/thewizardplusplus/luaserialization) library)
 
 ---
 -- @treturn {number,number,number}
