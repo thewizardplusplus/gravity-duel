@@ -1,8 +1,12 @@
+-- luacheck: no max comment line length
+
 ---
 -- @classmod Stats
 
 local middleclass = require("middleclass")
 local assertions = require("luatypechecks.assertions")
+local Nameable = require("luaserialization.nameable")
+local Stringifiable = require("luaserialization.stringifiable")
 local Rectangle = require("models.rectangle")
 local Label = require("models.label")
 local drawing = require("drawing")
@@ -14,6 +18,8 @@ local drawing = require("drawing")
 -- @tfield number destroyed_targets [0, ∞)
 
 local Stats = middleclass("Stats")
+Stats:include(Nameable)
+Stats:include(Stringifiable)
 
 ---
 -- @function new
@@ -23,6 +29,22 @@ function Stats:initialize()
   self.hit_targets = 0
   self.destroyed_targets = 0
 end
+
+---
+-- @treturn tab table with instance fields
+--   (see the [luaserialization](https://github.com/thewizardplusplus/luaserialization) library)
+function Stats:__data()
+  return {
+    performed_impulses = self.performed_impulses,
+    hit_targets = self.hit_targets,
+    destroyed_targets = self.destroyed_targets,
+  }
+end
+
+---
+-- @function __tostring
+-- @treturn string stringified table with instance fields
+--   (see the [luaserialization](https://github.com/thewizardplusplus/luaserialization) library)
 
 ---
 -- @treturn number [0, 1]
