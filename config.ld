@@ -7,7 +7,7 @@ full_description = [[
   For more details, see topic @{README.md}.
 ]]
 file = {
-  "typeutils.lua",
+  "jsonutils.lua",
   "mathutils.lua",
   "window.lua",
   "drawing.lua",

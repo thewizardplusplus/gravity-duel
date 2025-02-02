@@ -5,14 +5,14 @@ local baton = require("baton")
 local middleclass = require("middleclass")
 local mlib = require("mlib")
 local assertions = require("luatypechecks.assertions")
-local typeutils = require("typeutils")
+local jsonutils = require("jsonutils")
 local Rectangle = require("models.rectangle")
 local Ui = require("objects.ui")
 
 local function _load_keys(path)
   assertions.is_string(path)
 
-  local data, err = typeutils.load_from_json(path, {
+  local data, err = jsonutils.load_from_json(path, {
     type = "object",
     properties = {
       moved_left = {["$ref"] = "#/definitions/source_group"},
