@@ -1,8 +1,12 @@
+-- luacheck: no max comment line length
+
 ---
 -- @classmod BestStats
 
 local middleclass = require("middleclass")
 local assertions = require("luatypechecks.assertions")
+local Nameable = require("luaserialization.nameable")
+local Stringifiable = require("luaserialization.stringifiable")
 local Rectangle = require("models.rectangle")
 local Label = require("models.label")
 local Stats = require("objects.stats")
@@ -14,6 +18,8 @@ local drawing = require("drawing")
 -- @tfield number destroyed_targets [0, ∞)
 
 local BestStats = middleclass("BestStats")
+BestStats:include(Nameable)
+BestStats:include(Stringifiable)
 
 ---
 -- @function new
@@ -27,6 +33,21 @@ function BestStats:initialize(impulse_accuracy, destroyed_targets)
   self.impulse_accuracy = impulse_accuracy
   self.destroyed_targets = destroyed_targets
 end
+
+---
+-- @treturn tab table with instance fields
+--   (see the [luaserialization](https://github.com/thewizardplusplus/luaserialization) library)
+function BestStats:__data()
+  return {
+    impulse_accuracy = self.impulse_accuracy,
+    destroyed_targets = self.destroyed_targets,
+  }
+end
+
+---
+-- @function __tostring
+-- @treturn string stringified table with instance fields
+--   (see the [luaserialization](https://github.com/thewizardplusplus/luaserialization) library)
 
 ---
 -- @tparam Rectangle screen
