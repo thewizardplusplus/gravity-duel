@@ -26,7 +26,13 @@ function StatsManager:initialize(storage_path)
 
   self._stats_storage = StatsStorage:new(storage_path)
   self._stats = Stats:new()
-  self._best_stats = self._stats_storage:get_stats()
+  self._best_stats = self._stats_storage:best_stats()
+end
+
+---
+-- @treturn Stats
+function StatsManager:stats()
+  return self._stats
 end
 
 ---
@@ -42,22 +48,8 @@ end
 function StatsManager:update()
   local was_updated = self._best_stats:update(self._stats)
   if was_updated then
-    self._stats_storage:store_stats(self._best_stats)
+    self._stats_storage:store_best_stats(self._best_stats)
   end
-end
-
----
--- @function add_impulse
-function StatsManager:add_impulse()
-  self._stats:add_impulse()
-end
-
----
--- @tparam number target_lifes [0, ∞)
-function StatsManager:hit_target(target_lifes)
-  assertions.is_number(target_lifes)
-
-  self._stats:hit_target(target_lifes)
 end
 
 return StatsManager

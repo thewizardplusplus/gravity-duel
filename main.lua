@@ -15,6 +15,7 @@ require("luatable")
 require("compat52")
 
 local CONTROLS_PATH = "controls.json"
+local STATS_PATH = "stats.json"
 
 local screen = nil -- models.Rectangle
 local scene = nil -- objects.Scene
@@ -23,7 +24,7 @@ local stats_manager = nil -- stats.StatsManager
 
 local function _add_impulse()
   scene:add_impulse(screen)
-  stats_manager:add_impulse()
+  stats_manager:stats():add_impulse()
 end
 
 function love.load()
@@ -36,13 +37,13 @@ function love.load()
 
   scene = Scene:new(screen)
   controls = Controls:new(screen, CONTROLS_PATH, _add_impulse)
-  stats_manager = StatsManager:new("stats-db")
+  stats_manager = StatsManager:new(STATS_PATH)
 
   miscutils.repeat_at_intervals(2.5, function()
     scene:add_target(screen, function(lifes)
       assertions.is_number(lifes)
 
-      stats_manager:hit_target(lifes)
+      stats_manager:stats():hit_target(lifes)
     end)
   end)
   miscutils.repeat_at_intervals(2.5, function() scene:add_hole(screen) end)

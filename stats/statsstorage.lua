@@ -2,13 +2,14 @@
 -- @classmod StatsStorage
 
 local middleclass = require("middleclass")
-local flatdb = require("flatdb")
 local assertions = require("luatypechecks.assertions")
+local json = require("luaserialization.json")
 local BestStats = require("objects.beststats")
 
 ---
 -- @table instance
--- @tfield FlatDB _db
+-- @tfield string _path
+-- @tfield BestStats _best_stats
 
 local StatsStorage = middleclass("StatsStorage")
 
@@ -20,36 +21,45 @@ local StatsStorage = middleclass("StatsStorage")
 function StatsStorage:initialize(path)
   assertions.is_string(path)
 
-  local ok = love.filesystem.createDirectory(path)
-  assert(ok, "unable to create the stats DB")
+  local best_stats, err = json.load_from_json(
+    path,
+    BestStats.schema(),
+    { BestStats = BestStats.from_options },
+    function(path) -- luacheck: no redefined
+      assertions.is_string(path)
 
-  local full_path = love.filesystem.getSaveDirectory() .. "/" .. path
-  self._db = flatdb(full_path)
+      local data, err = love.filesystem.read(path)
+      return data, data == nil and err or nil
+    end
+  )
+  if not best_stats then
+    print("unable to load the stats: " .. err)
 
-  if not self._db.stats then
-    self._db.stats = {impulse_accuracy = 0, destroyed_targets = 0}
+    best_stats = BestStats:new(0, 0)
   end
+
+  self._path = path
+  self._best_stats = best_stats
 end
 
 ---
 -- @treturn BestStats
-function StatsStorage:get_stats()
-  return BestStats:new(
-    self._db.stats.impulse_accuracy,
-    self._db.stats.destroyed_targets
-  )
+function StatsStorage:best_stats()
+  return self._best_stats
 end
 
 ---
--- @tparam BestStats stats
-function StatsStorage:store_stats(stats)
-  assertions.is_instance(stats, BestStats)
+-- @tparam BestStats best_stats
+function StatsStorage:store_best_stats(best_stats)
+  assertions.is_instance(best_stats, BestStats)
 
-  self._db.stats = {
-    impulse_accuracy = stats.impulse_accuracy,
-    destroyed_targets = stats.destroyed_targets,
-  }
-  self._db:save()
+  self._best_stats = best_stats
+
+  local ok, err =
+    json.save_to_json(self._path, best_stats, love.filesystem.write)
+  if not ok then
+    print("unable to save the stats: " .. err)
+  end
 end
 
 return StatsStorage

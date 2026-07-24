@@ -22,6 +22,37 @@ BestStats:include(Nameable)
 BestStats:include(Stringifiable)
 
 ---
+-- @function schema
+-- @static
+-- @treturn tab JSON Schema for this class
+--   (see the [luaserialization](https://github.com/thewizardplusplus/luaserialization) library)
+function BestStats.static.schema()
+  local positive_number = { type = "number", minimum = 0 }
+
+  return {
+    type = "object",
+    required = {"impulse_accuracy", "destroyed_targets"},
+    properties = {
+      impulse_accuracy = positive_number,
+      destroyed_targets = positive_number,
+    },
+  }
+end
+
+---
+-- @function from_options
+-- @static
+-- @tparam tab options constructor options conforming to the JSON Schema
+--   returned by @{BestStats.schema|BestStats.schema()}
+--   (see the [luaserialization](https://github.com/thewizardplusplus/luaserialization) library)
+-- @treturn BestStats
+function BestStats.static.from_options(options)
+  assertions.is_table(options)
+
+  return BestStats:new(options.impulse_accuracy, options.destroyed_targets)
+end
+
+---
 -- @function new
 -- @tparam number impulse_accuracy [0, ∞)
 -- @tparam number destroyed_targets [0, ∞)
