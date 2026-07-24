@@ -55,7 +55,7 @@ _**Disclaimer:** this game was written directly on an Android smartphone with th
     - best:
       - accuracy of player impulses;
       - quantity of destroyed targets;
-  - storing the game stats in the [FlatDB](https://github.com/uleelx/FlatDB) database:
+  - storing the game stats:
     - save only the best metrics;
     - save only when the best metrics change.
 
