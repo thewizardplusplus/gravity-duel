@@ -12,7 +12,6 @@ local Controls = require("objects.controls")
 local StatsManager = require("stats.statsmanager")
 require("gooi")
 require("luatable")
-require("compat52")
 
 local CONTROLS_PATH = "controls.json"
 local STATS_PATH = "stats.json"
