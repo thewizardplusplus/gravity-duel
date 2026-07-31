@@ -9,8 +9,7 @@ local window = {}
 -- @treturn bool always true
 -- @error error message
 function window.enter_fullscreen()
-  local os = love.system.getOS()
-  local is_mobile_os = table.find({"Android", "iOS"}, os)
+  local is_mobile_os = table.find({"Android", "iOS"}, love.system.getOS())
   if not is_mobile_os then
     return true
   end
