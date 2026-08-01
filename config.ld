@@ -12,6 +12,7 @@ file = {
   "drawing.lua",
   "physics.lua",
   "miscutils.lua",
+  "constants/icons.lua",
   "models/rectangle.lua",
   "models/circle.lua",
   "models/color.lua",

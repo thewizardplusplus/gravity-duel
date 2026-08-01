@@ -4,6 +4,7 @@
 local middleclass = require("middleclass")
 local assertions = require("luatypechecks.assertions")
 local Rectangle = require("models.rectangle")
+local icons = require("constants.icons")
 
 ---
 -- @table instance
@@ -40,13 +41,21 @@ function Ui:initialize(screen, impulse_handler)
   self._direction_joystick:opacity(0.5)
   self._direction_joystick:noSpring()
 
+  local icon_font = love.graphics.newFont(
+    "resources/fonts/font-awesome/font_awesome_free_7.3.0_solid_900.otf",
+    screen:font_size()
+  )
+
+  local width, height = screen:ui_grid_step(), screen:ui_grid_step() / 2
   self._impulse_button = gooi.newButton({
-    text = "~~>",
+    text = icons.IMPULSE_ICON,
     x = screen_maximum_x - screen:ui_grid_step() - margin,
     y = screen_maximum_y - 1.625 * screen:ui_grid_step() - margin,
-    w = screen:ui_grid_step(),
-    h = screen:ui_grid_step() / 2,
+    w = width, h = height,
   })
+  self._impulse_button:setStyle({ font = icon_font })
+  -- restore the size after applying the font
+  self._impulse_button:setBounds(nil, nil, width, height)
   self._impulse_button:opacity(0.5)
   self._impulse_button:onPress(impulse_handler)
 
