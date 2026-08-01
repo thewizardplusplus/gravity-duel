@@ -7,6 +7,7 @@ local baton = require("baton")
 local middleclass = require("middleclass")
 local mlib = require("mlib")
 local assertions = require("luatypechecks.assertions")
+local checks = require("luatypechecks.checks")
 local json = require("luaserialization.json")
 local Rectangle = require("models.rectangle")
 local Ui = require("objects.ui")
@@ -96,16 +97,20 @@ end
 ---
 -- @function new
 -- @tparam Rectangle screen
+-- @tparam {[string]=Font,...} fonts
 -- @tparam string controls_path
 -- @tparam func impulse_handler func(): nil
 -- @treturn Controls
 -- @raise error message
-function Controls:initialize(screen, controls_path, impulse_handler)
+function Controls:initialize(screen, fonts, controls_path, impulse_handler)
   assertions.is_instance(screen, Rectangle)
+  assertions.is_table(fonts, checks.is_string, function(font)
+    return type(font) == "userdata"
+  end)
   assertions.is_string(controls_path)
   assertions.is_function(impulse_handler)
 
-  Ui.initialize(self, screen, function()
+  Ui.initialize(self, screen, fonts, function()
     if self:_is_impulse_allowed() then
       impulse_handler()
     end

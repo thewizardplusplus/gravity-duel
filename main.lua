@@ -17,6 +17,7 @@ local CONTROLS_PATH = "controls.json"
 local STATS_PATH = "stats.json"
 
 local screen = nil -- models.Rectangle
+local fonts = nil -- {[string]=Font,...}
 local scene = nil -- objects.Scene
 local controls = nil -- objects.Controls
 local stats_manager = nil -- stats.StatsManager
@@ -32,10 +33,10 @@ function love.load()
   assert(window.enter_fullscreen())
 
   screen = window.create_screen()
-  drawing.set_font(screen)
+  fonts = drawing.load_fonts(screen)
 
   scene = Scene:new(screen)
-  controls = Controls:new(screen, CONTROLS_PATH, _add_impulse)
+  controls = Controls:new(screen, fonts, CONTROLS_PATH, _add_impulse)
   stats_manager = StatsManager:new(STATS_PATH)
 
   miscutils.repeat_at_intervals(2.5, function()
@@ -49,9 +50,9 @@ function love.load()
 end
 
 function love.draw()
-  scene:draw(screen, controls:center_position())
+  scene:draw(screen, fonts, controls:center_position())
   gooi.draw()
-  stats_manager:draw(screen)
+  stats_manager:draw(screen, fonts)
 end
 
 function love.update(dt)
@@ -75,11 +76,11 @@ end
 
 function love.resize()
   screen = window.create_screen()
-  drawing.set_font(screen)
+  fonts = drawing.load_fonts(screen)
 
   miscutils.filter_destroyables({scene, controls}, function() return false end)
   scene = Scene:new(screen)
-  controls = Controls:new(screen, CONTROLS_PATH, _add_impulse)
+  controls = Controls:new(screen, fonts, CONTROLS_PATH, _add_impulse)
 end
 
 function love.keypressed(key)

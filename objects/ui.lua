@@ -3,6 +3,7 @@
 
 local middleclass = require("middleclass")
 local assertions = require("luatypechecks.assertions")
+local checks = require("luatypechecks.checks")
 local Rectangle = require("models.rectangle")
 local icons = require("constants.icons")
 
@@ -18,10 +19,14 @@ local Ui = middleclass("Ui")
 ---
 -- @function new
 -- @tparam Rectangle screen
+-- @tparam {[string]=Font,...} fonts
 -- @tparam func impulse_handler func(): nil
 -- @treturn Ui
-function Ui:initialize(screen, impulse_handler)
+function Ui:initialize(screen, fonts, impulse_handler)
   assertions.is_instance(screen, Rectangle)
+  assertions.is_table(fonts, checks.is_string, function(font)
+    return type(font) == "userdata"
+  end)
   assertions.is_function(impulse_handler)
 
   local screen_maximum_x, screen_maximum_y = screen:maximum()
@@ -41,11 +46,6 @@ function Ui:initialize(screen, impulse_handler)
   self._direction_joystick:opacity(0.5)
   self._direction_joystick:noSpring()
 
-  local icon_font = love.graphics.newFont(
-    "resources/fonts/font-awesome/font_awesome_free_7.3.0_solid_900.otf",
-    screen:font_size()
-  )
-
   local width, height = screen:ui_grid_step(), screen:ui_grid_step() / 2
   self._impulse_button = gooi.newButton({
     text = icons.IMPULSE_ICON,
@@ -53,7 +53,7 @@ function Ui:initialize(screen, impulse_handler)
     y = screen_maximum_y - 1.625 * screen:ui_grid_step() - margin,
     w = width, h = height,
   })
-  self._impulse_button:setStyle({ font = icon_font })
+  self._impulse_button:setStyle({ font = fonts.icons })
   -- restore the size after applying the font
   self._impulse_button:setBounds(nil, nil, width, height)
   self._impulse_button:opacity(0.5)
