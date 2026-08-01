@@ -6,16 +6,22 @@ local checks = require("luatypechecks.checks")
 local Rectangle = require("models.rectangle")
 local Label = require("models.label")
 
+local _ICONS_FONT_PATH =
+  "resources/fonts/font-awesome/font_awesome_free_7.3.0_solid_900.otf"
+
 local drawing = {}
 
 ---
 -- @tparam Rectangle screen
-function drawing.set_font(screen)
+-- @treturn {[string]=Font,...}
+function drawing.load_fonts(screen)
   assertions.is_instance(screen, Rectangle)
 
-  local font = love.graphics.newFont(screen:font_size())
-  love.graphics.setFont(font)
-  gooi.setStyle({font = font})
+  local font_size = screen:font_size()
+  return {
+    default = love.graphics.newFont(font_size),
+    icons = love.graphics.newFont(_ICONS_FONT_PATH, font_size),
+  }
 end
 
 ---
@@ -44,25 +50,33 @@ end
 
 ---
 -- @tparam Rectangle screen
+-- @tparam {[string]=Font,...} fonts
 -- @tparam {tab,...} drawables group of tables with the draw() method
-function drawing.draw_drawables(screen, drawables)
+function drawing.draw_drawables(screen, fonts, drawables)
   assertions.is_instance(screen, Rectangle)
+  assertions.is_table(fonts, checks.is_string, function(font)
+    return type(font) == "userdata"
+  end)
   assertions.is_sequence(drawables, checks.is_table)
 
   table.eachi(drawables, function(drawable)
     assertions.is_table(drawable)
 
-    drawable:draw(screen)
+    drawable:draw(screen, fonts)
   end)
 end
 
 ---
 -- @tparam Rectangle screen
+-- @tparam {[string]=Font,...} fonts
 -- @tparam number x [0, ∞)
 -- @tparam number y [0, ∞)
 -- @tparam {Label,...} labels
-function drawing.draw_labels(screen, x, y, labels)
+function drawing.draw_labels(screen, fonts, x, y, labels)
   assertions.is_instance(screen, Rectangle)
+  assertions.is_table(fonts, checks.is_string, function(font)
+    return type(font) == "userdata"
+  end)
   assertions.is_number(x)
   assertions.is_number(y)
   assertions.is_sequence(labels, checks.make_instance_checker(Label))
@@ -71,6 +85,7 @@ function drawing.draw_labels(screen, x, y, labels)
   for index, label in ipairs(labels) do
     love.graphics.print(
       string.format("%s: %s", label.title, label.value),
+      fonts.default,
       x,
       y + (index - 1) * grid_step
     )

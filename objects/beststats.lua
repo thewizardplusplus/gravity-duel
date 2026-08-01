@@ -5,6 +5,7 @@
 
 local middleclass = require("middleclass")
 local assertions = require("luatypechecks.assertions")
+local checks = require("luatypechecks.checks")
 local Nameable = require("luaserialization.nameable")
 local Stringifiable = require("luaserialization.stringifiable")
 local Rectangle = require("models.rectangle")
@@ -82,13 +83,17 @@ end
 
 ---
 -- @tparam Rectangle screen
-function BestStats:draw(screen)
+-- @tparam {[string]=Font,...} fonts
+function BestStats:draw(screen, fonts)
   assertions.is_instance(screen, Rectangle)
+  assertions.is_table(fonts, checks.is_string, function(font)
+    return type(font) == "userdata"
+  end)
 
   local x = screen.width - 0.6 * screen.height
   local y = screen.height / 16
   love.graphics.setColor(0, 0.5, 0)
-  drawing.draw_labels(screen, x, y, {
+  drawing.draw_labels(screen, fonts, x, y, {
     Label:new(
       "Best accuracy",
       string.format("%.2f%%", 100 * self.impulse_accuracy)

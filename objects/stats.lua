@@ -5,6 +5,7 @@
 
 local middleclass = require("middleclass")
 local assertions = require("luatypechecks.assertions")
+local checks = require("luatypechecks.checks")
 local Nameable = require("luaserialization.nameable")
 local Stringifiable = require("luaserialization.stringifiable")
 local Rectangle = require("models.rectangle")
@@ -56,12 +57,16 @@ end
 
 ---
 -- @tparam Rectangle screen
-function Stats:draw(screen)
+-- @tparam {[string]=Font,...} fonts
+function Stats:draw(screen, fonts)
   assertions.is_instance(screen, Rectangle)
+  assertions.is_table(fonts, checks.is_string, function(font)
+    return type(font) == "userdata"
+  end)
 
   local margin = screen.height / 16
   love.graphics.setColor(1, 1, 1)
-  drawing.draw_labels(screen, margin, margin, {
+  drawing.draw_labels(screen, fonts, margin, margin, {
     Label:new("Impulses", self.performed_impulses),
     Label:new("Hits", self.hit_targets),
     Label:new(

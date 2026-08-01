@@ -3,6 +3,7 @@
 
 local middleclass = require("middleclass")
 local assertions = require("luatypechecks.assertions")
+local checks = require("luatypechecks.checks")
 local drawing = require("drawing")
 local Rectangle = require("models.rectangle")
 local Stats = require("objects.stats")
@@ -37,10 +38,14 @@ end
 
 ---
 -- @tparam Rectangle screen
-function StatsManager:draw(screen)
+-- @tparam {[string]=Font,...} fonts
+function StatsManager:draw(screen, fonts)
   assertions.is_instance(screen, Rectangle)
+  assertions.is_table(fonts, checks.is_string, function(font)
+    return type(font) == "userdata"
+  end)
 
-  drawing.draw_drawables(screen, {self._stats, self._best_stats})
+  drawing.draw_drawables(screen, fonts, {self._stats, self._best_stats})
 end
 
 ---

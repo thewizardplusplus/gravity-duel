@@ -3,6 +3,7 @@
 
 local middleclass = require("middleclass")
 local assertions = require("luatypechecks.assertions")
+local checks = require("luatypechecks.checks")
 local Rectangle = require("models.rectangle")
 local Color = require("models.color")
 local Range = require("models.range")
@@ -70,8 +71,12 @@ end
 
 ---
 -- @tparam Rectangle screen
-function Target:draw(screen)
+-- @tparam {[string]=Font,...} fonts
+function Target:draw(screen, fonts)
   assertions.is_instance(screen, Rectangle)
+  assertions.is_table(fonts, checks.is_string, function(font)
+    return type(font) == "userdata"
+  end)
 
   TemporaryCircle.draw(self, screen)
 
@@ -79,6 +84,7 @@ function Target:draw(screen)
     love.graphics.setColor(1, 1, 1)
     love.graphics.printf(
       tostring(self._current_lifes),
+      fonts.default,
       -screen:grid_step() / 2,
       -screen:font_size() / 2,
       screen:grid_step(),

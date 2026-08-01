@@ -5,6 +5,7 @@ local middleclass = require("middleclass")
 local windfield = require("windfield")
 local mlib = require("mlib")
 local assertions = require("luatypechecks.assertions")
+local checks = require("luatypechecks.checks")
 local miscutils = require("miscutils")
 local Rectangle = require("models.rectangle")
 local Target = require("objects.target")
@@ -43,10 +44,14 @@ end
 
 ---
 -- @tparam Rectangle screen
+-- @tparam {[string]=Font,...} fonts
 -- @tparam number center_position_x [0, ∞)
 -- @tparam number center_position_y [0, ∞)
-function Scene:draw(screen, center_position_x, center_position_y)
+function Scene:draw(screen, fonts, center_position_x, center_position_y)
   assertions.is_instance(screen, Rectangle)
+  assertions.is_table(fonts, checks.is_string, function(font)
+    return type(font) == "userdata"
+  end)
   assertions.is_number(center_position_x)
   assertions.is_number(center_position_y)
 
@@ -61,10 +66,9 @@ function Scene:draw(screen, center_position_x, center_position_y)
       -(player_position_y - center_position_y)
     )
 
-    drawing.draw_drawables(
-      screen,
+    local drawables =
       self._holes .. self._targets .. self._impulses .. {self._player}
-    )
+    drawing.draw_drawables(screen, fonts, drawables)
   end)
 end
 
