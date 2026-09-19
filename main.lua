@@ -64,12 +64,10 @@ function love.update(dt)
   tick.update(dt)
   gooi.update(dt)
 
-  local player_move_direction_x, player_move_direction_y =
-    controls:player_move_direction()
+  local player_move_direction = controls:player_move_direction()
   scene:control_player(
     screen,
-    player_move_direction_x,
-    player_move_direction_y,
+    player_move_direction,
     controls:player_angle_delta()
   )
 end
