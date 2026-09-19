@@ -3,6 +3,8 @@
 
 local assertions = require("luatypechecks.assertions")
 local checks = require("luatypechecks.checks")
+local Vector2D = require("luamath.vector2d")
+local BoundingBox = require("luamath.models.boundingbox")
 local Rectangle = require("models.rectangle")
 local Label = require("models.label")
 
@@ -49,11 +51,11 @@ function drawing.draw_collider(collider, drawer)
 end
 
 ---
--- @tparam Rectangle screen
+-- @tparam BoundingBox screen
 -- @tparam {[string]=Font,...} fonts
 -- @tparam {tab,...} drawables group of tables with the draw() method
 function drawing.draw_drawables(screen, fonts, drawables)
-  assertions.is_instance(screen, Rectangle)
+  assertions.is_instance(screen, BoundingBox)
   assertions.is_table(fonts, checks.is_string, function(font)
     return type(font) == "userdata"
   end)
@@ -67,27 +69,43 @@ function drawing.draw_drawables(screen, fonts, drawables)
 end
 
 ---
--- @tparam Rectangle screen
+-- @tparam "fill"|"line" mode
+-- @tparam BoundingBox rectangle
+function drawing.draw_rectangle(mode, rectangle)
+  assertions.is_enumeration(mode, {"fill", "line"})
+  assertions.is_instance(rectangle, BoundingBox)
+
+  local position = rectangle:position()
+  local size = rectangle:size()
+  love.graphics.rectangle(
+    mode,
+    position.x,
+    position.y,
+    size.width,
+    size.height
+  )
+end
+
+---
+-- @tparam BoundingBox screen
 -- @tparam {[string]=Font,...} fonts
--- @tparam number x [0, ∞)
--- @tparam number y [0, ∞)
+-- @tparam Vector2D position
 -- @tparam {Label,...} labels
-function drawing.draw_labels(screen, fonts, x, y, labels)
-  assertions.is_instance(screen, Rectangle)
+function drawing.draw_labels(screen, fonts, position, labels)
+  assertions.is_instance(screen, BoundingBox)
   assertions.is_table(fonts, checks.is_string, function(font)
     return type(font) == "userdata"
   end)
-  assertions.is_number(x)
-  assertions.is_number(y)
+  assertions.is_instance(position, Vector2D)
   assertions.is_sequence(labels, checks.make_instance_checker(Label))
 
-  local grid_step = screen.height / 16
+  local grid_step = screen:size().height / 16
   for index, label in ipairs(labels) do
     love.graphics.print(
       string.format("%s: %s", label.title, label.value),
       fonts.default,
-      x,
-      y + (index - 1) * grid_step
+      position.x,
+      position.y + (index - 1) * grid_step
     )
   end
 end
