@@ -3,9 +3,10 @@
 
 local middleclass = require("middleclass")
 local windfield = require("windfield")
-local mlib = require("mlib")
 local assertions = require("luatypechecks.assertions")
 local checks = require("luatypechecks.checks")
+local Vector2D = require("luamath.vector2d")
+local BoundingBox = require("luamath.models.boundingbox")
 local miscutils = require("miscutils")
 local Rectangle = require("models.rectangle")
 local Target = require("objects.target")
@@ -45,26 +46,21 @@ end
 ---
 -- @tparam Rectangle screen
 -- @tparam {[string]=Font,...} fonts
--- @tparam number center_position_x [0, ∞)
--- @tparam number center_position_y [0, ∞)
-function Scene:draw(screen, fonts, center_position_x, center_position_y)
+-- @tparam Vector2D center_position
+function Scene:draw(screen, fonts, center_position)
   assertions.is_instance(screen, Rectangle)
   assertions.is_table(fonts, checks.is_string, function(font)
     return type(font) == "userdata"
   end)
-  assertions.is_number(center_position_x)
-  assertions.is_number(center_position_y)
+  assertions.is_instance(center_position, Vector2D)
 
-  local player_position_x, player_position_y = self._player:position()
+  local camera_offset = center_position - self._player:position()
   drawing.draw_with_transformations(function()
-    love.graphics.translate(center_position_x, center_position_y)
+    love.graphics.translate(center_position.x, center_position.y)
     love.graphics.rotate(-self._player:angle(true))
     love.graphics.scale(0.75, 0.75)
-    love.graphics.translate(-center_position_x, -center_position_y)
-    love.graphics.translate(
-      -(player_position_x - center_position_x),
-      -(player_position_y - center_position_y)
-    )
+    love.graphics.translate(-center_position.x, -center_position.y)
+    love.graphics.translate(camera_offset.x, camera_offset.y)
 
     local drawables =
       self._holes .. self._targets .. self._impulses .. {self._player}
@@ -129,8 +125,7 @@ function Scene:update(screen)
         return false
       end
 
-      local distance_to_player =
-        mlib.vec2.len(mlib.vec2.new(impulse:vector_to(self._player)))
+      local distance_to_player = impulse:vector_to(self._player):length()
       if distance_to_player > 10 * screen:grid_step() then
         return false
       end
@@ -149,28 +144,21 @@ function Scene:update(screen)
 end
 
 ---
--- @tparam Rectangle screen
--- @tparam number move_direction_x [-1, 1]
--- @tparam number move_direction_y [-1, 1]
+-- @tparam BoundingBox screen
+-- @tparam Vector2D move_direction
 -- @tparam number angle_delta
-function Scene:control_player(
-  screen,
-  move_direction_x,
-  move_direction_y,
-  angle_delta
-)
-  assertions.is_instance(screen, Rectangle)
-  assertions.is_number(move_direction_x)
-  assertions.is_number(move_direction_y)
+function Scene:control_player(screen, move_direction, angle_delta)
+  assertions.is_instance(screen, BoundingBox)
+  assertions.is_instance(move_direction, Vector2D)
   assertions.is_number(angle_delta)
 
   if angle_delta == 0 then
-    self._player:set_velocity(screen, move_direction_x, move_direction_y)
+    self._player:set_velocity(screen, move_direction)
   else
-    self._player:set_velocity(screen, 0, 0)
+    self._player:set_velocity(screen, Vector2D.ZERO)
   end
 
-  if move_direction_x == 0 and move_direction_y == 0 then
+  if move_direction == Vector2D.ZERO then
     self._player:rotate(angle_delta)
   end
 end

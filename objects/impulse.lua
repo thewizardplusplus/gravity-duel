@@ -2,9 +2,8 @@
 -- @classmod Impulse
 
 local middleclass = require("middleclass")
-local mlib = require("mlib")
 local assertions = require("luatypechecks.assertions")
-local mathutils = require("mathutils")
+local BoundingBox = require("luamath.models.boundingbox")
 local Rectangle = require("models.rectangle")
 local Circle = require("models.circle")
 local Collider = require("objects.collider")
@@ -31,28 +30,21 @@ function Impulse:initialize(world, screen, player)
   assertions.is_instance(screen, Rectangle)
   assertions.is_instance(player, Player)
 
-  local player_position_x, player_position_y = player:position()
   self._collider = physics.make_circle_collider(world, "dynamic", Circle:new(
-    player_position_x,
-    player_position_y,
+    player:position(),
     screen:grid_step() / 12
   ))
   self._collider:setCollisionClass("Impulse")
   self._collider:setMass(1 / 36)
 
-  local impulse_speed = 2 * screen.height
-  local player_direction_x, player_direction_y = player:direction()
-  self._collider:applyLinearImpulse(mathutils.transform_vector(
-    player_direction_x,
-    player_direction_y,
-    impulse_speed
-  ))
+  local impulse_speed = 2 * screen:size().height
+  local impulse = player:direction() * (impulse_speed * love.timer.getDelta())
+  self._collider:applyLinearImpulse(impulse.x, impulse.y)
 end
 
 ---
 -- @function position
--- @treturn number x
--- @treturn number y
+-- @treturn Vector2D
 
 ---
 -- @treturn bool
@@ -62,16 +54,11 @@ end
 
 ---
 -- @tparam Collider collider
--- @treturn number x
--- @treturn number y
+-- @treturn Vector2D
 function Impulse:vector_to(collider)
   assertions.is_table(collider)
 
-  local vector = mlib.vec2.sub(
-    mlib.vec2.new(collider:position()),
-    mlib.vec2.new(self:position())
-  )
-  return vector.x, vector.y
+  return collider:position() - self:position()
 end
 
 ---
@@ -86,27 +73,22 @@ function Impulse:draw(screen)
 end
 
 ---
--- @tparam Rectangle screen
+-- @tparam BoundingBox screen
 -- @tparam Hole hole
 function Impulse:apply_hole(screen, hole)
-  assertions.is_instance(screen, Rectangle)
+  assertions.is_instance(screen, BoundingBox)
   assertions.is_instance(hole, Hole)
 
-  local vector_to_hole = mlib.vec2.new(self:vector_to(hole))
+  local vector_to_hole = self:vector_to(hole)
   if hole:kind() == "white" then
-    vector_to_hole = mlib.vec2.mul(vector_to_hole, -1)
+    vector_to_hole = -vector_to_hole
   end
 
-  local factor = 1000000 * math.pow(screen.height / 400, 3)
-  factor = factor / math.pow(mlib.vec2.len(vector_to_hole), 2)
+  local factor = 1000000 * math.pow(screen:size().height / 400, 3)
+  factor = factor / vector_to_hole:length_squared()
 
-  local direction_to_hole = mlib.vec2.normalize(vector_to_hole)
-  self._collider:applyForce(mathutils.transform_vector(
-    direction_to_hole.x,
-    direction_to_hole.y,
-    factor,
-    false
-  ))
+  local force = vector_to_hole:normalized() * factor
+  self._collider:applyForce(force.x, force.y)
 end
 
 ---

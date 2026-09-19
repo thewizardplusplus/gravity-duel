@@ -8,7 +8,9 @@ local assertions = require("luatypechecks.assertions")
 local checks = require("luatypechecks.checks")
 local Nameable = require("luaserialization.nameable")
 local Stringifiable = require("luaserialization.stringifiable")
-local Rectangle = require("models.rectangle")
+local Vector2D = require("luamath.vector2d")
+local Color = require("luamath.models.color")
+local BoundingBox = require("luamath.models.boundingbox")
 local Label = require("models.label")
 local drawing = require("drawing")
 
@@ -56,17 +58,18 @@ function Stats:impulse_accuracy()
 end
 
 ---
--- @tparam Rectangle screen
+-- @tparam BoundingBox screen
 -- @tparam {[string]=Font,...} fonts
 function Stats:draw(screen, fonts)
-  assertions.is_instance(screen, Rectangle)
+  assertions.is_instance(screen, BoundingBox)
   assertions.is_table(fonts, checks.is_string, function(font)
     return type(font) == "userdata"
   end)
 
-  local margin = screen.height / 16
-  love.graphics.setColor(1, 1, 1)
-  drawing.draw_labels(screen, fonts, margin, margin, {
+  local margin = screen:size().height / 16
+  local position = Vector2D:new(margin, margin)
+  love.graphics.setColor(Color.WHITE:channels())
+  drawing.draw_labels(screen, fonts, position, {
     Label:new("Impulses", self.performed_impulses),
     Label:new("Hits", self.hit_targets),
     Label:new(
