@@ -5,10 +5,10 @@
 
 local baton = require("baton")
 local middleclass = require("middleclass")
-local mlib = require("mlib")
 local assertions = require("luatypechecks.assertions")
 local checks = require("luatypechecks.checks")
 local json = require("luaserialization.json")
+local Vector2D = require("luamath.vector2d")
 local Rectangle = require("models.rectangle")
 local Ui = require("objects.ui")
 
@@ -127,18 +127,12 @@ end
 
 ---
 -- @function center_position
--- @treturn number x [0, ∞)
--- @treturn number y [0, ∞)
+-- @treturn Vector2D
 
 ---
--- @treturn number x [-1, 1]
--- @treturn number y [-1, 1]
+-- @treturn Vector2D
 function Controls:player_move_direction()
-  local player_move_direction = mlib.vec2.add(
-    mlib.vec2.new(Ui.player_move_direction(self)),
-    mlib.vec2.new(self._keys:get("moved"))
-  )
-  return player_move_direction.x, player_move_direction.y
+  return Ui.player_move_direction(self) + Vector2D:new(self._keys:get("moved"))
 end
 
 ---
@@ -178,9 +172,7 @@ end
 ---
 -- @treturn bool
 function Controls:_is_player_moving()
-  local player_move_direction_x, player_move_direction_y =
-    self:player_move_direction()
-  return player_move_direction_x ~= 0 or player_move_direction_y ~= 0
+  return self:player_move_direction() ~= Vector2D.ZERO
     or self._position_joystick.pressed
 end
 

@@ -4,9 +4,9 @@
 local middleclass = require("middleclass")
 local assertions = require("luatypechecks.assertions")
 local checks = require("luatypechecks.checks")
+local Color = require("luamath.models.color")
+local Range = require("luamath.models.range")
 local Rectangle = require("models.rectangle")
-local Color = require("models.color")
-local Range = require("models.range")
 local TemporaryCircle = require("objects.temporarycircle")
 local Player = require("objects.player")
 local drawing = require("drawing")
@@ -60,8 +60,7 @@ end
 
 ---
 -- @function position
--- @treturn number x
--- @treturn number y
+-- @treturn Vector2D
 
 ---
 -- @treturn bool
@@ -81,7 +80,7 @@ function Target:draw(screen, fonts)
   TemporaryCircle.draw(self, screen)
 
   drawing.draw_collider(self._collider, function()
-    love.graphics.setColor(1, 1, 1)
+    love.graphics.setColor(Color.WHITE:channels())
     love.graphics.printf(
       tostring(self._current_lifes),
       fonts.default,

@@ -1,13 +1,14 @@
 ---
 -- @classmod Collider
 
+local Vector2D = require("luamath.vector2d")
+
 local Collider = {}
 
 ---
--- @treturn number x
--- @treturn number y
+-- @treturn Vector2D
 function Collider:position()
-  return self._collider:getPosition()
+  return Vector2D:new(self._collider:getPosition())
 end
 
 ---

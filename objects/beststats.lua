@@ -8,7 +8,8 @@ local assertions = require("luatypechecks.assertions")
 local checks = require("luatypechecks.checks")
 local Nameable = require("luaserialization.nameable")
 local Stringifiable = require("luaserialization.stringifiable")
-local Rectangle = require("models.rectangle")
+local Vector2D = require("luamath.vector2d")
+local BoundingBox = require("luamath.models.boundingbox")
 local Label = require("models.label")
 local Stats = require("objects.stats")
 local drawing = require("drawing")
@@ -82,18 +83,21 @@ end
 --   (see the [luaserialization](https://github.com/thewizardplusplus/luaserialization) library)
 
 ---
--- @tparam Rectangle screen
+-- @tparam BoundingBox screen
 -- @tparam {[string]=Font,...} fonts
 function BestStats:draw(screen, fonts)
-  assertions.is_instance(screen, Rectangle)
+  assertions.is_instance(screen, BoundingBox)
   assertions.is_table(fonts, checks.is_string, function(font)
     return type(font) == "userdata"
   end)
 
-  local x = screen.width - 0.6 * screen.height
-  local y = screen.height / 16
+  local screen_size = screen:size()
+  local position = Vector2D:new(
+    screen_size.width - 0.6 * screen_size.height,
+    screen_size.height / 16
+  )
   love.graphics.setColor(0, 0.5, 0)
-  drawing.draw_labels(screen, fonts, x, y, {
+  drawing.draw_labels(screen, fonts, position, {
     Label:new(
       "Best accuracy",
       string.format("%.2f%%", 100 * self.impulse_accuracy)

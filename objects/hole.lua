@@ -3,9 +3,9 @@
 
 local middleclass = require("middleclass")
 local assertions = require("luatypechecks.assertions")
+local Color = require("luamath.models.color")
+local Range = require("luamath.models.range")
 local Rectangle = require("models.rectangle")
-local Color = require("models.color")
-local Range = require("models.range")
 local TemporaryCircle = require("objects.temporarycircle")
 local Player = require("objects.player")
 
@@ -63,8 +63,7 @@ end
 
 ---
 -- @function position
--- @treturn number x
--- @treturn number y
+-- @treturn Vector2D
 
 ---
 -- @function alive
@@ -78,7 +77,7 @@ end
 
 ---
 -- @function draw
--- @tparam Rectangle screen
+-- @tparam BoundingBox screen
 
 ---
 -- @function update

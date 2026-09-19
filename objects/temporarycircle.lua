@@ -3,11 +3,10 @@
 
 local middleclass = require("middleclass")
 local assertions = require("luatypechecks.assertions")
-local mathutils = require("mathutils")
-local Rectangle = require("models.rectangle")
+local Range = require("luamath.models.range")
+local Color = require("luamath.models.color")
+local BoundingBox = require("luamath.models.boundingbox")
 local Circle = require("models.circle")
-local Color = require("models.color")
-local Range = require("models.range")
 local Collider = require("objects.collider")
 local Player = require("objects.player")
 local physics = require("physics")
@@ -66,28 +65,19 @@ function TemporaryCircle:initialize(
   self._fill_color = fill_color
   self._border_color = border_color
 
-  local distance = mathutils.random_in_range(distance_range)
-  local additional_angle = mathutils.random_in_range(additional_angle_range)
-  local player_direction_x, player_direction_y =
-    player:direction(nil, nil, additional_angle)
-  local circle_position_x, circle_position_y = mathutils.transform_vector(
-    player_direction_x,
-    player_direction_y,
-    distance,
-    false,
-    player:position()
-  )
+  local distance = distance_range:random()
+  local additional_angle = additional_angle_range:random()
+  local circle_position =
+    player:direction(nil, additional_angle) * distance + player:position()
   self._collider = physics.make_circle_collider(world, "static", Circle:new(
-    circle_position_x,
-    circle_position_y,
+    circle_position,
     radius
   ))
 end
 
 ---
 -- @function position
--- @treturn number x
--- @treturn number y
+-- @treturn Vector2D
 
 ---
 -- @treturn bool
@@ -96,9 +86,9 @@ function TemporaryCircle:alive()
 end
 
 ---
--- @tparam Rectangle screen
+-- @tparam BoundingBox screen
 function TemporaryCircle:draw(screen)
-  assertions.is_instance(screen, Rectangle)
+  assertions.is_instance(screen, BoundingBox)
 
   drawing.draw_collider(self._collider, function()
     love.graphics.setColor(self._fill_color:channels())

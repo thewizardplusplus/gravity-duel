@@ -2,9 +2,11 @@
 -- @classmod Player
 
 local middleclass = require("middleclass")
-local mlib = require("mlib")
 local assertions = require("luatypechecks.assertions")
-local mathutils = require("mathutils")
+local Vector2D = require("luamath.vector2d")
+local Matrix3x3 = require("luamath.matrix3x3")
+local Size = require("luamath.models.size")
+local BoundingBox = require("luamath.models.boundingbox")
 local Rectangle = require("models.rectangle")
 local Collider = require("objects.collider")
 local physics = require("physics")
@@ -26,14 +28,15 @@ function Player:initialize(world, screen)
   assertions.is_table(world)
   assertions.is_instance(screen, Rectangle)
 
-  local screen_center_x, screen_center_y = screen:center()
+  local grid_step = screen:grid_step()
+  local collider_size = Size:new(grid_step + grid_step / 3, grid_step)
+  local collider_position = screen:center() - collider_size / 2
   self._collider =
-    physics.make_rectangle_collider(world, "dynamic", Rectangle:new(
-      screen_center_x - screen:grid_step() / 2 - screen:grid_step() / 6,
-      screen_center_y - screen:grid_step() / 2,
-      screen:grid_step() + screen:grid_step() / 3,
-      screen:grid_step()
-    ))
+    physics.make_rectangle_collider(
+      world,
+      "dynamic",
+      BoundingBox.from_position_and_size(collider_position, collider_size)
+    )
   self._collider:setCollisionClass("Player")
   self._collider:setAngle(-math.pi / 2)
   self._collider:setMass(1 + 2 / 9)
@@ -41,8 +44,7 @@ end
 
 ---
 -- @function position
--- @treturn number x
--- @treturn number y
+-- @treturn Vector2D
 
 ---
 -- @tparam[opt=false] bool corrected_for_ui
@@ -62,33 +64,21 @@ function Player:angle(corrected_for_ui)
 end
 
 ---
--- @tparam[opt=1] number base_direction_x [-1, 1]
--- @tparam[optchain=0] number base_direction_y [-1, 1]
+-- @tparam[opt=Vector2D.BASIS_X] Vector2D base_direction
 -- @tparam[optchain=0] number additional_angle
 -- @tparam[optchain=false] bool corrected_for_ui
--- @treturn number x [-1, 1]
--- @treturn number y [-1, 1]
-function Player:direction(
-  base_direction_x,
-  base_direction_y,
-  additional_angle,
-  corrected_for_ui
-)
-  base_direction_x = base_direction_x or 1
-  base_direction_y = base_direction_y or 0
+-- @treturn Vector2D
+function Player:direction(base_direction, additional_angle, corrected_for_ui)
+  base_direction = base_direction or Vector2D.BASIS_X
   additional_angle = additional_angle or 0
   corrected_for_ui = corrected_for_ui or false
 
-  assertions.is_number(base_direction_x)
-  assertions.is_number(base_direction_y)
+  assertions.is_instance(base_direction, Vector2D)
   assertions.is_number(additional_angle)
   assertions.is_boolean(corrected_for_ui)
 
-  local direction = mlib.vec2.rotate(
-    mlib.vec2.new(base_direction_x, base_direction_y),
-    self:angle(corrected_for_ui) + additional_angle
-  )
-  return direction.x, direction.y
+  local direction_angle = self:angle(corrected_for_ui) + additional_angle
+  return base_direction * Matrix3x3.rotate(direction_angle)
 end
 
 ---
@@ -96,49 +86,38 @@ end
 function Player:draw(screen)
   assertions.is_instance(screen, Rectangle)
 
+  local grid_step = screen:grid_step()
   love.graphics.setColor(0.5, 0.5, 0.5)
   drawing.draw_collider(self._collider, function()
-    love.graphics.rectangle(
-      "fill",
-      -screen:grid_step() / 2 - screen:grid_step() / 6,
-      -screen:grid_step() / 2,
-      screen:grid_step(),
-      screen:grid_step()
-    )
-    love.graphics.rectangle(
-      "fill",
-      screen:grid_step() / 2 - screen:grid_step() / 6,
-      -screen:grid_step() / 2,
-      screen:grid_step() / 3,
-      screen:grid_step() / 3
-    )
-    love.graphics.rectangle(
-      "fill",
-      screen:grid_step() / 2 - screen:grid_step() / 6,
-      -screen:grid_step() / 2 + 2 * screen:grid_step() / 3,
-      screen:grid_step() / 3,
-      screen:grid_step() / 3
-    )
+    drawing.draw_rectangle("fill", BoundingBox.from_position_and_size(
+      Vector2D:new(-grid_step / 2 - grid_step / 6, -grid_step / 2),
+      Size:new(grid_step, grid_step)
+    ))
+    drawing.draw_rectangle("fill", BoundingBox.from_position_and_size(
+      Vector2D:new(grid_step / 2 - grid_step / 6, -grid_step / 2),
+      Size:new(grid_step / 3, grid_step / 3)
+    ))
+    drawing.draw_rectangle("fill", BoundingBox.from_position_and_size(
+      Vector2D:new(
+        grid_step / 2 - grid_step / 6,
+        -grid_step / 2 + 2 * grid_step / 3
+      ),
+      Size:new(grid_step / 3, grid_step / 3)
+    ))
   end)
 end
 
 ---
--- @tparam Rectangle screen
--- @tparam number ui_direction_x [-1, 1]
--- @tparam number ui_direction_y [-1, 1]
-function Player:set_velocity(screen, ui_direction_x, ui_direction_y)
-  assertions.is_instance(screen, Rectangle)
-  assertions.is_number(ui_direction_x)
-  assertions.is_number(ui_direction_y)
+-- @tparam BoundingBox screen
+-- @tparam Vector2D ui_direction
+function Player:set_velocity(screen, ui_direction)
+  assertions.is_instance(screen, BoundingBox)
+  assertions.is_instance(ui_direction, Vector2D)
 
-  local player_speed = 10 * screen.height
-  local player_direction_x, player_direction_y =
-    self:direction(ui_direction_x, ui_direction_y, nil, true)
-  self._collider:setLinearVelocity(mathutils.transform_vector(
-    player_direction_x,
-    player_direction_y,
-    player_speed
-  ))
+  local player_speed = 10 * screen:size().height
+  local player_direction = self:direction(ui_direction, nil, true)
+  local velocity = player_direction * (player_speed * love.timer.getDelta())
+  self._collider:setLinearVelocity(velocity.x, velocity.y)
 end
 
 ---
