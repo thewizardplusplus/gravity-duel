@@ -7,11 +7,11 @@ local middleclass = require("middleclass")
 local assertions = require("luatypechecks.assertions")
 local Nameable = require("luaserialization.nameable")
 local Stringifiable = require("luaserialization.stringifiable")
+local Vector2D = require("luamath.vector2d")
 
 ---
 -- @table instance
--- @tfield number x
--- @tfield number y
+-- @tfield Vector2D center
 -- @tfield number radius [0, ∞)
 
 local Circle = middleclass("Circle")
@@ -20,17 +20,14 @@ Circle:include(Stringifiable)
 
 ---
 -- @function new
--- @tparam number x
--- @tparam number y
+-- @tparam Vector2D center
 -- @tparam number radius [0, ∞)
 -- @treturn Circle
-function Circle:initialize(x, y, radius)
-  assertions.is_number(x)
-  assertions.is_number(y)
+function Circle:initialize(center, radius)
+  assertions.is_instance(center, Vector2D)
   assertions.is_number(radius)
 
-  self.x = x
-  self.y = y
+  self.center = center
   self.radius = radius
 end
 
@@ -39,8 +36,7 @@ end
 --   (see the [luaserialization](https://github.com/thewizardplusplus/luaserialization) library)
 function Circle:__data()
   return {
-    x = self.x,
-    y = self.y,
+    center = self.center,
     radius = self.radius,
   }
 end
