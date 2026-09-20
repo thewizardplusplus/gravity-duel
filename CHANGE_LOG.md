@@ -1,5 +1,21 @@
 # Change Log
 
+## [v1.3.4](https://github.com/thewizardplusplus/luaplot/tree/v1.3.4) (2026-09-20)
+
+Improving icon rendering; using the `luatypechecks`, `luaserialization`, and `luamath` libraries for type validation, model serialization, and mathematical primitives.
+
+- improve icon rendering and font handling:
+  - use the [Font Awesome](https://fontawesome.com/) font for icons;
+  - cache the loaded fonts;
+- refactoring:
+  - replacing the internal `typeutils` package with the [luatypechecks](https://github.com/thewizardplusplus/luatypechecks) library;
+  - replacing the internal `mathutils` package and the MLib library with the [luamath](https://github.com/thewizardplusplus/luamath) library;
+  - adding the [luaserialization](https://github.com/thewizardplusplus/luaserialization) library;
+- misc.:
+  - adding GitHub Actions workflows for tests, linting, and documentation deployment;
+  - supporting Lua 5.1, 5.2, 5.3, 5.4, 5.5, and LuaJIT;
+  - improving the generated documentation.
+
 ## [v1.3.3](https://github.com/thewizardplusplus/gravity-duel/tree/v1.3.3) (2022-12-10)
 
 Describe the game documentation.
