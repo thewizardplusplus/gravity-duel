@@ -11,11 +11,6 @@ local Size = require("luamath.models.size")
 local Range = require("luamath.models.range")
 local BoundingBox = require("luamath.models.boundingbox")
 
----
--- @table instance
--- @tfield Vector2D min top-left corner
--- @tfield Vector2D max bottom-right corner
-
 local Rectangle = middleclass("Rectangle", BoundingBox)
 
 ---
@@ -97,6 +92,11 @@ function Rectangle.static.intersection(...)
 
   return Rectangle:new(result.min, result.max)
 end
+
+---
+-- @table instance
+-- @tfield Vector2D min top-left corner
+-- @tfield Vector2D max bottom-right corner
 
 ---
 -- @function new

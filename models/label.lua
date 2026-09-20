@@ -8,14 +8,14 @@ local assertions = require("luatypechecks.assertions")
 local Nameable = require("luaserialization.nameable")
 local Stringifiable = require("luaserialization.stringifiable")
 
+local Label = middleclass("Label")
+Label:include(Nameable)
+Label:include(Stringifiable)
+
 ---
 -- @table instance
 -- @tfield string title
 -- @tfield string value
-
-local Label = middleclass("Label")
-Label:include(Nameable)
-Label:include(Stringifiable)
 
 ---
 -- @function new

@@ -15,6 +15,8 @@ local Player = require("objects.player")
 local Impulse = require("objects.impulse")
 local drawing = require("drawing")
 
+local Scene = middleclass("Scene")
+
 ---
 -- @table instance
 -- @tfield windfield.World _world
@@ -22,8 +24,6 @@ local drawing = require("drawing")
 -- @tfield {objects.Target,...} _targets
 -- @tfield {objects.Hole,...} _holes
 -- @tfield {objects.Impulse,...} _impulses
-
-local Scene = middleclass("Scene")
 
 ---
 -- @function new

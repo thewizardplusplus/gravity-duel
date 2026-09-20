@@ -12,12 +12,12 @@ local Collider = require("objects.collider")
 local physics = require("physics")
 local drawing = require("drawing")
 
+local Player = middleclass("Player")
+Player:include(Collider)
+
 ---
 -- @table instance
 -- @tfield windfield.Collider _collider
-
-local Player = middleclass("Player")
-Player:include(Collider)
 
 ---
 -- @function new

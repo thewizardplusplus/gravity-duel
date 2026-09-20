@@ -14,15 +14,15 @@ local BoundingBox = require("luamath.models.boundingbox")
 local Label = require("models.label")
 local drawing = require("drawing")
 
+local Stats = middleclass("Stats")
+Stats:include(Nameable)
+Stats:include(Stringifiable)
+
 ---
 -- @table instance
 -- @tfield number performed_impulses [0, ∞)
 -- @tfield number hit_targets [0, ∞)
 -- @tfield number destroyed_targets [0, ∞)
-
-local Stats = middleclass("Stats")
-Stats:include(Nameable)
-Stats:include(Stringifiable)
 
 ---
 -- @function new

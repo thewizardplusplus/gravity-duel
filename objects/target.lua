@@ -11,6 +11,8 @@ local TemporaryCircle = require("objects.temporarycircle")
 local Player = require("objects.player")
 local drawing = require("drawing")
 
+local Target = middleclass("Target", TemporaryCircle)
+
 ---
 -- @table instance
 -- @tfield number _initial_lifetime [0, ∞)
@@ -23,8 +25,6 @@ local drawing = require("drawing")
 -- @tfield number _initial_lifes [0, ∞)
 -- @tfield number _current_lifes
 -- @tfield func _life_decrement_handler func(lifes: number): nil
-
-local Target = middleclass("Target", TemporaryCircle)
 
 ---
 -- @function new
