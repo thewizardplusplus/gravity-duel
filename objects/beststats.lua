@@ -14,11 +14,6 @@ local Label = require("models.label")
 local Stats = require("objects.stats")
 local drawing = require("drawing")
 
----
--- @table instance
--- @tfield number impulse_accuracy [0, ∞)
--- @tfield number destroyed_targets [0, ∞)
-
 local BestStats = middleclass("BestStats")
 BestStats:include(Nameable)
 BestStats:include(Stringifiable)
@@ -53,6 +48,11 @@ function BestStats.static.from_options(options)
 
   return BestStats:new(options.impulse_accuracy, options.destroyed_targets)
 end
+
+---
+-- @table instance
+-- @tfield number impulse_accuracy [0, ∞)
+-- @tfield number destroyed_targets [0, ∞)
 
 ---
 -- @function new

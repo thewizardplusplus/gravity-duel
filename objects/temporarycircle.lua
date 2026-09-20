@@ -12,6 +12,9 @@ local Player = require("objects.player")
 local physics = require("physics")
 local drawing = require("drawing")
 
+local TemporaryCircle = middleclass("TemporaryCircle")
+TemporaryCircle:include(Collider)
+
 ---
 -- @table instance
 -- @tfield number _initial_lifetime [0, ∞)
@@ -21,9 +24,6 @@ local drawing = require("drawing")
 -- @tfield Color _fill_color
 -- @tfield Color _border_color
 -- @tfield windfield.Collider _collider
-
-local TemporaryCircle = middleclass("TemporaryCircle")
-TemporaryCircle:include(Collider)
 
 ---
 -- @function new

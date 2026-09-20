@@ -15,15 +15,6 @@ local Ui = require("objects.ui")
 local _MOVED_CONTROLS =
   {"moved_left", "moved_right", "moved_top", "moved_bottom"}
 
----
--- @table instance
--- @tfield gooi.component _position_joystick
--- @tfield gooi.component _direction_joystick
--- @tfield gooi.component _impulse_button
--- @tfield number _prev_player_angle [0, 2 * math.pi]
--- @tfield baton.Player _keys
--- @tfield func _impulse_handler func(): nil
-
 local Controls = middleclass("Controls", Ui)
 
 ---
@@ -93,6 +84,15 @@ function Controls.static.load_keys(controls_path)
 
   return baton.new({ controls = controls, pairs = { moved = _MOVED_CONTROLS } })
 end
+
+---
+-- @table instance
+-- @tfield gooi.component _position_joystick
+-- @tfield gooi.component _direction_joystick
+-- @tfield gooi.component _impulse_button
+-- @tfield number _prev_player_angle [0, 2 * math.pi]
+-- @tfield baton.Player _keys
+-- @tfield func _impulse_handler func(): nil
 
 ---
 -- @function new

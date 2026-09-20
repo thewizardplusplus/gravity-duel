@@ -9,6 +9,8 @@ local Rectangle = require("models.rectangle")
 local TemporaryCircle = require("objects.temporarycircle")
 local Player = require("objects.player")
 
+local Hole = middleclass("Hole", TemporaryCircle)
+
 ---
 -- @table instance
 -- @tfield number _initial_lifetime [0, ∞)
@@ -19,8 +21,6 @@ local Player = require("objects.player")
 -- @tfield Color _border_color
 -- @tfield windfield.Collider _collider
 -- @tfield "black"|"white" _kind
-
-local Hole = middleclass("Hole", TemporaryCircle)
 
 ---
 -- @function new

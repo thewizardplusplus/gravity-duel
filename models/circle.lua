@@ -9,14 +9,14 @@ local Nameable = require("luaserialization.nameable")
 local Stringifiable = require("luaserialization.stringifiable")
 local Vector2D = require("luamath.vector2d")
 
+local Circle = middleclass("Circle")
+Circle:include(Nameable)
+Circle:include(Stringifiable)
+
 ---
 -- @table instance
 -- @tfield Vector2D center
 -- @tfield number radius [0, ∞)
-
-local Circle = middleclass("Circle")
-Circle:include(Nameable)
-Circle:include(Stringifiable)
 
 ---
 -- @function new

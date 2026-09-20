@@ -10,14 +10,14 @@ local mathutils = require("luamath.utils")
 local Rectangle = require("models.rectangle")
 local icons = require("constants.icons")
 
+local Ui = middleclass("Ui")
+
 ---
 -- @table instance
 -- @tfield gooi.component _position_joystick
 -- @tfield gooi.component _direction_joystick
 -- @tfield gooi.component _impulse_button
 -- @tfield number _prev_player_angle [0, 2 * math.pi]
-
-local Ui = middleclass("Ui")
 
 ---
 -- @function new

@@ -9,13 +9,13 @@ local drawing = require("drawing")
 local Stats = require("objects.stats")
 local StatsStorage = require("stats.statsstorage")
 
+local StatsManager = middleclass("StatsManager")
+
 ---
 -- @table instance
 -- @tfield stats.StatsStorage _stats_storage
 -- @tfield objects.Stats _stats
 -- @tfield objects.BestStats _best_stats
-
-local StatsManager = middleclass("StatsManager")
 
 ---
 -- @function new
