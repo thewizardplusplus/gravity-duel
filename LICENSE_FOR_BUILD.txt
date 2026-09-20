@@ -6,7 +6,7 @@ This distribution contains code and resources from the following projects (full 
  - Gravity Duel
 	Website: https://github.com/thewizardplusplus/gravity-duel
 	License: MIT/Expat
-	Copyright (C) 2021-2022 thewizardplusplus <thewizardplusplus@yandex.ru>
+	Copyright (C) 2021-2022, 2026 thewizardplusplus <thewizardplusplus@yandex.ru>
 
  - Font Awesome Free
 	Website: https://fontawesome.com/
