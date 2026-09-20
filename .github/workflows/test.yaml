@@ -12,5 +12,11 @@ jobs:
         with:
           luaVersion: ${{ matrix.luaVersion }}
       - uses: leafo/gh-actions-luarocks@v6
+      - name: install compat53
+        if: >-
+          matrix.luaVersion == '5.1'
+          || matrix.luaVersion == '5.2'
+          || matrix.luaVersion == 'luajit'
+        run: luarocks install compat53
       - name: test
         run: lua test.lua

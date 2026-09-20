@@ -1,3 +1,8 @@
+local _ENV = require("compat53.module")
+if _VERSION == "Lua 5.1" then
+  setfenv(1, _ENV)
+end
+
 local luaunit = require("luaunit")
 local json = require("luaserialization.json")
 local Controls = require("objects.controls")
